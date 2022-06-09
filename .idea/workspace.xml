@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="72bd4045-439f-4dd9-ab6b-3c8ac232e6b5" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/JavaSmash.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/Cliff.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/Fork.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/GrassNDirt.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/Idle.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/Kunai.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/RocksnStumps.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/Shuriken.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/Trees.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/Walk.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/forest.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/forest.tmx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/map.1custom" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/ui/crosshair.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/BoundingBox.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/Chunk.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/Constants.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/Direction.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/Display.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/GameLoop.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/GraphicsUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/Input.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/Instance.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/LevelData.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/MathUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/ProgressReport.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/Scene.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/SceneInGame.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/SceneLoading.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/SceneWorldLoading.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/Vec2D.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/World.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/entity/CollisionAware.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/entity/Damageable.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/entity/DisplayEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/entity/Entity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/entity/EntityBase.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/entity/EntityCharacter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/entity/EntityEnemy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/entity/EntityPlayer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/entity/EntityProjectile.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/entity/LevelCheckpoint.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/entity/LevelObject.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/entity/Tile.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/item/Item.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/item/ItemRegistry.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/item/ItemWeapon.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/resource/ResourceFinder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/resource/Texture.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/resource/TextureAnimated.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/resource/TextureAtlas.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/resource/TextureBundle.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/resource/TextureStatic.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/resource/TiledMap.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Class" />
+        <option value="Interface" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="28vKaZ9gFQ4GyO3apBnFaFjsXTQ" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/til/IdeaProjects/JavaSmash/resources&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/resources" />
+      <recent name="$PROJECT_DIR$/resources/entity.ninja" />
+      <recent name="$PROJECT_DIR$/resources/ui" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/resources" />
+      <recent name="$PROJECT_DIR$/resources/entity/ninja" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="de.yonedash.smash.Instance" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="de.yonedash.smash.Instance" />
+      <module name="JavaSmash" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="de.yonedash.smash.entity.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.de.yonedash.smash.Instance" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="72bd4045-439f-4dd9-ab6b-3c8ac232e6b5" name="Changes" comment="" />
+      <created>1652091683949</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1652091683949</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/JavaSmash$de_yonedash_smash_Instance.ic" NAME="de.yonedash.smash.Instance Coverage Results" MODIFIED="1653033817201" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>de.yonedash.smash.entity.*</FILTER>
+    </SUITE>
+  </component>
+</project>
