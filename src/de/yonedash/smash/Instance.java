@@ -2,8 +2,8 @@ package de.yonedash.smash;
 
 import de.yonedash.smash.item.ItemRegistry;
 import de.yonedash.smash.resource.TextureAtlas;
-import de.yonedash.smash.resource.TiledMap;
 
+import java.io.File;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 

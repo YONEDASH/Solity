@@ -28,7 +28,7 @@ public class EntityPlayer extends EntityCharacter  {
     @Override
     protected void move(Scene scene, double dt, Vec2D moveMotion) {
         Input input = scene.instance.display.getInput();
-        double moveSpeed = scene.time(input.isKeyDown(KeyEvent.VK_SHIFT) ? 0.8 : 0.15, dt);
+        double moveSpeed = scene.time(input.isKeyDown(KeyEvent.VK_SHIFT) ? 0.8 : 0.3, dt);
         if (input.isKeyDown(KeyEvent.VK_W)) {
             moveMotion.y -= moveSpeed;
         }

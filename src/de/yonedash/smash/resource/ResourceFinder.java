@@ -12,7 +12,6 @@ public final class ResourceFinder {
         File file = new File(new File("").getAbsolutePath() + "/" + path);
         try {
             // Try folder path
-            System.out.println("FILE fileinputstream " + path);
             return new FileInputStream(file);
         } catch (FileNotFoundException e) {
             // If folder path did not work, try getting the resource from inside the
@@ -21,7 +20,6 @@ public final class ResourceFinder {
             // If stream does not exist
             if (stream == null) {
                 try {
-                    System.out.println("PATH fileinputstream " + path);
                     // Return FileInputStream
                     return new FileInputStream(path);
                 } catch (FileNotFoundException ex) {
@@ -29,7 +27,6 @@ public final class ResourceFinder {
                 }
             }
 
-            System.out.println("inputstream " + path);
             return stream;
         }
     }

@@ -2,6 +2,7 @@ package de.yonedash.smash.resource;
 
 import de.yonedash.smash.Direction;
 import de.yonedash.smash.entity.Entity;
+import de.yonedash.smash.entity.EntityAnt;
 import de.yonedash.smash.entity.EntityPlayer;
 
 import javax.imageio.ImageIO;
@@ -49,6 +50,7 @@ public class TextureAtlas {
                 10.0, 32, 0, 16, 16, SOUTH, 4));
         playerBundle.store(0x002 + walkSubId, loadTexture(ninjaWalk,
                 10.0, 48, 0, 16, 16, SOUTH, 4));
+        ninjaWalk.flush();
 
         Texture ninjaIdle = loadTexture("/Idle.png");
         playerBundle.store(0x003 + idleSubId, loadTexture(ninjaIdle,
@@ -59,6 +61,14 @@ public class TextureAtlas {
                 1.0, 32, 0, 16, 16, SOUTH, 1));
         playerBundle.store(0x002 + idleSubId, loadTexture(ninjaIdle,
                 1.0, 48, 0, 16, 16, SOUTH, 1));
+        ninjaIdle.flush();
+
+        Texture antIdle = loadTexture("/SoldierAntIdleSide.png", 1.0, 0, 0, 16, 16, EAST, 4);
+        TextureBundle antBundle = getBundleOrCreate(EntityAnt.class);
+        antBundle.store(0x003 + idleSubId, antIdle);
+        antBundle.store(0x001 + idleSubId, antIdle);
+        antBundle.store(0x004 + idleSubId, antIdle);
+        antBundle.store(0x002 + idleSubId, antIdle);
     }
 
     public void update(double dt) {
@@ -103,6 +113,13 @@ public class TextureAtlas {
 
         Texture result = bufferedImage == null ? createMissingTexture() : new TextureStatic(this, bufferedImage);
         this.texturesLoaded.add(result);
+        return result;
+    }
+
+    public Texture loadTexture(String path, double playbackSpeed, int x, int y, int width, int height, Direction direction, int size) {
+        Texture texture = loadTexture(path);
+        Texture result = loadTexture(texture, playbackSpeed, x, y, width, height, direction, size);
+        texture.flush();
         return result;
     }
 

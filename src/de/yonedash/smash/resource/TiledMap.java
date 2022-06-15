@@ -265,6 +265,12 @@ public class TiledMap implements ProgressReport {
             this.progress++;
         }
 
+        try {
+            stream.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         return this.levelData = new LevelData(tiles);
     }
 
@@ -425,7 +431,26 @@ public class TiledMap implements ProgressReport {
             if (tileId == 6) {
                 tile.setCollisionBoxes(new BoundingBox[]{
                         new BoundingBox(
-                                origin.position.clone().add(new Vec2D(Tile.TILE_SIZE * 0.7, Tile.TILE_SIZE * -0.1)), new Vec2D(Tile.TILE_SIZE * 0.3, Tile.TILE_SIZE * 0.85))
+                                origin.position.clone().add(new Vec2D(Tile.TILE_SIZE * 0.7, Tile.TILE_SIZE * 0.1)), new Vec2D(Tile.TILE_SIZE * 0.3, Tile.TILE_SIZE * 0.65)),
+                        new BoundingBox(
+                                origin.position.clone().add(new Vec2D(Tile.TILE_SIZE * 0.5, Tile.TILE_SIZE * 0.1)), new Vec2D(Tile.TILE_SIZE * 0.2, Tile.TILE_SIZE * 0.55)),
+                        new BoundingBox(
+                                origin.position.clone().add(new Vec2D(Tile.TILE_SIZE * 0.4, Tile.TILE_SIZE * 0.1)), new Vec2D(Tile.TILE_SIZE * 0.1, Tile.TILE_SIZE * 0.5)),
+                        new BoundingBox(
+                                origin.position.clone().add(new Vec2D(Tile.TILE_SIZE * 0.3, Tile.TILE_SIZE * 0.1)), new Vec2D(Tile.TILE_SIZE * 0.1, Tile.TILE_SIZE * 0.35)),
+                        new BoundingBox(
+                                origin.position.clone().add(new Vec2D(Tile.TILE_SIZE * 0.2, Tile.TILE_SIZE * 0.1)), new Vec2D(Tile.TILE_SIZE * 0.1, Tile.TILE_SIZE * 0.3))
+                });
+            } else if (tileId == 7) {
+                tile.setCollisionBoxes(new BoundingBox[]{
+                        new BoundingBox(
+                                origin.position.clone().add(new Vec2D(Tile.TILE_SIZE - Tile.TILE_SIZE * 0.7 - Tile.TILE_SIZE * 0.3, Tile.TILE_SIZE * 0.1)), new Vec2D(Tile.TILE_SIZE * 0.3, Tile.TILE_SIZE * 0.65)),
+                        new BoundingBox(
+                                origin.position.clone().add(new Vec2D(Tile.TILE_SIZE - Tile.TILE_SIZE * 0.5 - Tile.TILE_SIZE * 0.2, Tile.TILE_SIZE * 0.1)), new Vec2D(Tile.TILE_SIZE * 0.2, Tile.TILE_SIZE * 0.55)),
+                        new BoundingBox(
+                                origin.position.clone().add(new Vec2D(Tile.TILE_SIZE - Tile.TILE_SIZE * 0.4 - Tile.TILE_SIZE * 0.1, Tile.TILE_SIZE * 0.1)), new Vec2D(Tile.TILE_SIZE * 0.1, Tile.TILE_SIZE * 0.5)),
+                        new BoundingBox(
+                                origin.position.clone().add(new Vec2D(Tile.TILE_SIZE - Tile.TILE_SIZE * 0.3 - Tile.TILE_SIZE * 0.1, Tile.TILE_SIZE * 0.1)), new Vec2D(Tile.TILE_SIZE * 0.1, Tile.TILE_SIZE * 0.35))
                 });
             }
         }
@@ -438,15 +463,14 @@ public class TiledMap implements ProgressReport {
             }
         } else if (source.equals("RocksnStumps.png")) {
             if (tileId == 0 || tileId == 1 || tileId == 5
-                || tileId == 6 || tileId == 7 || tileId == 8
-                || tileId == 10 || tileId == 11 || tileId == 13 ) {
+                ||  tileId == 8 || tileId == 10 || tileId == 11 || tileId == 13 ) {
                 tile.setDynamic(0.6);
             } else if (tileId == 2 || tileId == 3) {
-                tile.setDynamic(1.0);
-            } else if (tileId == 4) {
-                tile.setDynamic(0.3);
-            } else if (tileId == 9) {
-                tile.setDynamic(0.3);
+                tile.setDynamic(1.2);
+            } else if (tileId == 4 || tileId == 9) {
+                tile.setDynamic(0.6);
+            } else if (tileId == 6 || tileId == 7) {
+                tile.setDynamic(0.2);
             } else {
                 tile.setZ(0);
             }

@@ -9,7 +9,7 @@ import java.awt.*;
 public class LevelObject implements CollisionAware, DisplayEntity {
 
     // This constant integer determines the tiles' size in pixels (independent of the scale)
-    public static final int TILE_SIZE = 75;
+    public static final int TILE_SIZE = 140;
 
     protected BoundingBox[] collisionBoxes;
     protected BoundingBox boundingBox;

@@ -3,12 +3,15 @@ package de.yonedash.smash.entity;
 import de.yonedash.smash.*;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class EntityEnemy extends EntityBase {
+public class EntityEnemy extends EntityCharacter {
 
     private Entity target;
+
+    protected double entityMoveSpeed = 1;
 
     public EntityEnemy(BoundingBox boundingBox) {
         super(boundingBox);
@@ -16,45 +19,41 @@ public class EntityEnemy extends EntityBase {
 
     @Override
     public void draw(Scene scene, Graphics2D g2d, double dt) {
-        g2d.setColor(Color.YELLOW);
-        g2d.fillRect(
-                scene.scaleToDisplay(this.boundingBox.position.x),
-                scene.scaleToDisplay(this.boundingBox.position.y),
-                scene.scaleToDisplay(this.boundingBox.size.x),
-                scene.scaleToDisplay(this.boundingBox.size.y)
-        );
-//
-//        if (this.targetPosition != null) {
-//            g2d.setColor(Color.GREEN);
-//            g2d.drawRect(
-//                    scene.scaleToDisplay(this.targetPosition.x - this.boundingBox.size.x / 2.0),
-//                    scene.scaleToDisplay(this.targetPosition.y - this.boundingBox.size.y / 2.0),
-//                    scene.scaleToDisplay(this.boundingBox.size.x),
-//                    scene.scaleToDisplay(this.boundingBox.size.y)
-//            );
-//            g2d.setColor(Color.RED);
-//            g2d.drawString(String.valueOf(this.pathInterest), scene.scaleToDisplay(this.targetPosition.x),
-//                    scene.scaleToDisplay(this.targetPosition.y));
-//
-//            double rotation = this.boundingBox.center().rotationTo(this.targetPosition) - 90.0;
-//            g2d.setColor(Color.WHITE);
-//            AffineTransform tx = g2d.getTransform();
-//            double rad = Math.toRadians(rotation);
-//            tx.rotate(rad, scene.scaleToDisplay(this.boundingBox.center().x), scene.scaleToDisplay(this.boundingBox.center().y));
-//            g2d.setTransform(tx);
-//            g2d.drawRect(scene.scaleToDisplay(this.boundingBox.center().x - 5), scene.scaleToDisplay(this.boundingBox.center().y), 10, 50);
-//            tx.rotate(-rad, scene.scaleToDisplay(this.boundingBox.center().x), scene.scaleToDisplay(this.boundingBox.center().y));
-//            g2d.setTransform(tx);
-//
-//            Vec2D test = boundingBox.center().clone().add(this.boundingBox.center().rotationTo(this.targetPosition), 100.0);
-//            g2d.setColor(Color.ORANGE);
-//            g2d.drawRect(
-//                    scene.scaleToDisplay(test.x - this.boundingBox.size.x / 2.0),
-//                    scene.scaleToDisplay(test.y - this.boundingBox.size.y / 2.0),
-//                    scene.scaleToDisplay(this.boundingBox.size.x),
-//                    scene.scaleToDisplay(this.boundingBox.size.y)
-//            );
-//        }
+        super.draw(scene, g2d, dt);
+
+        if (true) return;
+
+        if (this.targetPosition != null) {
+            g2d.setColor(Color.GREEN);
+            g2d.drawRect(
+                    scene.scaleToDisplay(this.targetPosition.x - this.boundingBox.size.x / 2.0),
+                    scene.scaleToDisplay(this.targetPosition.y - this.boundingBox.size.y / 2.0),
+                    scene.scaleToDisplay(this.boundingBox.size.x),
+                    scene.scaleToDisplay(this.boundingBox.size.y)
+            );
+            g2d.setColor(Color.RED);
+            g2d.drawString(String.valueOf(this.pathInterest), scene.scaleToDisplay(this.targetPosition.x),
+                    scene.scaleToDisplay(this.targetPosition.y));
+
+            double rotation = this.boundingBox.center().rotationTo(this.targetPosition) - 90.0;
+            g2d.setColor(Color.WHITE);
+            AffineTransform tx = g2d.getTransform();
+            double rad = Math.toRadians(rotation);
+            tx.rotate(rad, scene.scaleToDisplay(this.boundingBox.center().x), scene.scaleToDisplay(this.boundingBox.center().y));
+            g2d.setTransform(tx);
+            g2d.drawRect(scene.scaleToDisplay(this.boundingBox.center().x - 5), scene.scaleToDisplay(this.boundingBox.center().y), 10, 50);
+            tx.rotate(-rad, scene.scaleToDisplay(this.boundingBox.center().x), scene.scaleToDisplay(this.boundingBox.center().y));
+            g2d.setTransform(tx);
+
+            Vec2D test = boundingBox.center().clone().add(this.boundingBox.center().rotationTo(this.targetPosition), this.boundingBox.size.average());
+            g2d.setColor(Color.ORANGE);
+            g2d.drawRect(
+                    scene.scaleToDisplay(test.x - this.boundingBox.size.x / 2.0),
+                    scene.scaleToDisplay(test.y - this.boundingBox.size.y / 2.0),
+                    scene.scaleToDisplay(this.boundingBox.size.x),
+                    scene.scaleToDisplay(this.boundingBox.size.y)
+            );
+        }
     }
 
     Vec2D targetPosition;
@@ -75,12 +74,14 @@ public class EntityEnemy extends EntityBase {
         if (!insideChunk)
             return;
 
+        double maxDistance = 1200.0;
+
         Vec2D posEntityCenter = this.boundingBox.center();
         if (this.target != null) {
             // Get distance between enemy and target
             double distance = this.target.getBoundingBox().center().distanceSqrt(posEntityCenter);
             // If distance is to great, forget about this target
-            if (distance > 1200.0) {
+            if (distance > maxDistance) {
                 this.target = null;
                 return;
             }
@@ -91,7 +92,7 @@ public class EntityEnemy extends EntityBase {
 
             int i = 0;
             Entity tempTarget = null;
-            while (i < distanceSortedEntities.size() && (tempTarget = distanceSortedEntities.get(i)) instanceof EntityEnemy) {
+            while (i < distanceSortedEntities.size() && ((tempTarget = distanceSortedEntities.get(i)) instanceof EntityEnemy || MathUtils.rayCast(scene.instance.world, this.boundingBox, this.boundingBox.center().rotationTo(tempTarget.getBoundingBox().center()), 1.0, maxDistance) != null)) {
                 i++;
             }
 
@@ -106,15 +107,16 @@ public class EntityEnemy extends EntityBase {
             }
         }
 
-        double moveSpeed = scene.time(0.2, dt);
+        double moveSpeed = scene.time(this.entityMoveSpeed, dt);
 
         if (this.targetPosition != null) {
             double distanceToTargetPos = this.targetPosition.distanceSqrt(this.boundingBox.center());
             double distanceToTarget = this.target.getBoundingBox().center().distanceSqrt(this.boundingBox.center());
 
-            if (distanceToTarget < distanceToTargetPos || MathUtils.rayCast(scene.instance.world, this.boundingBox, this.boundingBox.center().rotationTo(this.target.getBoundingBox().center()), moveSpeed, distanceToTarget) == null) {
-                this.targetPosition = null;
-            } else if (distanceToTargetPos < (pathInterest > 0 ? this.target.getBoundingBox().size.average() : moveSpeed)) {
+//            if (distanceToTarget < distanceToTargetPos || (pathInterest != 1 && MathUtils.rayCast(scene.instance.world, this.boundingBox, this.boundingBox.center().rotationTo(this.target.getBoundingBox().center()), moveSpeed, distanceToTarget) == null)) {
+//                this.targetPosition = null;
+//            }
+            if (distanceToTargetPos < (pathInterest > 0 ? this.target.getBoundingBox().size.average() : moveSpeed)) {
                 this.targetPosition = null;
             }
         }
@@ -201,8 +203,6 @@ public class EntityEnemy extends EntityBase {
             move.y += my;
         }
 
-        this.motion.add(move);
-
         if (Math.abs(move.x) > Math.abs(move.y)) {
             if (move.x > 0)
                 this.viewDirection = Direction.EAST;
@@ -215,7 +215,14 @@ public class EntityEnemy extends EntityBase {
                 this.viewDirection = Direction.NORTH;
         }
 
+        move(scene, dt, move);
+
         super.update(scene, dt);
+    }
+
+    @Override
+    protected void move(Scene scene, double dt, Vec2D moveMotion) {
+        this.motion.add(moveMotion);
     }
 
     @Override

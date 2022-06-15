@@ -23,11 +23,11 @@ public class SceneInGame extends Scene {
         // Zoom from player to map
         this.zoomOut(7.5);
 
-        this.player = new EntityPlayer(new BoundingBox(new Vec2D(0, 0), new Vec2D(40, 10)));
+        this.player = new EntityPlayer(new BoundingBox(new Vec2D(0, 0), new Vec2D(40 * 2, 10 * 2)));
         instance.world.entitiesLoaded.add(this.player);
-//        instance.world.entitiesLoaded.add(new EntityEnemy(new BoundingBox(new Vec2D(100, 100), new Vec2D(20, 20))));
-//        instance.world.entitiesLoaded.add(new EntityEnemy(new BoundingBox(new Vec2D(150, 100), new Vec2D(20, 20))));
-//        instance.world.entitiesLoaded.add(new EntityEnemy(new BoundingBox(new Vec2D(-70, 120), new Vec2D(20, 20))));
+        instance.world.entitiesLoaded.add(new EntityAnt(new BoundingBox(new Vec2D(100, 100), new Vec2D(40, 7))));
+        instance.world.entitiesLoaded.add(new EntityAnt(new BoundingBox(new Vec2D(150, 100), new Vec2D(40, 7))));
+        instance.world.entitiesLoaded.add(new EntityAnt(new BoundingBox(new Vec2D(-70, 120), new Vec2D(40, 7))));
 
         // Initialize camera vec
         this.cameraPos = calculateCameraTargetPos().subtract(new Vec2D(instance.display.getWidth(), instance.display.getHeight()).multiply(0.5));
@@ -89,6 +89,14 @@ public class SceneInGame extends Scene {
         if (key == KeyEvent.VK_H) {
             Constants.SHOW_CHUNK_BORDERS = !Constants.SHOW_CHUNK_BORDERS;
             Constants.SHOW_COLLISION = !Constants.SHOW_COLLISION;
+        }
+        if (key == KeyEvent.VK_M) {
+            scaleFactor += 0.05;
+        }
+        if (key == KeyEvent.VK_N) {
+            scaleFactor -= 0.05;
+            if (scaleFactor <= 0)
+                scaleFactor = 0.05;
         }
     }
 
@@ -277,7 +285,7 @@ public class SceneInGame extends Scene {
 
         // Draw mouse crosshair
         if (!this.zoomingOut) {
-            int crosshairSize = super.scaleToDisplay(50.0);
+            int crosshairSize = super.scaleToDisplay(100.0);
             double crosshairRotation = mouseWorldPosition.rotationTo(player.getBoundingBox().center());
             GraphicsUtils.rotate(g2d, crosshairRotation, super.scaleToDisplay(mouseWorldPosition.x), super.scaleToDisplay(mouseWorldPosition.y));
             if (mouseWorldPosition.distanceSqrt(this.player.getBoundingBox().center()) < 450.0)
@@ -291,12 +299,26 @@ public class SceneInGame extends Scene {
 
         // Revert camera position translation
         g2d.translate(+this.cameraPos.x, +this.cameraPos.y);
+
         g2d.setColor(Color.WHITE);
-        g2d.drawString("fps=" + (Math.round(this.instance.gameLoop.getFramesPerSecond() * 100.0) / 100.0), 50, 50);
-        g2d.drawString("chunks=" + this.instance.world.chunksLoaded.size() + "/" + this.instance.world.chunks.size() + ", tiles=" + tilesLoaded + ", entities=" + this.instance.world.entitiesLoaded.size() + " " + countDrawnOnScreen + " drawn", 50, 60);
-        g2d.drawString("dt=" + dt + "ms", 50, 70);
-        g2d.drawString("chu_t=" + chunkRefreshDelay + "ms / " + chunkTime + "ms", 50, 80);
-        g2d.drawString("col_t=" + collisionTime + "ms", 50, 90);
+        Font TODO_MAKE_GLOBAL = new Font("Arial", Font.PLAIN, 0);
+        g2d.setFont(TODO_MAKE_GLOBAL.deriveFont((float) super.scaleToDisplay(35.0/ scaleFactor)));
+        this.fontRenderer.drawString(g2d, (Math.round(this.instance.gameLoop.getFramesPerSecond() * 10.0) / 10.0) + " FPS", super.scaleToDisplay(50.0 / this.scaleFactor), super.scaleToDisplay(50.0 / this.scaleFactor), FontRenderer.LEFT, FontRenderer.TOP,true);
+
+        if (Constants.SHOW_COLLISION || Constants.SHOW_CHUNK_BORDERS) {
+            String[] extraInfo = {
+                    "chunks=" + this.instance.world.chunksLoaded.size() + "/" + this.instance.world.chunks.size() + ", tiles=" + tilesLoaded + ", entities=" + this.instance.world.entitiesLoaded.size() + " " + countDrawnOnScreen + " drawn",
+                    "dt=" + dt + "ms",
+                    "chu_t=" + chunkRefreshDelay + "ms / " + chunkTime + "ms",
+                    "col_t=" + collisionTime + "ms"
+            };
+            BoundingBox genericBounds = this.fontRenderer.bounds(g2d, "X");
+            Vec2D infoPos = new Vec2D(50, 50 + genericBounds.size.y + Math.abs(genericBounds.position.y));
+            for (String info : extraInfo) {
+                BoundingBox bounds = this.fontRenderer.drawString(g2d, info, super.scaleToDisplay((infoPos.x) / this.scaleFactor), super.scaleToDisplay((infoPos.y) / this.scaleFactor), FontRenderer.LEFT, FontRenderer.TOP,true);
+                infoPos.add(new Vec2D(0, Math.abs(bounds.position.y) + bounds.size.y));
+            }
+        }
 
         // Update camera
 

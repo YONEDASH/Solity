@@ -37,29 +37,32 @@ public abstract class EntityCharacter extends EntityBase {
 
         double texSize = this.boundingBox.size.x * 1.25;
         Vec2D vecSize = new Vec2D(texSize, texSize);
+        Vec2D texPos = new Vec2D(this.boundingBox.position.x + this.boundingBox.size.x * 0.5 - vecSize.x * 0.5,
+                this.boundingBox.position.y - vecSize.y + this.boundingBox.size.y * 0.5);
+        BoundingBox texBB = new BoundingBox(texPos, vecSize);
 
         // Draw shadow
-//        g2d.setColor(new Color(0, 0, 0, 100));
-//        g2d.fillOval(
-//                scene.scaleToDisplay(this.boundingBox.position.x),
-//                scene.scaleToDisplay(this.boundingBox.position.y),
-//                scene.scaleToDisplay(this.boundingBox.size.x),
-//                scene.scaleToDisplay(this.boundingBox.size.y)
-//        );
+        g2d.setColor(new Color(0, 0, 0, 75));
+        g2d.fillOval(
+                scene.scaleToDisplay(this.boundingBox.position.x),
+                scene.scaleToDisplay(this.boundingBox.position.y),
+                scene.scaleToDisplay(this.boundingBox.size.x),
+                scene.scaleToDisplay(this.boundingBox.size.y)
+        );
 
         g2d.drawImage(
                 texture.getBufferedImage(),
-                scene.scaleToDisplay(this.boundingBox.position.x + this.boundingBox.size.x * 0.5 - vecSize.x * 0.5),
-                scene.scaleToDisplay(this.boundingBox.position.y - vecSize.y + this.boundingBox.size.y * 0.5),
-                scene.scaleToDisplay(vecSize.x),
-                scene.scaleToDisplay(vecSize.y),
+                scene.scaleToDisplay(texBB.position.x),
+                scene.scaleToDisplay(texBB.position.y),
+                scene.scaleToDisplay(texBB.size.x),
+                scene.scaleToDisplay(texBB.size.y),
                 null
         );
 
         if (this.itemInHand != null) {
             Texture itemTexture = this.itemInHand.getTexture();
-            double itemSize = this.boundingBox.size.average() * 0.3;
-            BoundingBox itemBB = new BoundingBox(this.boundingBox.center().clone().add(vecSize.clone().multiply(new Vec2D(0.5 * 0.8 * (viewDirection == Direction.WEST ? -1 : 1), 0.5 * 0.3))).subtract(new Vec2D(itemSize / 2.0, itemSize / 2.0)), new Vec2D(itemSize, itemSize));
+            double itemSize = texBB.size.average() * 0.3;
+            BoundingBox itemBB = new BoundingBox(texBB.center().clone().add(vecSize.clone().multiply(new Vec2D(0.5 * 0.8 * (viewDirection == Direction.WEST ? -1 : 1), 0.5 * 0.3))).subtract(new Vec2D(itemSize / 2.0, itemSize / 2.0)), new Vec2D(itemSize, itemSize));
             Vec2D itemBBCenter = itemBB.center();
             double rotationDegView = 0;
             if (scene instanceof SceneInGame sig)

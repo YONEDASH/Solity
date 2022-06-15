@@ -7,11 +7,15 @@ public abstract class Scene {
     // Instance access in screen children
     public final Instance instance;
 
+    // Access to font renderer in screen children
+    protected final FontRenderer fontRenderer;
+
     // Scales scale
     protected double scaleFactor = 1.0;
 
     public Scene(Instance instance) {
         this.instance = instance;
+        this.fontRenderer = new FontRenderer(this);
     }
 
     // Easy access to display
@@ -32,7 +36,7 @@ public abstract class Scene {
                 + (displayHeight / (double) Constants.SCALE_HEIGHT)) / 2.0;
 
         // Drop accuracy to a 10000th
-        return Math.round(factor * this.scaleFactor * 10000.0) / 10000.0;
+        return Math.round(factor * this.scaleFactor * Constants.DISPLAY_SCALE * 0.5 * 10000.0) / 10000.0;
     }
 
     // Scale value to display dimension-scale

@@ -82,6 +82,10 @@ public class World implements ProgressReport {
                     }
                 }
 
+                // If chunk has no tiles, don't bother to add to increase performance
+                if (tilesInChunk.size() == 0)
+                    continue;
+
                 // Create a new chunk with tiles
                 Chunk chunk = new Chunk(x, y, tilesInChunk.toArray(new LevelObject[0]));
                 // Add to chunk list
