@@ -14,6 +14,8 @@ public class World implements ProgressReport {
     public final ArrayList<Chunk> chunks;
     public final CopyOnWriteArraySet<Chunk> chunksLoaded;
     public final CopyOnWriteArraySet<Entity> entitiesLoaded;
+
+    public Vec2D topLeft, bottomRight;
     public World() {
         this.chunks = new ArrayList<>();
 
@@ -45,9 +47,9 @@ public class World implements ProgressReport {
         levelObjects.sort(Comparator.comparingDouble(o -> o.getBoundingBox().position.x + o.getBoundingBox().position.y));
 
         // Get tile with lowest x and y value
-        Vec2D posSmallestSum = levelObjects.get(0).getBoundingBox().position.clone();
+        Vec2D posSmallestSum = this.topLeft = levelObjects.get(0).getBoundingBox().position.clone();
         // Get tile with highest x and y value
-        Vec2D posHighestSum = levelObjects.get(levelObjects.size() - 1).getBoundingBox().position.clone();
+        Vec2D posHighestSum = this.bottomRight = levelObjects.get(levelObjects.size() - 1).getBoundingBox().position.clone();
 
         // Double check positions to prevent any errors
         for (LevelObject levelObject : levelObjects) {

@@ -1,6 +1,9 @@
 package de.yonedash.smash;
 
+import de.yonedash.smash.entity.Entity;
 import de.yonedash.smash.entity.LevelObject;
+
+import java.util.ArrayList;
 
 // This class represents a chunk of the game world
 // The game world is split up into chunks for the
@@ -14,10 +17,12 @@ public class Chunk {
 
     private final BoundingBox boundingBox;
     private final LevelObject[] levelObjects;
+    private ArrayList<Entity> entities;
 
     public Chunk(int x, int y, LevelObject[] levelObjects) {
         this.boundingBox = new BoundingBox(new Vec2D(x * CHUNK_SIZE, y * CHUNK_SIZE), new Vec2D(CHUNK_SIZE, CHUNK_SIZE));
         this.levelObjects = levelObjects;
+        this.entities = new ArrayList<>();
     }
 //
 //    public Texture[] compile() {
@@ -44,5 +49,9 @@ public class Chunk {
 
     public LevelObject[] getLevelObjects() {
         return levelObjects;
+    }
+
+    public ArrayList<Entity> getEntities() {
+        return this.entities;
     }
 }

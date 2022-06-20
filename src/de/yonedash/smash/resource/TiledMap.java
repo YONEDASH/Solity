@@ -1,9 +1,6 @@
 package de.yonedash.smash.resource;
 
-import de.yonedash.smash.BoundingBox;
-import de.yonedash.smash.LevelData;
-import de.yonedash.smash.ProgressReport;
-import de.yonedash.smash.Vec2D;
+import de.yonedash.smash.*;
 import de.yonedash.smash.entity.LevelObject;
 import de.yonedash.smash.entity.Tile;
 import org.w3c.dom.Document;
@@ -242,6 +239,13 @@ public class TiledMap implements ProgressReport {
                                 }
                                 int sourceId = tileId - gidSource;
                                 Texture texture = textures.get(source).get(sourceId);
+
+                                // If texture is blank, do not add tile because we won't see it anyways
+                                if (texture.isBlank()) {
+                                    x++;
+                                    continue;
+                                }
+
                                 int z = id - 3;
                                 Tile tile = new Tile(new BoundingBox(
                                         new Vec2D(
@@ -251,8 +255,11 @@ public class TiledMap implements ProgressReport {
                                         new Vec2D(tileMapSize, tileMapSize)),
                                         z,
                                         texture);
+
+                                assert source != null;
                                 updateCollision(source, sourceId, tile);
                                 updateDynamicState(source, sourceId, tile);
+                                updateParticleType(atlas, source, sourceId, tile);
                                 tiles.add(tile);
 
                                 x++;
@@ -463,7 +470,7 @@ public class TiledMap implements ProgressReport {
             }
         } else if (source.equals("RocksnStumps.png")) {
             if (tileId == 0 || tileId == 1 || tileId == 5
-                ||  tileId == 8 || tileId == 10 || tileId == 11 || tileId == 13 ) {
+                    ||  tileId == 8 || tileId == 10 || tileId == 11 || tileId == 13 ) {
                 tile.setDynamic(0.6);
             } else if (tileId == 2 || tileId == 3) {
                 tile.setDynamic(1.2);
@@ -473,6 +480,16 @@ public class TiledMap implements ProgressReport {
                 tile.setDynamic(0.2);
             } else {
                 tile.setZ(0);
+            }
+        }
+    }
+
+    private void updateParticleType(TextureAtlas atlas, String source, int tileId, Tile tile) {
+        if (source.equals("Trees.png")) {
+            // Exclude tree trunks
+            if (tileId != 80 && tileId != 85 && tileId != 89
+             && tileId != 67 && tileId != 54 && tileId != 72) {
+                tile.setParticleType(atlas, ParticleType.LEAF);
             }
         }
     }

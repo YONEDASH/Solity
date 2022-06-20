@@ -36,7 +36,8 @@ public abstract class EntityCharacter extends EntityBase {
         this.lastDrawnTexture = texture;
 
         double texSize = this.boundingBox.size.x * 1.25;
-        Vec2D vecSize = new Vec2D(texSize, texSize);
+        double texAspectRatio = texture.getHeight() / (double) texture.getWidth();
+        Vec2D vecSize = new Vec2D(texSize, texSize * texAspectRatio);
         Vec2D texPos = new Vec2D(this.boundingBox.position.x + this.boundingBox.size.x * 0.5 - vecSize.x * 0.5,
                 this.boundingBox.position.y - vecSize.y + this.boundingBox.size.y * 0.5);
         BoundingBox texBB = new BoundingBox(texPos, vecSize);

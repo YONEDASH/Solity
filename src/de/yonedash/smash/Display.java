@@ -1,11 +1,12 @@
 package de.yonedash.smash;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferStrategy;
 
 // This class represents the game window
-public class Display extends Frame {
+public class Display extends JFrame {
 
     private final Instance instance;
 

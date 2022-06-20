@@ -18,17 +18,19 @@ public class TextureAtlas {
 
     protected final ArrayList<Texture> texturesLoaded;
     private final HashMap<Class<? extends Entity>, TextureBundle> textureBundles;
+    private final HashMap<Texture, Texture> particleMap;
 
     public final int walkSubId = 0x0000, idleSubId = 0x1111;
 
     public final Texture invalid;
-    public Texture crosshair, fork;
+    public Texture crosshair, fork, leaf;
 
     public Texture forest;
 
     public TextureAtlas() {
         this.texturesLoaded = new ArrayList<>();
         this.textureBundles = new HashMap<>();
+        this.particleMap = new HashMap<>();
 
         this.invalid = createMissingTexture();
     }
@@ -63,7 +65,7 @@ public class TextureAtlas {
                 1.0, 48, 0, 16, 16, SOUTH, 1));
         ninjaIdle.flush();
 
-        Texture antIdle = loadTexture("/SoldierAntIdleSide.png", 1.0, 0, 0, 16, 16, EAST, 4);
+        Texture antIdle = loadTexture("/SoldierAntIdleSide.png", 4.0, 0, 0, 16, 16, EAST, 4);
         TextureBundle antBundle = getBundleOrCreate(EntityAnt.class);
         antBundle.store(0x003 + idleSubId, antIdle);
         antBundle.store(0x001 + idleSubId, antIdle);
@@ -106,6 +108,14 @@ public class TextureAtlas {
             this.textureBundles.put(owner, bundle = new TextureBundle());
 
         return bundle;
+    }
+
+    public void storeParticle(Texture texture, Texture particle) {
+        this.particleMap.put(texture, particle);
+    }
+
+    public Texture getParticle(Texture texture) {
+        return this.particleMap.get(texture);
     }
 
     public Texture loadTexture(String path) {

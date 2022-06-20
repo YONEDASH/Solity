@@ -1,6 +1,7 @@
 package de.yonedash.smash.resource;
 
 import de.yonedash.smash.Direction;
+import de.yonedash.smash.ImageUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -9,13 +10,17 @@ import java.util.Arrays;
 public class TextureAnimated implements Texture {
 
     private final TextureAtlas atlas;
+    private final int width, height;
     private double playbackTime;
     private int playbackIndex;
     private final double playbackLength;
     private final BufferedImage[] bufferedImages;
+    private final boolean blank;
 
     protected TextureAnimated(TextureAtlas atlas, BufferedImage bufferedImage, double playbackSpeed, Direction direction, int width, int height) {
         this.atlas = atlas;
+        this.width = width;
+        this.height = height;
 
         if (direction == Direction.NORTH || direction == Direction.SOUTH) {
             int imageHeight = bufferedImage.getHeight();;
@@ -37,6 +42,8 @@ public class TextureAnimated implements Texture {
 
         double playbackDelay = 1000.0 / playbackSpeed;
         this.playbackLength = playbackDelay * this.bufferedImages.length;
+
+        this.blank = Arrays.stream(this.bufferedImages).anyMatch(bi -> !ImageUtils.isBufferedImageBlank(bi));
     }
 
     public void update(double dt) {
@@ -52,6 +59,21 @@ public class TextureAnimated implements Texture {
     public void restart() {
         this.playbackTime = 0;
         this.playbackIndex = 0;
+    }
+
+    @Override
+    public boolean isBlank() {
+        return this.blank;
+    }
+
+    @Override
+    public int getWidth() {
+        return this.width;
+    }
+
+    @Override
+    public int getHeight() {
+        return this.height;
     }
 
     @Override

@@ -5,6 +5,8 @@ import de.yonedash.smash.resource.Texture;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.lang.management.ManagementFactory;
+import java.lang.management.OperatingSystemMXBean;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -25,9 +27,6 @@ public class SceneInGame extends Scene {
 
         this.player = new EntityPlayer(new BoundingBox(new Vec2D(0, 0), new Vec2D(40 * 2, 10 * 2)));
         instance.world.entitiesLoaded.add(this.player);
-        instance.world.entitiesLoaded.add(new EntityAnt(new BoundingBox(new Vec2D(100, 100), new Vec2D(40, 7))));
-        instance.world.entitiesLoaded.add(new EntityAnt(new BoundingBox(new Vec2D(150, 100), new Vec2D(40, 7))));
-        instance.world.entitiesLoaded.add(new EntityAnt(new BoundingBox(new Vec2D(-70, 120), new Vec2D(40, 7))));
 
         // Initialize camera vec
         this.cameraPos = calculateCameraTargetPos().subtract(new Vec2D(instance.display.getWidth(), instance.display.getHeight()).multiply(0.5));
@@ -39,6 +38,25 @@ public class SceneInGame extends Scene {
         this.instance.itemRegistry.load();
 
         player.setItemInHand(instance.itemRegistry.fork);
+
+        // Scatter enemies
+        for (int i = 0; i < 500; i++) {
+            EntityAnt ant = new EntityAnt(new BoundingBox(findEnemySpawn(), new Vec2D(60, 12)));
+            this.instance.world.entitiesLoaded.add(ant);
+        }
+    }
+
+    private Vec2D findEnemySpawn() {
+        World world = this.instance.world;
+        double x = (world.topLeft.x + world.bottomRight.x) * Math.random();
+        double y = (world.topLeft.y + world.bottomRight.y) * Math.random();
+        double space = Tile.TILE_SIZE * 1.5;
+        BoundingBox spawn = new BoundingBox(new Vec2D(x - (space / 2), y - (space / 2)), new Vec2D(space, space));
+        for (Chunk chunk : this.instance.world.chunks) {
+            if (Arrays.stream(chunk.getLevelObjects()).anyMatch(levelObject -> levelObject.hasCollision() && Arrays.stream(levelObject.getCollisionBoxes()).anyMatch(boundingBox -> boundingBox.isColliding(spawn, 0))))
+                return findEnemySpawn();
+        }
+        return spawn.center();
     }
 
     private void zoomOut(double scale) {
@@ -64,12 +82,12 @@ public class SceneInGame extends Scene {
         updateMousePosition(x, y);
         updateMouseWorldPosition();
 
-        Vec2D projSize = new Vec2D(20, 20);
+        Vec2D projSize = new Vec2D(40, 40);
         EntityProjectile proj = new EntityProjectile(
                 new BoundingBox(this.player.getBoundingBox().center().clone().subtract(projSize.clone().multiply(0.5)),
                        projSize),
                 this.player, this.player.getBoundingBox().center().rotationTo(this.mouseWorldPosition),
-                0.75, 450.0);
+                0.875, Tile.TILE_SIZE * 5);
         this.instance.world.entitiesLoaded.add(proj);
     }
 
@@ -147,8 +165,6 @@ public class SceneInGame extends Scene {
 
         chunkTime = System.currentTimeMillis() - chunkTime;
 
-        boolean playerColliding = false;
-
         long collisionTime = System.currentTimeMillis();
 
         int tilesLoaded = 0;
@@ -162,12 +178,19 @@ public class SceneInGame extends Scene {
         // Update entities
         this.instance.world.entitiesLoaded.forEach(entity -> entity.update(this, dt));
 
+        ArrayList<Entity> entitiesToCheckCollision = new ArrayList<>(this.instance.world.entitiesLoaded);
+
+        // No need to check for particles and  for entities which are not in a loaded chunk
+        entitiesToCheckCollision.removeIf(entity -> entity instanceof EntityParticle || !this.instance.world.chunksLoaded.stream().anyMatch(chunk -> entity.getBoundingBox().isColliding(chunk.getBoundingBox(), 0)));
+
+        boolean emitParticlesForLoadedTiles = Constants.EMIT_PARTICLES_IN_LOADED_CHUNKS;
+
         for (Chunk chunk : this.instance.world.chunksLoaded) {
             LevelObject[] levelObjects = chunk.getLevelObjects();
             tilesLoaded += levelObjects.length;
 
             // Handle collision with level
-            for (Entity entity : this.instance.world.entitiesLoaded) {
+            for (Entity entity : entitiesToCheckCollision) {
                 // Create a list which is going to be sorted by the tile's by distance to entity
                 // This list is used for collision detection and the distance to the entity determines
                 // the order in which the collision is going to be checked.
@@ -186,13 +209,19 @@ public class SceneInGame extends Scene {
                 }
             }
 
-            // Add level objects from chunk to list
+            // Try to emit particles for each tile
+            if (emitParticlesForLoadedTiles)
+                Arrays.stream(levelObjects).filter(levelObject -> levelObject instanceof Tile).forEach(tile -> ((Tile) tile).emitParticles(this, dt));
+
+            // Add level objects from chunk to list to draw them later
             zSortedLevelObjects.addAll(Arrays.stream(levelObjects).toList().stream().filter(obj -> createScaledToDisplay(obj.getBoundingBox()).isColliding(cameraView, 0)).toList());
         }
 
+
         // Handle collision with entities
-        ArrayList<Entity> reversedEntityList = new ArrayList<>(this.instance.world.entitiesLoaded);
+        ArrayList<Entity> reversedEntityList = new ArrayList<>(entitiesToCheckCollision);
         Collections.reverse(reversedEntityList);
+
         for (Entity entity : reversedEntityList) {
             for (Entity entity2 : reversedEntityList) {
                 if (entity == entity2)
@@ -229,7 +258,9 @@ public class SceneInGame extends Scene {
             // Sort current batch by y value
             batch.sort(Comparator.comparingInt(DisplayEntity::getY));
 
+            // Draw entities
             batch.forEach(displayEntity -> displayEntity.draw(this, g2d, dt));
+
             countDrawnOnScreen += batch.size();
             batch.clear();
         }
@@ -300,10 +331,12 @@ public class SceneInGame extends Scene {
         // Revert camera position translation
         g2d.translate(+this.cameraPos.x, +this.cameraPos.y);
 
+        OperatingSystemMXBean operatingSystemMXBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
         g2d.setColor(Color.WHITE);
         Font TODO_MAKE_GLOBAL = new Font("Arial", Font.PLAIN, 0);
         g2d.setFont(TODO_MAKE_GLOBAL.deriveFont((float) super.scaleToDisplay(35.0/ scaleFactor)));
-        this.fontRenderer.drawString(g2d, (Math.round(this.instance.gameLoop.getFramesPerSecond() * 10.0) / 10.0) + " FPS", super.scaleToDisplay(50.0 / this.scaleFactor), super.scaleToDisplay(50.0 / this.scaleFactor), FontRenderer.LEFT, FontRenderer.TOP,true);
+        double jvmLoad = operatingSystemMXBean.getSystemLoadAverage() / operatingSystemMXBean.getAvailableProcessors();
+        this.fontRenderer.drawString(g2d, (Math.round(this.instance.gameLoop.getFramesPerSecond() * 10.0) / 10.0) + " FPS, " + Math.round(jvmLoad * 1000.0) / 10.0 + "%, " + "", super.scaleToDisplay(50.0 / this.scaleFactor), super.scaleToDisplay(50.0 / this.scaleFactor), FontRenderer.LEFT, FontRenderer.TOP,true);
 
         if (Constants.SHOW_COLLISION || Constants.SHOW_CHUNK_BORDERS) {
             String[] extraInfo = {
@@ -342,6 +375,25 @@ public class SceneInGame extends Scene {
             if (createScaledToDisplay(chunk.getBoundingBox()).isColliding(cameraView, 0)) {
                 // If on screen, add to loaded chunks
                 this.instance.world.chunksLoaded.add(chunk);
+
+                // Add entities
+                if (chunk.getEntities().size() > 0) {
+                    this.instance.world.entitiesLoaded.addAll(chunk.getEntities());
+                    chunk.getEntities().clear();
+                }
+            }
+        }
+
+        // Unload entities
+        for (Entity entity : this.instance.world.entitiesLoaded) {
+            if (!this.instance.world.chunksLoaded.stream().anyMatch(chunk -> entity.getBoundingBox().isColliding(chunk.getBoundingBox(), 0))) {
+                this.instance.world.entitiesLoaded.remove(entity);
+                for (Chunk chunk : this.instance.world.chunks) {
+                    if (chunk.getBoundingBox().isColliding(entity.getBoundingBox(), 0)) {
+                        chunk.getEntities().add(entity);
+                        break;
+                    }
+                }
             }
         }
     }
