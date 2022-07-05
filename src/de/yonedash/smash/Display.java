@@ -23,7 +23,7 @@ public class Display extends JFrame {
         super.setSize(1280, 720);
 
         // Set title
-        super.setTitle("AA");
+        super.setTitle("Solity Immortal");
 
         // Set close operation, we want program to exit when display window is closed
         super.addWindowListener(new WindowAdapter() {

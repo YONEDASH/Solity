@@ -1,3 +1,4 @@
+
 import de.yonedash.smash.Instance;
 
 public class GPUTest {

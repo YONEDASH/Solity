@@ -28,7 +28,7 @@ public class EntityProjectile extends EntityBase {
         g2d.setColor(Color.WHITE);
         GraphicsUtils.rotate(g2d, rotationDegView, scene.scaleToDisplay(center.x), scene.scaleToDisplay(center.y));
         g2d.drawImage(
-                scene.instance.atlas.fork.getBufferedImage(),
+                scene.instance.atlas.fork.getImage(),
                 scene.scaleToDisplay(this.boundingBox.position.x), scene.scaleToDisplay(this.boundingBox.position.y),
                 scene.scaleToDisplay(this.boundingBox.size.x), scene.scaleToDisplay(this.boundingBox.size.y),
                 null
@@ -63,23 +63,51 @@ public class EntityProjectile extends EntityBase {
     }
 
     @Override
-    public boolean collide(Scene scene, LevelObject levelObject) {
+    public boolean collide(Scene scene, LevelObject levelObject, BoundingBox objectBoundingBox) {
+        if (!scene.instance.world.entitiesLoaded.contains(this))
+            return false;
+
         // levelObject.getBoundingBox().size = levelObject.getBoundingBox().position = new Vec2D(0, 0);
         scene.instance.world.entitiesLoaded.remove(this);
+
+
+        double particleHitScale = 0.75;
+        EntityParticle particle = new EntityParticle(this.boundingBox.clone().scale(particleHitScale), scene.instance.atlas.hit, 0.0, 0.0, 150.0, this.getZ(), false);
+        scene.instance.world.entitiesLoaded.add(particle);
+
         return true;
     }
 
     @Override
     public boolean collide(Scene scene, Entity entity) {
-        if (shooter == entity)
+        if (shooter == entity || !scene.instance.world.entitiesLoaded.contains(this))
             return false;
 
         scene.instance.world.entitiesLoaded.remove(this);
         scene.instance.world.entitiesLoaded.remove(entity);
+
+        {
+            EntityParticle particle = new EntityParticle(entity.getBoundingBox().clone().scale(2.0), scene.instance.atlas.afterdeath, 0.0, 0.0, 350.0, entity.getZ(), false);
+            scene.instance.world.entitiesLoaded.add(particle);
+        }
+
+        double particleHitScale = 0.75;
+        EntityParticle particle = new EntityParticle(this.boundingBox.clone().scale(particleHitScale), scene.instance.atlas.hit, 0.0, 0.0, 150.0, this.getZ(), false);
+        scene.instance.world.entitiesLoaded.add(particle);
+
         return true;
     }
 
     public Entity getShooter() {
         return shooter;
     }
+
+    public double getRotation() {
+        return rotation;
+    }
+
+    public double getMoveSpeed() {
+        return moveSpeed;
+    }
+
 }

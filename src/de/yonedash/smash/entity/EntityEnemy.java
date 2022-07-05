@@ -3,9 +3,6 @@ package de.yonedash.smash.entity;
 import de.yonedash.smash.*;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.util.ArrayList;
-import java.util.Comparator;
 
 public class EntityEnemy extends EntityCharacter {
 
@@ -51,7 +48,7 @@ public class EntityEnemy extends EntityCharacter {
     }
 
     @Override
-    public boolean collide(Scene scene, LevelObject levelObject) {
+    public boolean collide(Scene scene, LevelObject levelObject, BoundingBox objectBoundingBox) {
         return true;
     }
 

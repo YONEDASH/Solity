@@ -4,7 +4,6 @@ import de.yonedash.smash.*;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.security.Key;
 
 public class EntityPlayer extends EntityCharacter  {
 
@@ -50,7 +49,7 @@ public class EntityPlayer extends EntityCharacter  {
     }
 
     @Override
-    public boolean collide(Scene scene, LevelObject levelObject) {
+    public boolean collide(Scene scene, LevelObject levelObject, BoundingBox objectBoundingBox) {
         return true;
     }
 

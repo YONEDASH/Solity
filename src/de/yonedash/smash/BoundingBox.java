@@ -147,6 +147,16 @@ public class BoundingBox {
         return this;
     }
 
+    // Scale
+    public BoundingBox scale(double factor) {
+        Vec2D originSize = this.size.clone();
+        this.size.multiply(factor);
+        double dx = this.size.x - originSize.x;
+        double dy = this.size.y - originSize.y;
+        this.position.subtract(new Vec2D(dx, dy).multiply(0.5));
+        return this;
+    }
+
     @Override
     public BoundingBox clone() {
         BoundingBox clone = new BoundingBox(null, null);

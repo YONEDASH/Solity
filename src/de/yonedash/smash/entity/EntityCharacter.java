@@ -52,7 +52,7 @@ public abstract class EntityCharacter extends EntityBase {
         );
 
         g2d.drawImage(
-                texture.getBufferedImage(),
+                texture.getImage(),
                 scene.scaleToDisplay(texBB.position.x),
                 scene.scaleToDisplay(texBB.position.y),
                 scene.scaleToDisplay(texBB.size.x),
@@ -70,7 +70,7 @@ public abstract class EntityCharacter extends EntityBase {
                 rotationDegView = itemBBCenter.rotationTo(sig.mouseWorldPosition) + 90.0;
             GraphicsUtils.rotate(g2d, rotationDegView, scene.scaleToDisplay(itemBBCenter.x), scene.scaleToDisplay(itemBBCenter.y));
             g2d.drawImage(
-                    itemTexture.getBufferedImage(),
+                    itemTexture.getImage(),
                     scene.scaleToDisplay(itemBB.position.x),
                     scene.scaleToDisplay(itemBB.position.y),
                     scene.scaleToDisplay(itemBB.size.x),
@@ -132,7 +132,7 @@ public abstract class EntityCharacter extends EntityBase {
     }
 
     @Override
-    public boolean collide(Scene scene, LevelObject levelObject) {
+    public boolean collide(Scene scene, LevelObject levelObject, BoundingBox objectBoundingBox) {
         return true;
     }
 

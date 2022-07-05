@@ -77,9 +77,31 @@ public class TextureAnimated implements Texture {
     }
 
     @Override
+    public Image getImage() {
+        return this.bufferedImages[this.playbackIndex];
+    }
+
+    public Image getImage(int index) {
+        return this.bufferedImages[index];
+    }
+
+    public double getPlaybackLength() {
+        return playbackLength;
+    }
+
+    public int getSize() {
+        return this.bufferedImages.length;
+    }
+
+    @Override
     public BufferedImage getBufferedImage() {
         return this.bufferedImages[this.playbackIndex];
     }
+
+    public BufferedImage getBufferedImage(int index) {
+        return this.bufferedImages[index];
+    }
+
 
     @Override
     public void flush() {

@@ -21,7 +21,7 @@ public class Tile extends LevelObject {
     @Override
     public void draw(Scene scene, Graphics2D g2d, double dt) {
         double padding = 1.0 / scene.calculateDisplayScaleFactor();
-        g2d.drawImage(this.texture.getBufferedImage(),
+        g2d.drawImage(this.texture.getImage(),
                 scene.scaleToDisplay(this.boundingBox.position.x - padding),
                 scene.scaleToDisplay(this.boundingBox.position.y - padding),
                 scene.scaleToDisplay(this.boundingBox.size.x + padding * 2),
@@ -29,7 +29,7 @@ public class Tile extends LevelObject {
                 null
         );
 
-        if (!Constants.EMIT_PARTICLES_IN_LOADED_CHUNKS)
+        if (!Constants.PARTICLE_EMIT_IN_LOADED_CHUNKS)
             emitParticles(scene, dt);
     }
 
@@ -43,7 +43,7 @@ public class Tile extends LevelObject {
 
             double random1 = Math.random(), random2 = Math.random(), random3 = (random1 + random2) / 2, random4 = Math.random();
             double centerOffsetFactor = 0.7;
-            Vec2D particleSize = new Vec2D(random4 * random3 * Tile.TILE_SIZE * 0.0615 * 2.0, random4 * random3 * Tile.TILE_SIZE * 0.0615 * 2.0);
+            Vec2D particleSize = new Vec2D(random4 * random3 * Tile.TILE_SIZE * 0.0615 * 2.3, random4 * random3 * Tile.TILE_SIZE * 0.0615 * 2.3);
             World world = scene.instance.world;
             EntityParticleLeaf entityParticleLeaf = new EntityParticleLeaf(
                     new BoundingBox(this.boundingBox.center().clone().add(
@@ -59,7 +59,7 @@ public class Tile extends LevelObject {
         this.particleType = particleType;
         rollNextEmitTime();
 
-        int tw = this.texture.getBufferedImage().getWidth(), th = this.texture.getBufferedImage().getHeight();
+        int tw = this.texture.getWidth(), th = this.texture.getHeight();
         int size = Math.min(8, Math.min(tw, th));
         Texture particle = atlas.loadTexture(this.texture, tw / 2 - size / 2, th / 2 - size / 2, size, size);
         atlas.storeParticle(this.texture, particle);

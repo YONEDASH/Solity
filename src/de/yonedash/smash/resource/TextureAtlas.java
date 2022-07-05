@@ -1,6 +1,7 @@
 package de.yonedash.smash.resource;
 
 import de.yonedash.smash.Direction;
+import de.yonedash.smash.Instance;
 import de.yonedash.smash.entity.Entity;
 import de.yonedash.smash.entity.EntityAnt;
 import de.yonedash.smash.entity.EntityPlayer;
@@ -16,6 +17,7 @@ import static de.yonedash.smash.Direction.*;
 
 public class TextureAtlas {
 
+    private final Instance instance;
     protected final ArrayList<Texture> texturesLoaded;
     private final HashMap<Class<? extends Entity>, TextureBundle> textureBundles;
     private final HashMap<Texture, Texture> particleMap;
@@ -23,11 +25,13 @@ public class TextureAtlas {
     public final int walkSubId = 0x0000, idleSubId = 0x1111;
 
     public final Texture invalid;
-    public Texture crosshair, fork, leaf;
+    public Texture crosshair, fork, slash, afterdeath, hit;
 
     public Texture forest;
 
-    public TextureAtlas() {
+    public TextureAtlas(Instance instance) {
+        this.instance = instance;
+
         this.texturesLoaded = new ArrayList<>();
         this.textureBundles = new HashMap<>();
         this.particleMap = new HashMap<>();
@@ -71,6 +75,16 @@ public class TextureAtlas {
         antBundle.store(0x001 + idleSubId, antIdle);
         antBundle.store(0x004 + idleSubId, antIdle);
         antBundle.store(0x002 + idleSubId, antIdle);
+
+        // Load effects
+        this.slash = loadTexture("/slash_effect_anim_spritesheet.png",
+                10.0, 0, 0, 16, 16, EAST, 3);
+
+        this.afterdeath = loadTexture("/enemy_afterdead_explosion_anim_spritesheet.png",
+                10.0, 0, 0, 16, 16, EAST, 4);
+
+        this.hit = loadTexture("/hit_effect_anim_spritesheet.png",
+                10.0, 0, 0, 8, 8, EAST, 3);
     }
 
     public void update(double dt) {

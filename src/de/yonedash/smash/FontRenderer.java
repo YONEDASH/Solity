@@ -45,7 +45,7 @@ public class FontRenderer {
             default -> throw new IllegalArgumentException("Unexpected horizontal align");
         };
         g2d.drawString(text, x + (int) horizontalModifier, y + (int) verticalModifier);
-        return hb;
+        return hb.add(new BoundingBox(new Vec2D(x, y), Vec2D.zero()));
     }
 
     public BoundingBox bounds(Graphics2D g2d, String text) {

@@ -1,24 +1,28 @@
 package de.yonedash.smash.entity;
 
-import de.yonedash.smash.BoundingBox;
-import de.yonedash.smash.Scene;
+import de.yonedash.smash.*;
 import de.yonedash.smash.resource.Texture;
+import de.yonedash.smash.resource.TextureIndividual;
 
 import java.awt.*;
 
 public class EntityParticle extends EntityBase {
 
-    private final Texture texture;
+    private final TextureIndividual texture;
     private final int z;
 
     private double rotationDirection, moveSpeed, timeAlive;
     private final double targetTimeAlive;
 
-    public EntityParticle(BoundingBox boundingBox, Texture texture, double rotationDirection, double moveSpeed, double targetTimeAlive, int z) {
+    private boolean rotate;
+
+    public EntityParticle(BoundingBox boundingBox, Texture texture, double rotationDirection, double moveSpeed, double targetTimeAlive, int z, boolean rotate) {
         super(boundingBox);
-        this.texture = texture;
+        this.texture = new TextureIndividual(texture);
+        this.texture.setLooping(false);
         this.z = z;
         this.targetTimeAlive = targetTimeAlive;
+        this.rotate = rotate;
         changeDirection(rotationDirection, moveSpeed);
     }
 
@@ -29,6 +33,9 @@ public class EntityParticle extends EntityBase {
 
     @Override
     public void update(Scene scene, double dt) {
+        double moveSpeed = scene.time(this.moveSpeed, dt);
+        this.motion.add(this.rotationDirection, moveSpeed);
+
         super.update(scene, dt);
 
         this.timeAlive += dt;
@@ -40,9 +47,13 @@ public class EntityParticle extends EntityBase {
 
     }
 
+
     @Override
     public void draw(Scene scene, Graphics2D g2d, double dt) {
-        this.boundingBox.position.add(this.rotationDirection, scene.time(this.moveSpeed, dt));
+        this.texture.update(dt);
+
+        Vec2D center = this.boundingBox.center();
+        double rotationDegView = this.rotationDirection + 0.0;
 
         double progress = this.timeAlive / this.targetTimeAlive;
         double alpha = progress > 0.8 ? 1.0 - ((progress - 0.8) / 0.2) : 1;
@@ -51,14 +62,14 @@ public class EntityParticle extends EntityBase {
         AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, (float) alpha);
         g2d.setComposite(alphaComposite);
 
+        GraphicsUtils.rotate(g2d, rotationDegView, scene.scaleToDisplay(center.x), scene.scaleToDisplay(center.y));
         g2d.drawImage(
-                this.texture.getBufferedImage(),
-                scene.scaleToDisplay(this.boundingBox.position.x - this.boundingBox.size.x / 2.0),
-                scene.scaleToDisplay(this.boundingBox.position.y - this.boundingBox.size.y / 2.0),
-                scene.scaleToDisplay(this.boundingBox.size.x),
-                scene.scaleToDisplay(this.boundingBox.size.y),
+                this.texture.getImage(),
+                scene.scaleToDisplay(this.boundingBox.position.x), scene.scaleToDisplay(this.boundingBox.position.y),
+                scene.scaleToDisplay(this.boundingBox.size.x), scene.scaleToDisplay(this.boundingBox.size.y),
                 null
         );
+        GraphicsUtils.rotate(g2d, -rotationDegView, scene.scaleToDisplay(center.x), scene.scaleToDisplay(center.y));
 
         g2d.setComposite(compositeBefore);
     }
@@ -69,7 +80,7 @@ public class EntityParticle extends EntityBase {
     }
 
     @Override
-    public boolean collide(Scene scene, LevelObject levelObject) {
+    public boolean collide(Scene scene, LevelObject levelObject, BoundingBox objectBoundingBox) {
         return false;
     }
 

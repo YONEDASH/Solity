@@ -5,11 +5,8 @@ import de.yonedash.smash.resource.Texture;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.lang.management.ManagementFactory;
-import java.lang.management.OperatingSystemMXBean;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class SceneInGame extends Scene {
 
@@ -22,14 +19,14 @@ public class SceneInGame extends Scene {
     public SceneInGame(Instance instance) {
         super(instance);
 
-        // Zoom from player to map
-        this.zoomOut(7.5);
-
         this.player = new EntityPlayer(new BoundingBox(new Vec2D(0, 0), new Vec2D(40 * 2, 10 * 2)));
         instance.world.entitiesLoaded.add(this.player);
 
         // Initialize camera vec
         this.cameraPos = calculateCameraTargetPos().subtract(new Vec2D(instance.display.getWidth(), instance.display.getHeight()).multiply(0.5));
+
+        // Load fonts
+        this.instance.lexicon.load();
 
         // Load textures
         this.instance.atlas.load();
@@ -44,6 +41,9 @@ public class SceneInGame extends Scene {
             EntityAnt ant = new EntityAnt(new BoundingBox(findEnemySpawn(), new Vec2D(60, 12)));
             this.instance.world.entitiesLoaded.add(ant);
         }
+
+        // Zoom from player to map
+        this.zoomOut(7.5);
     }
 
     private Vec2D findEnemySpawn() {
@@ -89,6 +89,17 @@ public class SceneInGame extends Scene {
                 this.player, this.player.getBoundingBox().center().rotationTo(this.mouseWorldPosition),
                 0.875, Tile.TILE_SIZE * 5);
         this.instance.world.entitiesLoaded.add(proj);
+
+        int particleCount = (int) (proj.getMoveSpeed() / 0.1 * Constants.PARTICLE_PROJECTILE_COUNT_FACTOR);
+        double dirSplitDeg = 5.5;
+        boolean dirSplit = false;
+        for (int i = 0; i < particleCount; i++) {
+            double f = 0.8 * ((i + 1) / (double) particleCount);
+            for (int d = 0; d <= (dirSplit ? 2 : 0); d++) {
+                EntityParticle particle = new EntityParticle(proj.getBoundingBox().clone(), this.instance.atlas.slash, proj.getRotation() + (d == 1 ? dirSplitDeg : d == 2 ? -dirSplitDeg : 0.0), proj.getMoveSpeed() * f, 300.0 * f, proj.getZ() + 1, true);
+                this.instance.world.entitiesLoaded.add(particle);
+            }
+        }
     }
 
     private void updateMousePosition(int x, int y) {
@@ -181,9 +192,9 @@ public class SceneInGame extends Scene {
         ArrayList<Entity> entitiesToCheckCollision = new ArrayList<>(this.instance.world.entitiesLoaded);
 
         // No need to check for particles and  for entities which are not in a loaded chunk
-        entitiesToCheckCollision.removeIf(entity -> entity instanceof EntityParticle || !this.instance.world.chunksLoaded.stream().anyMatch(chunk -> entity.getBoundingBox().isColliding(chunk.getBoundingBox(), 0)));
+        entitiesToCheckCollision.removeIf(entity -> entity instanceof EntityParticle || this.instance.world.chunksLoaded.stream().noneMatch(chunk -> entity.getBoundingBox().isColliding(chunk.getBoundingBox(), 0)));
 
-        boolean emitParticlesForLoadedTiles = Constants.EMIT_PARTICLES_IN_LOADED_CHUNKS;
+        boolean emitParticlesForLoadedTiles = Constants.PARTICLE_EMIT_IN_LOADED_CHUNKS;
 
         for (Chunk chunk : this.instance.world.chunksLoaded) {
             LevelObject[] levelObjects = chunk.getLevelObjects();
@@ -197,12 +208,12 @@ public class SceneInGame extends Scene {
                 // This way many bugs are bypassed.
                 ArrayList<LevelObject> distanceSortedLevelObjects = new ArrayList<>(List.of(levelObjects));
                 Vec2D posEntityCenter = entity.getBoundingBox().center();
-                ;
+
                 distanceSortedLevelObjects.sort(Comparator.comparingDouble(o -> o.getBoundingBox().center().distanceSqrt(posEntityCenter)));
 
                 for (LevelObject levelObject : distanceSortedLevelObjects) {
                     for (BoundingBox bb : levelObject.getCollisionBoxes()) {
-                        if (levelObject.hasCollision() && entity.getBoundingBox().isColliding(bb, 0) && entity.collide(this, levelObject)) {
+                        if (levelObject.hasCollision() && entity.getBoundingBox().isColliding(bb, 0) && entity.collide(this, levelObject, bb)) {
                             entity.getBoundingBox().handleCollision(bb);
                         }
                     }
@@ -324,19 +335,51 @@ public class SceneInGame extends Scene {
             else
                 g2d.setColor(Color.GRAY);
             Texture texCrosshair = this.instance.atlas.crosshair;
-            g2d.drawImage(texCrosshair.getBufferedImage(), super.scaleToDisplay(mouseWorldPosition.x) - crosshairSize / 2, super.scaleToDisplay(mouseWorldPosition.y) - crosshairSize / 2, crosshairSize, crosshairSize, null);
+            g2d.drawImage(texCrosshair.getImage(), super.scaleToDisplay(mouseWorldPosition.x) - crosshairSize / 2, super.scaleToDisplay(mouseWorldPosition.y) - crosshairSize / 2, crosshairSize, crosshairSize, null);
             GraphicsUtils.rotate(g2d, -crosshairRotation, super.scaleToDisplay(mouseWorldPosition.x), super.scaleToDisplay(mouseWorldPosition.y));
         }
 
         // Revert camera position translation
         g2d.translate(+this.cameraPos.x, +this.cameraPos.y);
 
-        OperatingSystemMXBean operatingSystemMXBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+        // Draw HUD
+
+        // Set font
+        g2d.setFont(this.instance.lexicon.equipmentPro.deriveFont((float) scaleToDisplay(40.0)));
+
+        // Draw Player Health
+        g2d.setColor(Color.RED);
+        this.fontRenderer.drawString(g2d, "Player Health: " + null, scaleToDisplay(20.0), scaleToDisplay(30.0), FontRenderer.LEFT, FontRenderer.TOP, true);
+
+        // Draw Player Dashes
+        g2d.setColor(Color.GREEN);
+        this.fontRenderer.drawString(g2d, "Player Dashes Left: " + null, scaleToDisplay(20.0), scaleToDisplay(90.0), FontRenderer.LEFT, FontRenderer.TOP, true);
+
+        // Draw Player Heal Potions
+        g2d.setColor(Color.CYAN);
+        this.fontRenderer.drawString(g2d, "Player Heal Potions Left: " + null, scaleToDisplay(20.0), scaleToDisplay(150.0), FontRenderer.LEFT, FontRenderer.TOP, true);
+
+        // Draw Player Inventory
+        // Draw Item in Hand
+        g2d.setColor(Color.YELLOW);
+        this.fontRenderer.drawString(g2d, "Item In Hand: " + player.getItemInHand().getName(), scaleToDisplay(20.0), scaleToDisplay(210.0), FontRenderer.LEFT, FontRenderer.TOP, true);
+
+        // Draw Wave
+        g2d.setColor(new Color(239, 93, 93));
+        g2d.setFont(this.instance.lexicon.compassPro.deriveFont((float) scaleToDisplay(90.0)));
+        BoundingBox waveTextBounds = this.fontRenderer.drawString(g2d, "Wave " + null, width / 2, height - scaleToDisplay(140.0), FontRenderer.CENTER, FontRenderer.BOTTOM, true);
+        g2d.setColor(new Color(208, 202, 202));
+        g2d.setFont(this.instance.lexicon.compassPro.deriveFont((float) scaleToDisplay(40.0)));
+        this.fontRenderer.drawString(g2d, null + " kills", width / 2, (int) (waveTextBounds.position.y + waveTextBounds.size.y) + scaleToDisplay(20.0), FontRenderer.CENTER, FontRenderer.TOP, true);
+
+        // Set font
+        g2d.setFont(this.instance.lexicon.equipmentPro.deriveFont((float) scaleToDisplay(50.0)));
         g2d.setColor(Color.WHITE);
-        Font TODO_MAKE_GLOBAL = new Font("Arial", Font.PLAIN, 0);
-        g2d.setFont(TODO_MAKE_GLOBAL.deriveFont((float) super.scaleToDisplay(35.0/ scaleFactor)));
-        double jvmLoad = operatingSystemMXBean.getSystemLoadAverage() / operatingSystemMXBean.getAvailableProcessors();
-        this.fontRenderer.drawString(g2d, (Math.round(this.instance.gameLoop.getFramesPerSecond() * 10.0) / 10.0) + " FPS, " + Math.round(jvmLoad * 1000.0) / 10.0 + "%, " + "", super.scaleToDisplay(50.0 / this.scaleFactor), super.scaleToDisplay(50.0 / this.scaleFactor), FontRenderer.LEFT, FontRenderer.TOP,true);
+
+        Runtime runtime = Runtime.getRuntime();
+        double memoryUsage = (runtime.totalMemory() - runtime.freeMemory()) * 1e-6;
+        double memoryTotal = (runtime.totalMemory()) * 1e-6;
+        this.fontRenderer.drawString(g2d, (Math.round(this.instance.gameLoop.getFramesPerSecond() * 10.0) / 10.0) + " FPS, " + (Math.round(memoryUsage * 10.0) / 10.0) + "M / " +  (Math.round(memoryTotal * 10.0) / 10.0) + "M", width / 2, super.scaleToDisplay(50.0 / this.scaleFactor), FontRenderer.CENTER, FontRenderer.TOP,false);
 
         if (Constants.SHOW_COLLISION || Constants.SHOW_CHUNK_BORDERS) {
             String[] extraInfo = {
@@ -356,9 +399,9 @@ public class SceneInGame extends Scene {
         // Update camera
 
         // Scale target position to display
-        Vec2D cameraTargetScaledPos = super.createScaledToDisplay(calculateCameraTargetPos());
+        Vec2D cameraTargetScaledPos = super.createScaledToDisplay(this.calculateCameraTargetPos());
         // Calculate speed
-        float cameraSpeed = super.time(0.0069f, dt);
+        float cameraSpeed = super.time(0.003969420f, dt);
         // Move camera by multiplying speed with position delta minus half the screen size (for screen center)
         this.cameraPos.x += cameraSpeed * (cameraTargetScaledPos.x - this.cameraPos.x - (width / 2f));
         this.cameraPos.y += cameraSpeed * (cameraTargetScaledPos.y - this.cameraPos.y - (height / 2f));
@@ -386,7 +429,7 @@ public class SceneInGame extends Scene {
 
         // Unload entities
         for (Entity entity : this.instance.world.entitiesLoaded) {
-            if (!this.instance.world.chunksLoaded.stream().anyMatch(chunk -> entity.getBoundingBox().isColliding(chunk.getBoundingBox(), 0))) {
+            if (this.instance.world.chunksLoaded.stream().noneMatch(chunk -> entity.getBoundingBox().isColliding(chunk.getBoundingBox(), 0))) {
                 this.instance.world.entitiesLoaded.remove(entity);
                 for (Chunk chunk : this.instance.world.chunks) {
                     if (chunk.getBoundingBox().isColliding(entity.getBoundingBox(), 0)) {

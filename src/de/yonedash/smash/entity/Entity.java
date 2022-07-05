@@ -9,7 +9,7 @@ public interface Entity extends DisplayEntity {
 
     void update(Scene scene, double dt);
 
-    boolean collide(Scene scene, LevelObject levelObject);
+    boolean collide(Scene scene, LevelObject levelObject, BoundingBox objectBoundingBox);
 
     boolean collide(Scene scene, Entity entity);
 

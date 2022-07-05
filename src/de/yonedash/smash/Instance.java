@@ -1,6 +1,7 @@
 package de.yonedash.smash;
 
 import de.yonedash.smash.item.ItemRegistry;
+import de.yonedash.smash.resource.FontLexicon;
 import de.yonedash.smash.resource.TextureAtlas;
 
 import java.io.File;
@@ -18,6 +19,8 @@ public class Instance implements Runnable {
 
     public final Display display;
     public final TextureAtlas atlas;
+    public final FontLexicon lexicon;
+
     public final ItemRegistry itemRegistry;
     public final World world;
 
@@ -31,7 +34,10 @@ public class Instance implements Runnable {
         this.display = new Display(this);
 
         // Initialize texture atlas
-        this.atlas = new TextureAtlas();
+        this.atlas = new TextureAtlas(this);
+
+        // Initialize font lexicon
+        this.lexicon = new FontLexicon();
 
         // Initialize item registry
         this.itemRegistry = new ItemRegistry(this);

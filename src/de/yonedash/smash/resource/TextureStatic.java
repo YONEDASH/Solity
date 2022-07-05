@@ -1,8 +1,11 @@
 package de.yonedash.smash.resource;
 
 import de.yonedash.smash.ImageUtils;
+import de.yonedash.smash.Instance;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.VolatileImage;
 
 public class TextureStatic implements Texture {
 
@@ -17,6 +20,11 @@ public class TextureStatic implements Texture {
         this.width = bufferedImage.getWidth();
         this.height = bufferedImage.getHeight();
         this.blank = ImageUtils.isBufferedImageBlank(this.bufferedImage);
+    }
+
+    @Override
+    public Image getImage() {
+        return this.bufferedImage;
     }
 
     @Override
@@ -44,4 +52,5 @@ public class TextureStatic implements Texture {
         this.atlas.texturesLoaded.remove(this);
         this.bufferedImage.flush();
     }
+
 }
