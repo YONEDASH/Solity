@@ -71,7 +71,7 @@ public class EntityProjectile extends EntityBase {
         scene.instance.world.entitiesLoaded.remove(this);
 
 
-        double particleHitScale = 0.75;
+        double particleHitScale = 0.6;
         EntityParticle particle = new EntityParticle(this.boundingBox.clone().scale(particleHitScale), scene.instance.atlas.hit, 0.0, 0.0, 150.0, this.getZ(), false);
         scene.instance.world.entitiesLoaded.add(particle);
 
