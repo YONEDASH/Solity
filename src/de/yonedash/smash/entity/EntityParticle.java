@@ -1,12 +1,13 @@
 package de.yonedash.smash.entity;
 
 import de.yonedash.smash.*;
+import de.yonedash.smash.graphics.GraphicsUtils;
 import de.yonedash.smash.resource.Texture;
-import de.yonedash.smash.resource.TextureIndividual;
+import de.yonedash.smash.graphics.TextureIndividual;
 
 import java.awt.*;
 
-public class EntityParticle extends EntityBase {
+public class EntityParticle extends EntityBase implements VisualEffect {
 
     private final TextureIndividual texture;
     private final int z;

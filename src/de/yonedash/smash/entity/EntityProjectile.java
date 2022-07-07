@@ -1,6 +1,7 @@
 package de.yonedash.smash.entity;
 
 import de.yonedash.smash.*;
+import de.yonedash.smash.graphics.GraphicsUtils;
 
 import java.awt.*;
 

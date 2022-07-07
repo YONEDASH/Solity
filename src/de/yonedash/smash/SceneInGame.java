@@ -1,6 +1,7 @@
 package de.yonedash.smash;
 
 import de.yonedash.smash.entity.*;
+import de.yonedash.smash.graphics.GraphicsUtils;
 import de.yonedash.smash.resource.Texture;
 
 import java.awt.*;
@@ -15,6 +16,8 @@ public class SceneInGame extends Scene {
     private final EntityPlayer player;
 
     private boolean zoomingOut = false;
+
+    private final Texture fog;
 
     public SceneInGame(Instance instance) {
         super(instance);
@@ -44,6 +47,9 @@ public class SceneInGame extends Scene {
 
         // Zoom from player to map
         this.zoomOut(7.5);
+
+        OpenSimplexNoise noise = new OpenSimplexNoise(123);
+        this.fog = GraphicsUtils.createNoiseTexture(noise, 24.0, instance.atlas, 48, 48);
     }
 
     private Vec2D findEnemySpawn() {
@@ -131,6 +137,8 @@ public class SceneInGame extends Scene {
 
     private double timeNoChunksRefreshed;
 
+    double testD;
+
     @Override
     public void update(Graphics2D g2d, double dt) {
         Display display = getDisplay();
@@ -150,6 +158,9 @@ public class SceneInGame extends Scene {
 
         // Update mouse world position
         updateMouseWorldPosition();
+
+        // Update fog offset
+        this.instance.world.fogOffset += super.time(-0.1, dt);
 
         g2d.setStroke(new BasicStroke(1));
 
@@ -191,8 +202,8 @@ public class SceneInGame extends Scene {
 
         ArrayList<Entity> entitiesToCheckCollision = new ArrayList<>(this.instance.world.entitiesLoaded);
 
-        // No need to check for particles and  for entities which are not in a loaded chunk
-        entitiesToCheckCollision.removeIf(entity -> entity instanceof EntityParticle || this.instance.world.chunksLoaded.stream().noneMatch(chunk -> entity.getBoundingBox().isColliding(chunk.getBoundingBox(), 0)));
+        // No need to check collision for visual effects and  for entities which are not in a loaded chunk
+        entitiesToCheckCollision.removeIf(entity -> entity instanceof VisualEffect || this.instance.world.chunksLoaded.stream().noneMatch(chunk -> entity.getBoundingBox().isColliding(chunk.getBoundingBox(), 0)));
 
         boolean emitParticlesForLoadedTiles = Constants.PARTICLE_EMIT_IN_LOADED_CHUNKS;
 
@@ -247,6 +258,10 @@ public class SceneInGame extends Scene {
 
         // Add entities from chunk to list
         zSortedLevelObjects.addAll(this.instance.world.entitiesLoaded.stream().filter(entity -> createScaledToDisplay(entity.getBoundingBox()).isColliding(cameraView, 0)).toList());
+
+        // If fog is disabled remove fog from list
+        if (!Constants.FOG_ENABLED)
+            zSortedLevelObjects.removeIf(displayEntity -> displayEntity instanceof EntityFog);
 
         // Sort list by z value
         zSortedLevelObjects.sort(Comparator.comparingInt(DisplayEntity::getZ));

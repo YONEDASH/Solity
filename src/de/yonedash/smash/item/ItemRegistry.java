@@ -1,7 +1,7 @@
 package de.yonedash.smash.item;
 
 import de.yonedash.smash.Instance;
-import de.yonedash.smash.resource.TextureAtlas;
+import de.yonedash.smash.graphics.TextureAtlas;
 
 public class ItemRegistry {
 

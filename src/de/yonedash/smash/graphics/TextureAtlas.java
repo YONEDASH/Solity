@@ -1,10 +1,12 @@
-package de.yonedash.smash.resource;
+package de.yonedash.smash.graphics;
 
 import de.yonedash.smash.Direction;
 import de.yonedash.smash.Instance;
 import de.yonedash.smash.entity.Entity;
 import de.yonedash.smash.entity.EntityAnt;
 import de.yonedash.smash.entity.EntityPlayer;
+import de.yonedash.smash.resource.ResourceFinder;
+import de.yonedash.smash.resource.Texture;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

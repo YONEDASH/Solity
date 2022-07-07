@@ -11,6 +11,10 @@ import java.util.concurrent.CopyOnWriteArraySet;
 // This class represents the game world
 public class World implements ProgressReport {
 
+    public OpenSimplexNoise simplexNoise;
+
+    public double fogOffset;
+
     public final ArrayList<Chunk> chunks;
     public final CopyOnWriteArraySet<Chunk> chunksLoaded;
     public final CopyOnWriteArraySet<Entity> entitiesLoaded;
@@ -26,6 +30,9 @@ public class World implements ProgressReport {
     private int progressTotal, progress;
 
     public void loadLevel(LevelData level) {
+        // Init simplex noise
+        this.simplexNoise = new OpenSimplexNoise(level.seed());
+
         // In order to prevent bugs, clear all lists/sets
         this.chunks.clear();
         this.chunksLoaded.clear();
@@ -34,7 +41,7 @@ public class World implements ProgressReport {
         // Load tiles into chunks
 
         // Create new arraylist with levels tiles
-        CopyOnWriteArrayList<LevelObject> levelObjects = new CopyOnWriteArrayList<>(level.getLevelObjects());
+        CopyOnWriteArrayList<LevelObject> levelObjects = new CopyOnWriteArrayList<>(level.levelObjects());
 
         // Set progress total for reporting
         this.progressTotal = levelObjects.size();

@@ -1,4 +1,6 @@
-package de.yonedash.smash.resource;
+package de.yonedash.smash.graphics;
+
+import de.yonedash.smash.resource.Texture;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

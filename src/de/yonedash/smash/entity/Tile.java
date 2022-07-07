@@ -2,7 +2,7 @@ package de.yonedash.smash.entity;
 
 import de.yonedash.smash.*;
 import de.yonedash.smash.resource.Texture;
-import de.yonedash.smash.resource.TextureAtlas;
+import de.yonedash.smash.graphics.TextureAtlas;
 
 import java.awt.*;
 
@@ -34,7 +34,7 @@ public class Tile extends LevelObject {
     }
 
     public void emitParticles(Scene scene, double dt) {
-        if (!Constants.ENABLE_PARTICLES)
+        if (!Constants.PARTICLES_ENABLED)
             return;
 
         if (this.particleType != null && (this.time += dt) > this.timeNextParticleEmit) {

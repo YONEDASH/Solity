@@ -3,6 +3,7 @@ package de.yonedash.smash.resource;
 import de.yonedash.smash.*;
 import de.yonedash.smash.entity.LevelObject;
 import de.yonedash.smash.entity.Tile;
+import de.yonedash.smash.graphics.TextureAtlas;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -278,7 +279,7 @@ public class TiledMap implements ProgressReport {
             throw new RuntimeException(e);
         }
 
-        return this.levelData = new LevelData(tiles);
+        return this.levelData = new LevelData(1337, tiles);
     }
 
     final BoundingBox full = new BoundingBox(Vec2D.zero(), new Vec2D(Tile.TILE_SIZE, Tile.TILE_SIZE));

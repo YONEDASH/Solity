@@ -8,6 +8,7 @@ public class GameLoop extends Thread {
     private boolean running;
 
     public GameLoop(Instance instance) {
+        setName("Game Loop");
         this.instance = instance;
     }
 
@@ -57,6 +58,13 @@ public class GameLoop extends Thread {
             // Reset frames counter
             this.frames = 0;
         }
+
+        // Unpause fog thread
+        if (this.instance.fogThread.isAlive())
+            synchronized (this.instance.fogThread) {
+                this.instance.fogThread.notify();
+            }
+
     }
 
     // Returns frames per second
@@ -69,4 +77,7 @@ public class GameLoop extends Thread {
         this.running = false;
     }
 
+    public boolean isRunning() {
+        return running;
+    }
 }

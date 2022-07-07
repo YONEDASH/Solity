@@ -1,6 +1,7 @@
 package de.yonedash.smash;
 
 import de.yonedash.smash.entity.Entity;
+import de.yonedash.smash.entity.EntityFog;
 import de.yonedash.smash.entity.LevelObject;
 
 import java.util.ArrayList;
@@ -17,13 +18,15 @@ public class Chunk {
 
     private final BoundingBox boundingBox;
     private final LevelObject[] levelObjects;
-    private ArrayList<Entity> entities;
+    private final ArrayList<Entity> entities;
 
     public Chunk(int x, int y, LevelObject[] levelObjects) {
         this.boundingBox = new BoundingBox(new Vec2D(x * CHUNK_SIZE, y * CHUNK_SIZE), new Vec2D(CHUNK_SIZE, CHUNK_SIZE));
         this.levelObjects = levelObjects;
         this.entities = new ArrayList<>();
+        this.entities.add(new EntityFog(this));
     }
+
 //
 //    public Texture[] compile() {
 //        var texs[];

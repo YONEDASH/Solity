@@ -1,10 +1,11 @@
 package de.yonedash.smash.entity;
 
 import de.yonedash.smash.*;
+import de.yonedash.smash.graphics.GraphicsUtils;
 import de.yonedash.smash.item.Item;
 import de.yonedash.smash.resource.Texture;
-import de.yonedash.smash.resource.TextureAnimated;
-import de.yonedash.smash.resource.TextureAtlas;
+import de.yonedash.smash.graphics.TextureAnimated;
+import de.yonedash.smash.graphics.TextureAtlas;
 
 import java.awt.*;
 

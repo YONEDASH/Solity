@@ -2,9 +2,8 @@ package de.yonedash.smash;
 
 import de.yonedash.smash.item.ItemRegistry;
 import de.yonedash.smash.resource.FontLexicon;
-import de.yonedash.smash.resource.TextureAtlas;
+import de.yonedash.smash.graphics.TextureAtlas;
 
-import java.io.File;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -26,6 +25,8 @@ public class Instance implements Runnable {
 
     public Scene scene;
     public final GameLoop gameLoop;
+
+    public final Thread fogThread;
 
     public Instance() {
         // Instance constructor, initialize variables before running
@@ -51,6 +52,9 @@ public class Instance implements Runnable {
 
         // Initialize game loop thread
         this.gameLoop = new GameLoop(this);
+
+        // Initialize fog loop thread
+        this.fogThread = new FogThread(this);
 
     }
 

@@ -1,11 +1,10 @@
-package de.yonedash.smash.resource;
+package de.yonedash.smash.graphics;
 
 import de.yonedash.smash.ImageUtils;
-import de.yonedash.smash.Instance;
+import de.yonedash.smash.resource.Texture;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.VolatileImage;
 
 public class TextureStatic implements Texture {
 
