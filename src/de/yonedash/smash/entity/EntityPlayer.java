@@ -1,16 +1,18 @@
 package de.yonedash.smash.entity;
 
 import de.yonedash.smash.*;
+import de.yonedash.smash.graphics.LightSource;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-public class EntityPlayer extends EntityCharacter  {
+public class EntityPlayer extends EntityCharacter {
 
     private int dashes;
 
     public EntityPlayer(BoundingBox boundingBox) {
         super(boundingBox);
+        this.lightSource = new LightSource(Color.WHITE, 25.0);
     }
 
 

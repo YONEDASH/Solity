@@ -11,14 +11,13 @@ import java.util.concurrent.CopyOnWriteArraySet;
 // This class represents the game world
 public class World implements ProgressReport {
 
+    public Vec2D waypoint;
     public OpenSimplexNoise simplexNoise;
-
-    public double fogOffset;
-
+    public double fogOffset, weatherOffset, weatherProgress;
+    public double particleOffset;
     public final ArrayList<Chunk> chunks;
     public final CopyOnWriteArraySet<Chunk> chunksLoaded;
     public final CopyOnWriteArraySet<Entity> entitiesLoaded;
-
     public Vec2D topLeft, bottomRight;
     public World() {
         this.chunks = new ArrayList<>();
@@ -32,6 +31,9 @@ public class World implements ProgressReport {
     public void loadLevel(LevelData level) {
         // Init simplex noise
         this.simplexNoise = new OpenSimplexNoise(level.seed());
+
+        // Reset waypoint
+        this.waypoint = Vec2D.zero();
 
         // In order to prevent bugs, clear all lists/sets
         this.chunks.clear();

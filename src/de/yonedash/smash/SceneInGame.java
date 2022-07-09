@@ -1,7 +1,9 @@
 package de.yonedash.smash;
 
 import de.yonedash.smash.entity.*;
+import de.yonedash.smash.graphics.EntityFog;
 import de.yonedash.smash.graphics.GraphicsUtils;
+import de.yonedash.smash.graphics.VisualEffect;
 import de.yonedash.smash.resource.Texture;
 
 import java.awt.*;
@@ -16,8 +18,6 @@ public class SceneInGame extends Scene {
     private final EntityPlayer player;
 
     private boolean zoomingOut = false;
-
-    private final Texture fog;
 
     public SceneInGame(Instance instance) {
         super(instance);
@@ -49,7 +49,6 @@ public class SceneInGame extends Scene {
         this.zoomOut(7.5);
 
         OpenSimplexNoise noise = new OpenSimplexNoise(123);
-        this.fog = GraphicsUtils.createNoiseTexture(noise, 24.0, instance.atlas, 48, 48);
     }
 
     private Vec2D findEnemySpawn() {
@@ -102,7 +101,7 @@ public class SceneInGame extends Scene {
         for (int i = 0; i < particleCount; i++) {
             double f = 0.8 * ((i + 1) / (double) particleCount);
             for (int d = 0; d <= (dirSplit ? 2 : 0); d++) {
-                EntityParticle particle = new EntityParticle(proj.getBoundingBox().clone(), this.instance.atlas.slash, proj.getRotation() + (d == 1 ? dirSplitDeg : d == 2 ? -dirSplitDeg : 0.0), proj.getMoveSpeed() * f, 300.0 * f, proj.getZ() + 1, true);
+                EntityParticle particle = new EntityParticle(proj.getBoundingBox().clone(), this.instance.atlas.animSlash, proj.getRotation() + (d == 1 ? dirSplitDeg : d == 2 ? -dirSplitDeg : 0.0), proj.getMoveSpeed() * f, 300.0 * f, proj.getZ() + 1, true);
                 this.instance.world.entitiesLoaded.add(particle);
             }
         }
@@ -159,8 +158,17 @@ public class SceneInGame extends Scene {
         // Update mouse world position
         updateMouseWorldPosition();
 
-        // Update fog offset
-        this.instance.world.fogOffset += super.time(-0.1, dt);
+        World world = this.instance.world;
+
+        // Update fog variables
+
+        // Update condition (f.e. this variable controls density)
+        world.weatherOffset += super.time(0.00001, dt);
+        // Update weather progress
+        world.weatherProgress = world.simplexNoise.eval(world.weatherOffset, 0.0);
+        // Make fog move
+        world.fogOffset += super.time(world.weatherProgress > 0 ? -0.1 : 0.1, dt);
+
 
         g2d.setStroke(new BasicStroke(1));
 
@@ -340,6 +348,48 @@ public class SceneInGame extends Scene {
 
         collisionTime = System.currentTimeMillis() - collisionTime;
 
+        world.waypoint = new Vec2D(82 * Tile.TILE_SIZE, 58 * Tile.TILE_SIZE);
+        // Draw waypoint arrow
+        if (world.waypoint != null) {
+            BoundingBox playerBB = player.getBoundingBox();
+            Vec2D center = playerBB.center();
+            double rotationToWaypoint = center.rotationTo(world.waypoint);
+            double arrowDistance = world.waypoint.distanceSqrt(center);
+            double playerDistance = Tile.TILE_SIZE * 1.5;
+            double minDistance = Tile.TILE_SIZE * 1.3;
+            boolean isClose = arrowDistance < minDistance;
+            double arrowSize = 100.0;
+
+            Vec2D arrowPos = !isClose ? center.clone().add(rotationToWaypoint, Math.min(arrowDistance, playerDistance))
+                    : world.waypoint.clone().add(-90, arrowSize * 1.25);
+
+            rotationToWaypoint -= 90.0;
+
+            if (isClose) {
+                rotationToWaypoint = 0.0;
+
+                // Up and down animation
+                double d = ((System.currentTimeMillis() % 1000) / 1000.0) * 2;
+
+                if (d > 1)
+                    d = 1 - d + 1;
+                d /= 2;
+
+                double bounceY = arrowSize * d;
+                arrowPos.add(new Vec2D(0, bounceY));
+            }
+
+            GraphicsUtils.setAlpha(g2d, 0.75f);
+
+            GraphicsUtils.rotate(g2d, rotationToWaypoint, super.scaleToDisplay(arrowPos.x), super.scaleToDisplay(arrowPos.y));
+            g2d.drawImage(this.instance.atlas.arrow.getImage(), super.scaleToDisplay(arrowPos.x - arrowSize / 2),
+                    super.scaleToDisplay(arrowPos.y - arrowSize / 2), super.scaleToDisplay(arrowSize), super.scaleToDisplay(arrowSize), null);
+            GraphicsUtils.rotate(g2d, -rotationToWaypoint, super.scaleToDisplay(arrowPos.x), super.scaleToDisplay(arrowPos.y));
+
+            GraphicsUtils.setAlpha(g2d, 1.0f);
+        }
+
+
         // Draw mouse crosshair
         if (!this.zoomingOut) {
             int crosshairSize = super.scaleToDisplay(100.0);
@@ -349,7 +399,7 @@ public class SceneInGame extends Scene {
                 g2d.setColor(Color.WHITE);
             else
                 g2d.setColor(Color.GRAY);
-            Texture texCrosshair = this.instance.atlas.crosshair;
+            Texture texCrosshair = this.instance.atlas.crossHair;
             g2d.drawImage(texCrosshair.getImage(), super.scaleToDisplay(mouseWorldPosition.x) - crosshairSize / 2, super.scaleToDisplay(mouseWorldPosition.y) - crosshairSize / 2, crosshairSize, crosshairSize, null);
             GraphicsUtils.rotate(g2d, -crosshairRotation, super.scaleToDisplay(mouseWorldPosition.x), super.scaleToDisplay(mouseWorldPosition.y));
         }
@@ -401,13 +451,14 @@ public class SceneInGame extends Scene {
                     "chunks=" + this.instance.world.chunksLoaded.size() + "/" + this.instance.world.chunks.size() + ", tiles=" + tilesLoaded + ", entities=" + this.instance.world.entitiesLoaded.size() + " " + countDrawnOnScreen + " drawn",
                     "dt=" + dt + "ms",
                     "chu_t=" + chunkRefreshDelay + "ms / " + chunkTime + "ms",
-                    "col_t=" + collisionTime + "ms"
+                    "col_t=" + collisionTime + "ms",
+                    "weather=" + world.weatherProgress
             };
             BoundingBox genericBounds = this.fontRenderer.bounds(g2d, "X");
-            Vec2D infoPos = new Vec2D(50, 50 + genericBounds.size.y + Math.abs(genericBounds.position.y));
+            Vec2D infoPos = new Vec2D(50, 400 + genericBounds.size.y + Math.abs(genericBounds.position.y));
             for (String info : extraInfo) {
                 BoundingBox bounds = this.fontRenderer.drawString(g2d, info, super.scaleToDisplay((infoPos.x) / this.scaleFactor), super.scaleToDisplay((infoPos.y) / this.scaleFactor), FontRenderer.LEFT, FontRenderer.TOP,true);
-                infoPos.add(new Vec2D(0, Math.abs(bounds.position.y) + bounds.size.y));
+                infoPos.add(new Vec2D(0, bounds.size.y * 2));
             }
         }
 

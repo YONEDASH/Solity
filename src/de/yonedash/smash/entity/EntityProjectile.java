@@ -72,8 +72,8 @@ public class EntityProjectile extends EntityBase {
         scene.instance.world.entitiesLoaded.remove(this);
 
 
-        double particleHitScale = 0.6;
-        EntityParticle particle = new EntityParticle(this.boundingBox.clone().scale(particleHitScale), scene.instance.atlas.hit, 0.0, 0.0, 150.0, this.getZ(), false);
+        double particleHitScale = 1.0;
+        EntityParticle particle = new EntityParticle(this.boundingBox.clone().scale(particleHitScale), scene.instance.atlas.animHit, 0.0, 0.0, 150.0, this.getZ(), false);
         scene.instance.world.entitiesLoaded.add(particle);
 
         return true;
@@ -88,12 +88,12 @@ public class EntityProjectile extends EntityBase {
         scene.instance.world.entitiesLoaded.remove(entity);
 
         {
-            EntityParticle particle = new EntityParticle(entity.getBoundingBox().clone().scale(2.0), scene.instance.atlas.afterdeath, 0.0, 0.0, 350.0, entity.getZ(), false);
+            EntityParticle particle = new EntityParticle(entity.getBoundingBox().clone().scale(2.0), scene.instance.atlas.animAfterDeath, 0.0, 0.0, 350.0, entity.getZ(), false);
             scene.instance.world.entitiesLoaded.add(particle);
         }
 
         double particleHitScale = 0.75;
-        EntityParticle particle = new EntityParticle(this.boundingBox.clone().scale(particleHitScale), scene.instance.atlas.hit, 0.0, 0.0, 150.0, this.getZ(), false);
+        EntityParticle particle = new EntityParticle(this.boundingBox.clone().scale(particleHitScale), scene.instance.atlas.animHit, 0.0, 0.0, 150.0, this.getZ(), false);
         scene.instance.world.entitiesLoaded.add(particle);
 
         return true;

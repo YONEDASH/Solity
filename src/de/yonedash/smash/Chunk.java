@@ -1,8 +1,9 @@
 package de.yonedash.smash;
 
 import de.yonedash.smash.entity.Entity;
-import de.yonedash.smash.entity.EntityFog;
+import de.yonedash.smash.graphics.EntityFog;
 import de.yonedash.smash.entity.LevelObject;
+import de.yonedash.smash.graphics.EntityLighting;
 
 import java.util.ArrayList;
 
@@ -20,11 +21,15 @@ public class Chunk {
     private final LevelObject[] levelObjects;
     private final ArrayList<Entity> entities;
 
+    private final EntityFog entityFog;
+    private final EntityLighting entityLighting;
+
     public Chunk(int x, int y, LevelObject[] levelObjects) {
         this.boundingBox = new BoundingBox(new Vec2D(x * CHUNK_SIZE, y * CHUNK_SIZE), new Vec2D(CHUNK_SIZE, CHUNK_SIZE));
         this.levelObjects = levelObjects;
         this.entities = new ArrayList<>();
-        this.entities.add(new EntityFog(this));
+        this.entities.add(this.entityFog = new EntityFog(this));
+        this.entities.add(this.entityLighting = new EntityLighting(this));
     }
 
 //
@@ -56,5 +61,13 @@ public class Chunk {
 
     public ArrayList<Entity> getEntities() {
         return this.entities;
+    }
+
+    public EntityFog getEntityFog() {
+        return entityFog;
+    }
+
+    public EntityLighting getEntityLighting() {
+        return entityLighting;
     }
 }

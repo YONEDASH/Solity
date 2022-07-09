@@ -27,7 +27,12 @@ public class TextureAtlas {
     public final int walkSubId = 0x0000, idleSubId = 0x1111;
 
     public final Texture invalid;
-    public Texture crosshair, fork, slash, afterdeath, hit;
+
+    // UI
+    public Texture crossHair, arrow;
+
+    // ING
+    public Texture fork, animSlash, animAfterDeath, animHit;
 
     public Texture forest;
 
@@ -42,14 +47,15 @@ public class TextureAtlas {
     }
 
     public void load() {
-        this.crosshair = loadTexture("/ui/crosshair.png");
+        this.crossHair = loadTexture("/ui/crosshair.png");
+        this.arrow = loadTexture("/ui/arrow.png");
         this.fork = loadTexture("/Fork.png");
         this.forest = loadTexture("/forest.png");
 
         // Load player assets
         TextureBundle playerBundle = getBundleOrCreate(EntityPlayer.class);
 
-        Texture ninjaWalk = loadTexture("/Walk.png");
+        Texture ninjaWalk = loadTexture("/entities/knight/Walk.png");
         playerBundle.store(0x003 + walkSubId, loadTexture(ninjaWalk,
                 10.0, 0, 0, 16, 16, SOUTH, 4));
         playerBundle.store(0x001 + walkSubId, loadTexture(ninjaWalk,
@@ -60,7 +66,7 @@ public class TextureAtlas {
                 10.0, 48, 0, 16, 16, SOUTH, 4));
         ninjaWalk.flush();
 
-        Texture ninjaIdle = loadTexture("/Idle.png");
+        Texture ninjaIdle = loadTexture("/entities/knight/Idle.png");
         playerBundle.store(0x003 + idleSubId, loadTexture(ninjaIdle,
                 1.0, 0, 0, 16, 16, SOUTH, 1));
         playerBundle.store(0x001 + idleSubId, loadTexture(ninjaIdle,
@@ -79,13 +85,13 @@ public class TextureAtlas {
         antBundle.store(0x002 + idleSubId, antIdle);
 
         // Load effects
-        this.slash = loadTexture("/slash_effect_anim_spritesheet.png",
+        this.animSlash = loadTexture("/slash_effect_anim_spritesheet.png",
                 10.0, 0, 0, 16, 16, EAST, 3);
 
-        this.afterdeath = loadTexture("/enemy_afterdead_explosion_anim_spritesheet.png",
+        this.animAfterDeath = loadTexture("/enemy_afterdead_explosion_anim_spritesheet.png",
                 10.0, 0, 0, 16, 16, EAST, 4);
 
-        this.hit = loadTexture("/hit_effect_anim_spritesheet.png",
+        this.animHit = loadTexture("/hit_effect_anim_spritesheet.png",
                 10.0, 0, 0, 8, 8, EAST, 3);
     }
 

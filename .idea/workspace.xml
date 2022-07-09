@@ -1,33 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="Demo" />
+    </artifacts-to-build>
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="72bd4045-439f-4dd9-ab6b-3c8ac232e6b5" name="Changes" comment="Initial commit">
-      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/FogThread.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/OpenSimplexNoise.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/entity/EntityFog.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/entity/VisualEffect.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/graphics/GraphicsUtils.java" afterDir="false" />
+    <list default="true" id="72bd4045-439f-4dd9-ab6b-3c8ac232e6b5" name="Changes" comment="Fog">
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/Demo.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/entities/knight/Idle.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/entities/knight/Walk.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/explosion_anim_spritesheet.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/ui/arrow.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/graphics/EntityLighting.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/de/yonedash/smash/graphics/LightSource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/Idle.png" beforeDir="false" afterPath="$PROJECT_DIR$/resources/entity/ninja/Idle.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/Walk.png" beforeDir="false" afterPath="$PROJECT_DIR$/resources/entity/ninja/Walk.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GPUTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GPUTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/de/yonedash/smash/Chunk.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/smash/Chunk.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/de/yonedash/smash/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/smash/Constants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/yonedash/smash/GameLoop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/smash/GameLoop.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/yonedash/smash/GraphicsUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/smash/FogThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/smash/graphics/GraphicsThread.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/de/yonedash/smash/Instance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/smash/Instance.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/yonedash/smash/LevelData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/smash/LevelData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/smash/ParticleType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/smash/ParticleType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/smash/Scene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/smash/Scene.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/de/yonedash/smash/SceneInGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/smash/SceneInGame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/yonedash/smash/SceneWorldLoading.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/smash/SceneWorldLoading.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/de/yonedash/smash/World.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/smash/World.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/yonedash/smash/entity/EntityCharacter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/smash/entity/EntityCharacter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/smash/entity/DisplayEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/smash/entity/DisplayEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/smash/entity/EntityAnt.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/smash/entity/EntityAnt.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/smash/entity/EntityBase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/smash/entity/EntityBase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/smash/entity/EntityFog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/smash/graphics/EntityFog.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/de/yonedash/smash/entity/EntityParticle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/smash/entity/EntityParticle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/smash/entity/EntityPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/smash/entity/EntityPlayer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/de/yonedash/smash/entity/EntityProjectile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/smash/entity/EntityProjectile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/smash/entity/LevelObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/smash/entity/LevelObject.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/de/yonedash/smash/entity/Tile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/smash/entity/Tile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/yonedash/smash/item/ItemRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/smash/item/ItemRegistry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/yonedash/smash/resource/TextureAnimated.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/smash/graphics/TextureAnimated.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/yonedash/smash/resource/TextureAtlas.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/smash/graphics/TextureAtlas.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/yonedash/smash/resource/TextureBundle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/smash/graphics/TextureBundle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/yonedash/smash/resource/TextureIndividual.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/smash/graphics/TextureIndividual.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/yonedash/smash/resource/TextureStatic.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/smash/graphics/TextureStatic.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/yonedash/smash/resource/TiledMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/smash/resource/TiledMap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/smash/entity/VisualEffect.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/smash/graphics/VisualEffect.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/smash/graphics/GraphicsUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/smash/graphics/GraphicsUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/smash/graphics/TextureAtlas.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/smash/graphics/TextureAtlas.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,26 +78,29 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/til/IdeaProjects/JavaSmash/resources&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/til/IdeaProjects/JavaSmash/resources/ui&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.21120186&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/resources/ui" />
+      <recent name="$PROJECT_DIR$/resources/entity.knight" />
       <recent name="$PROJECT_DIR$/resources" />
       <recent name="$PROJECT_DIR$/resources/fonts" />
       <recent name="$PROJECT_DIR$/resources/entity.ninja" />
-      <recent name="$PROJECT_DIR$/resources/ui" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/resources" />
+      <recent name="$PROJECT_DIR$/resources/entities" />
       <recent name="$PROJECT_DIR$/resources/entity/ninja" />
+      <recent name="$PROJECT_DIR$/resources" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.de.yonedash.smash.Instance">
+  <component name="RunManager" selected="Application.Instance">
     <configuration name="GPUTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="GPUTest" />
       <module name="JavaSmash" />
@@ -94,12 +109,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="de.yonedash.smash.Instance" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration name="Instance" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="de.yonedash.smash.Instance" />
       <module name="JavaSmash" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="de.yonedash.smash.entity.*" />
+          <option name="PATTERN" value="de.yonedash.smash.graphics.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -108,12 +123,12 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.de.yonedash.smash.Instance" />
       <item itemvalue="Application.GPUTest" />
+      <item itemvalue="Application.Instance" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.de.yonedash.smash.Instance" />
+        <item itemvalue="Application.Instance" />
         <item itemvalue="Application.GPUTest" />
       </list>
     </recent_temporary>
@@ -162,7 +177,14 @@
       <option name="project" value="LOCAL" />
       <updated>1657182786055</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Fog">
+      <created>1657201896918</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1657201896918</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -178,7 +200,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="Initial commit" />
+    <MESSAGE value="Fog" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fog" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/JavaSmash$de_yonedash_smash_Instance.ic" NAME="de.yonedash.smash.Instance Coverage Results" MODIFIED="1657199355871" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">

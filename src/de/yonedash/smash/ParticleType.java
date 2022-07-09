@@ -1,10 +1,11 @@
 package de.yonedash.smash;
 
 public enum ParticleType {
-    LEAF(4500.0);
+    LEAF(3000.0, 5000.0);
 
-    public final double maxDelay;
-    ParticleType(double maxDelay) {
+    public final double maxDelay, timeAlive;
+    ParticleType(double maxDelay, double timeAlive) {
         this.maxDelay = maxDelay;
+        this.timeAlive = timeAlive;
     }
 }

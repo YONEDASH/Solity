@@ -1,6 +1,9 @@
-package de.yonedash.smash.entity;
+package de.yonedash.smash.graphics;
 
 import de.yonedash.smash.*;
+import de.yonedash.smash.entity.Entity;
+import de.yonedash.smash.entity.EntityBase;
+import de.yonedash.smash.entity.LevelObject;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -30,17 +33,19 @@ public class EntityFog extends EntityBase implements VisualEffect {
         );
     }
 
-    public void generateFog(Scene scene) {
+    public void updateFog(Scene scene) {
         OpenSimplexNoise simplexNoise = scene.instance.world.simplexNoise;
 
         double fogOffset = scene.instance.world.fogOffset;
+        double weatherProgress = scene.instance.world.weatherProgress;
         double fogSize = 1500.0f;
         double fogX = this.boundingBox.position.x - 1 + fogOffset;
         double fogY = this.boundingBox.position.y - 1 + fogOffset * 0.4;
 
         double fogHorizontalScale = this.boundingBox.size.x / this.image.getWidth();
         double fogVerticalScale = this.boundingBox.size.y / this.image.getHeight();
-        float fogThickness = 1.175f;
+        float fogSpread = 1.175f;
+        float fogDensity = 2.0f * (float) ((weatherProgress + 1.0f) / 2.0f);
         for (int x = 0; x < image.getWidth(); x++) {
             for (int y = 0; y < image.getHeight(); y++) {
                 double value = simplexNoise.eval(
@@ -48,11 +53,11 @@ public class EntityFog extends EntityBase implements VisualEffect {
                 );
 
                 double grade = (value + 1.0) / 2.0;
-                float brightness = (float) grade * fogThickness;
-                float alpha = (float) grade * 0.1f + ((brightness - (float) grade) * 0.8f);
+                float brightness = (float) grade * fogSpread;
+                float alpha = (float) grade * 0.2f + ((brightness - (float) grade) * (1.0f - 0.98f + fogDensity));
 
-                int a = (int) (Math.min(1.0f, alpha) * 255);
-                int b = (int) (Math.min(1.0f, brightness) * 255);
+                int a = (int) (Math.min(1.0f, alpha * 1.2) * 255);
+                int b = (int) (Math.min(1.0f, brightness) * 255 * 0.9);
                 int argb = (a << 24) | (b << 16 ) | (b << 8) | b;
 
                 image.setRGB(x, y, argb);
@@ -62,7 +67,7 @@ public class EntityFog extends EntityBase implements VisualEffect {
 
     @Override
     public int getZ() {
-        return 1;
+        return 100;
     }
 
     @Override

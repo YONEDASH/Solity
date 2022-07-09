@@ -1,6 +1,7 @@
 package de.yonedash.smash.entity;
 
 import de.yonedash.smash.*;
+import de.yonedash.smash.graphics.LightSource;
 
 public abstract class EntityBase implements Entity {
 
@@ -8,6 +9,8 @@ public abstract class EntityBase implements Entity {
     protected final Vec2D motion;
 
     protected Direction viewDirection;
+
+    protected LightSource lightSource;
 
     public EntityBase(BoundingBox boundingBox) {
         this.boundingBox = boundingBox;
@@ -45,4 +48,8 @@ public abstract class EntityBase implements Entity {
         return (int) Math.floor(this.boundingBox.position.y + this.boundingBox.size.y);
     }
 
+    @Override
+    public LightSource getLightSource() {
+        return lightSource;
+    }
 }

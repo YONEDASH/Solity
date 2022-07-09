@@ -35,14 +35,14 @@ public abstract class Scene {
         double factor = ((displayWidth / (double) Constants.SCALE_WIDTH)
                 + (displayHeight / (double) Constants.SCALE_HEIGHT)) / 2.0;
 
-        // Drop accuracy to a 10000th
-        return Math.round(factor * this.scaleFactor * Constants.DISPLAY_SCALE * 0.5 * 10000.0) / 10000.0;
+        // Drop accuracy to a 10th
+        return Math.round(factor * this.scaleFactor * Constants.DISPLAY_SCALE * 0.5 * 10.0) / 10.0;
     }
 
     // Scale value to display dimension-scale
     public int scaleToDisplay(double d) {
         // Scale value
-        return (int) (d * calculateDisplayScaleFactor());
+        return (int) Math.floor(d * calculateDisplayScaleFactor());
     }
 
     // Scales Vec2D to display dimension-scale
@@ -59,11 +59,11 @@ public abstract class Scene {
     // Transfers delta time to milliseconds and multiplies them with value
     // For example this results in constant movement speeds independent of the frame rate
     public double time(double val, double dt) {
-        return val * dt ;//* 0.0000001;
+        return val * Math.min(100.0, dt);//* 0.0000001;
     }
 
     public float time(float val, double dt) {
-        return val * (float) dt ;//* 0.0000001f;
+        return val * (float) Math.min(100f, dt);//* 0.0000001f;
     }
 
     // Dummy methods down here, can be used in different screen to react to user input

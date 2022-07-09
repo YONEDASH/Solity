@@ -41,18 +41,23 @@ public class Tile extends LevelObject {
             rollNextEmitTime();
             this.time = 0;
 
-            double random1 = Math.random(), random2 = Math.random(), random3 = (random1 + random2) / 2, random4 = Math.random();
+            double random1 = random(scene), random2 = random(scene), random3 = (random1 + random2) / 2, random4 = random(scene);
             double centerOffsetFactor = 0.7;
             Vec2D particleSize = new Vec2D(random4 * random3 * Tile.TILE_SIZE * 0.0615 * 2.3, random4 * random3 * Tile.TILE_SIZE * 0.0615 * 2.3);
             World world = scene.instance.world;
+            double rotation = (15.0 + random3 * 69.0) + (90.0 * (world.weatherProgress + 1.0) / 2.0);
             EntityParticleLeaf entityParticleLeaf = new EntityParticleLeaf(
                     new BoundingBox(this.boundingBox.center().clone().add(
                             new Vec2D(this.boundingBox.size.x * random1 * centerOffsetFactor , this.boundingBox.size.y * random2 * centerOffsetFactor)), particleSize),
                     scene.instance.atlas.getParticle(this.texture),
-                    15.0 + random3 * 69.0, 0.075 * random3, this.particleType.maxDelay * ((random1 + random2 + random3) / 3.0),
+                    rotation, 0.075 * random3, this.particleType.timeAlive * ((random1 + random2 + random3) / 3.0),
                     this.z + (random1 > 0.5 ? 1 : -1));
             world.entitiesLoaded.add(entityParticleLeaf);
         }
+    }
+
+    private double random(Scene scene) {
+        return (scene.instance.world.simplexNoise.eval(scene.instance.world.particleOffset++, scene.instance.world.particleOffset / 2) + 1.0) / 2.0;
     }
 
     public void setParticleType(TextureAtlas atlas, ParticleType particleType) {

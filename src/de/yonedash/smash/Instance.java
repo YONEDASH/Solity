@@ -1,5 +1,6 @@
 package de.yonedash.smash;
 
+import de.yonedash.smash.graphics.GraphicsThread;
 import de.yonedash.smash.item.ItemRegistry;
 import de.yonedash.smash.resource.FontLexicon;
 import de.yonedash.smash.graphics.TextureAtlas;
@@ -54,7 +55,7 @@ public class Instance implements Runnable {
         this.gameLoop = new GameLoop(this);
 
         // Initialize fog loop thread
-        this.fogThread = new FogThread(this);
+        this.fogThread = new GraphicsThread(this);
 
     }
 

@@ -2,6 +2,7 @@ package de.yonedash.smash.entity;
 
 import de.yonedash.smash.BoundingBox;
 import de.yonedash.smash.Scene;
+import de.yonedash.smash.graphics.LightSource;
 
 import java.awt.*;
 
@@ -17,6 +18,8 @@ public class LevelObject implements CollisionAware, DisplayEntity {
 
     protected boolean hasDynamicZ;
     protected double dynamicFactor;
+
+    protected LightSource lightSource;
 
     public LevelObject(BoundingBox boundingBox, int z) {
         this.boundingBox = boundingBox;
@@ -75,5 +78,10 @@ public class LevelObject implements CollisionAware, DisplayEntity {
 
     public void setZ(int z) {
         this.z = z;
+    }
+
+    @Override
+    public LightSource getLightSource() {
+        return lightSource;
     }
 }

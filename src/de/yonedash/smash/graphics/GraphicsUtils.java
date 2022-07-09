@@ -18,20 +18,10 @@ public class GraphicsUtils {
         g2d.setTransform(tx);
     }
 
-    public static Texture createNoiseTexture(OpenSimplexNoise noise, double size, TextureAtlas atlas, int w, int h) {
-        BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
-        for (int y = 0; y < w; y++)
-        {
-            for (int x = 0; x < h; x++)
-            {
-                double value = noise.eval(x / size, y / size);
-                int rgb = 0x010101 * (int)((value + 1) * 127.5);
-                image.setRGB(x, y, rgb);
-            }
-        }
-
-        TextureStatic textureStatic = new TextureStatic(atlas, image);
-        return textureStatic;
+    public static void setAlpha(Graphics2D g2d, float alpha) {
+        AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+                    Math.max(Math.min(alpha, 1.0f), 0.0f));
+        g2d.setComposite(alphaComposite);
     }
 
 }

@@ -2,6 +2,7 @@ package de.yonedash.smash.entity;
 
 import de.yonedash.smash.*;
 import de.yonedash.smash.graphics.GraphicsUtils;
+import de.yonedash.smash.graphics.VisualEffect;
 import de.yonedash.smash.resource.Texture;
 import de.yonedash.smash.graphics.TextureIndividual;
 

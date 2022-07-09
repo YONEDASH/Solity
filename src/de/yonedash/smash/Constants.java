@@ -13,7 +13,9 @@ public class Constants {
     public static double PARTICLE_PROJECTILE_COUNT_FACTOR = 5.0;
     public static boolean PARTICLE_EMIT_IN_LOADED_CHUNKS = false;
     public static boolean FOG_ENABLED = true;
-    public static double FOG_QUALITY_FACTOR = 0.05;
+    public static double FOG_QUALITY_FACTOR = 0.1;
+    public static boolean LIGHTING_ENABLED = true;
+    public static double LIGHTING_QUALITY_FACTOR = 0.05;
     public static final int SCALE_WIDTH = 1280, SCALE_HEIGHT = 720;
     public static boolean SHOW_CHUNK_BORDERS = false;
     public static boolean SHOW_COLLISION = false;
