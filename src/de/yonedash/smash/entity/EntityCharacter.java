@@ -44,6 +44,20 @@ public abstract class EntityCharacter extends EntityBase {
         BoundingBox texBB = new BoundingBox(texPos, vecSize);
 
         // Draw shadow
+        g2d.setStroke(new BasicStroke(scene.scaleToDisplay(4.0)));
+        if (this instanceof EntityPlayer) {
+            g2d.setColor(Color.GREEN.darker());
+        } else if (this instanceof EntityEnemy) {
+            g2d.setColor(Color.RED.darker());
+        }
+        g2d.drawOval(
+                scene.scaleToDisplay(this.boundingBox.position.x),
+                scene.scaleToDisplay(this.boundingBox.position.y),
+                scene.scaleToDisplay(this.boundingBox.size.x),
+                scene.scaleToDisplay(this.boundingBox.size.y)
+        );
+
+        // Draw shadow
         g2d.setColor(new Color(0, 0, 0, 75));
         g2d.fillOval(
                 scene.scaleToDisplay(this.boundingBox.position.x),

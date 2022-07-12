@@ -2,6 +2,8 @@ package de.yonedash.smash.entity;
 
 import de.yonedash.smash.*;
 import de.yonedash.smash.graphics.GraphicsUtils;
+import de.yonedash.smash.graphics.TextureIndividual;
+import de.yonedash.smash.resource.Texture;
 
 import java.awt.*;
 
@@ -10,31 +12,39 @@ public class EntityProjectile extends EntityBase {
     protected final Vec2D origin;
     protected final Entity shooter;
     protected double rotation;
-    protected final double moveSpeed, maxDistance;
+    protected final double moveSpeed, maxDistance, damage;
 
-    public EntityProjectile(BoundingBox boundingBox, Entity shooter, double rotation, double moveSpeed, double maxDistance) {
+    protected final TextureIndividual texture;
+
+    public EntityProjectile(Texture texture, BoundingBox boundingBox, Entity shooter, double rotation, double moveSpeed, double damage, double maxDistance) {
         super(boundingBox);
+        this.texture = new TextureIndividual(texture);
         this.origin = boundingBox.center();
         this.shooter = shooter;
         this.rotation = rotation;
         this.moveSpeed = moveSpeed;
         this.maxDistance = maxDistance;
+        this.damage = damage;
     }
 
 
     @Override
     public void draw(Scene scene, Graphics2D g2d, double dt) {
+        this.texture.update(dt);
+
         Vec2D center = this.boundingBox.center();
         double rotationDegView = this.rotation + 90.0;
-        g2d.setColor(Color.WHITE);
         GraphicsUtils.rotate(g2d, rotationDegView, scene.scaleToDisplay(center.x), scene.scaleToDisplay(center.y));
         g2d.drawImage(
-                scene.instance.atlas.fork.getImage(),
+                this.texture.getImage(),
                 scene.scaleToDisplay(this.boundingBox.position.x), scene.scaleToDisplay(this.boundingBox.position.y),
                 scene.scaleToDisplay(this.boundingBox.size.x), scene.scaleToDisplay(this.boundingBox.size.y),
                 null
         );
         GraphicsUtils.rotate(g2d, -rotationDegView, scene.scaleToDisplay(center.x), scene.scaleToDisplay(center.y));
+
+        g2d.setColor(Color.WHITE);
+
     }
 
     @Override
@@ -81,11 +91,14 @@ public class EntityProjectile extends EntityBase {
 
     @Override
     public boolean collide(Scene scene, Entity entity) {
-        if (shooter == entity || !scene.instance.world.entitiesLoaded.contains(this))
+        if (shooter == entity
+                || entity instanceof EntityProjectile
+                || !scene.instance.world.entitiesLoaded.contains(this)
+                || (shooter instanceof EntityEnemy && entity instanceof EntityEnemy))
             return false;
 
         scene.instance.world.entitiesLoaded.remove(this);
-        scene.instance.world.entitiesLoaded.remove(entity);
+        // scene.instance.world.entitiesLoaded.remove(entity);
 
         {
             EntityParticle particle = new EntityParticle(entity.getBoundingBox().clone().scale(2.0), scene.instance.atlas.animAfterDeath, 0.0, 0.0, 350.0, entity.getZ(), false);

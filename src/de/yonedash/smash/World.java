@@ -19,11 +19,30 @@ public class World implements ProgressReport {
     public final CopyOnWriteArraySet<Chunk> chunksLoaded;
     public final CopyOnWriteArraySet<Entity> entitiesLoaded;
     public Vec2D topLeft, bottomRight;
+
+    private double randomOffset;
+
+    private TextPrompt prompt;
+
     public World() {
         this.chunks = new ArrayList<>();
 
         this.chunksLoaded = new CopyOnWriteArraySet<>();
         this.entitiesLoaded = new CopyOnWriteArraySet<>();
+    }
+
+    // Returns random value between -1 and 1
+    public double random() {
+        return this.simplexNoise.eval(randomOffset, ++randomOffset);
+    }
+
+    // Show prompt on screen
+    public void prompt(TextPrompt prompt) {
+        this.prompt = prompt;
+    }
+
+    public TextPrompt getPrompt() {
+        return prompt;
     }
 
     private int progressTotal, progress;

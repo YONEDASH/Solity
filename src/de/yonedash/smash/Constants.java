@@ -19,5 +19,7 @@ public class Constants {
     public static final int SCALE_WIDTH = 1280, SCALE_HEIGHT = 720;
     public static boolean SHOW_CHUNK_BORDERS = false;
     public static boolean SHOW_COLLISION = false;
+    public static double PROMPT_TEXT_REVEAL_SPEED = 0.0075;
+    public static double PROMPT_TEXT_AUTO_NEXT_THRESHOLD = 5.0; // in seconds
 
 }

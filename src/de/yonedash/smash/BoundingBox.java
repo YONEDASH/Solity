@@ -157,6 +157,14 @@ public class BoundingBox {
         return this;
     }
 
+    // Adds all absolute sums to a Vec2D, useful for text bounds
+    public Vec2D abs() {
+        return new Vec2D(
+                Math.abs(this.position.x) + Math.abs(this.size.x),
+                Math.abs(this.position.y) + Math.abs(this.size.y)
+        );
+    }
+
     @Override
     public BoundingBox clone() {
         BoundingBox clone = new BoundingBox(null, null);

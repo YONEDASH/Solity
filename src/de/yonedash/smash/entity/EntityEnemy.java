@@ -3,6 +3,8 @@ package de.yonedash.smash.entity;
 import de.yonedash.smash.*;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Comparator;
 
 public class EntityEnemy extends EntityCharacter {
 
@@ -22,8 +24,12 @@ public class EntityEnemy extends EntityCharacter {
     Vec2D targetPosition;
     int pathInterest;
 
+    double shootIdleTime;
+
     @Override
     public void update(Scene scene, double dt) {
+        super.update(scene, dt);
+
         // Check if entity is loaded in a chunk
         boolean insideChunk = false;
         for (Chunk chunk : scene.instance.world.chunksLoaded) {
@@ -37,9 +43,84 @@ public class EntityEnemy extends EntityCharacter {
         if (!insideChunk)
             return;
 
-        double maxDistance = Tile.TILE_SIZE * 10.0;
+        Vec2D center = this.boundingBox.center();
 
-        super.update(scene, dt);
+        World world = scene.instance.world;
+
+        double maxDistance = Tile.TILE_SIZE * 8.0;
+        double shootDelay = 1000.0;
+        double shotDistance = maxDistance;
+        double shotDamage = 1.0;
+        double shotSpeed = 0.6;
+        double shotSize = 60.0;
+        Vec2D projSize = new Vec2D(shotSize, shotSize);
+
+        // If there is no target or target is too far away, look for a new target
+        if (this.target == null || target.getBoundingBox().center().distanceSqrt(center) >= maxDistance) {
+
+            // Loop through found entities
+            for (Entity temp : findNewTargets(world)) {
+                Vec2D tempCenter = temp.getBoundingBox().center();
+
+                if (tempCenter.distanceSqrt(center) >= maxDistance)
+                    continue;
+
+                // If target can not be seen, target is not viable
+                LevelObject casted = MathUtils.rayCast(world, new BoundingBox(center.clone().subtract(projSize.clone().multiply(0.5)), projSize), center.rotationTo(tempCenter), 5, center.distanceSqrt(tempCenter));
+                if (casted != null) {
+                    continue;
+                }
+
+                // Set new temp as target
+                this.target = temp;
+                break;
+            }
+
+            // Reset shoot idle time
+            this.shootIdleTime = 0.0 - world.random() * shootDelay * 0.5;
+
+            // If there was no target found, do nothing
+            if (this.target == null)
+                return;
+        }
+
+        this.shootIdleTime += dt;
+
+        // defines how good the enemy can predict their shots
+        double intelligence = 1.0; // range 0 - 1
+
+        if (this.shootIdleTime >= shootDelay) {
+            this.shootIdleTime = 0.0 - world.random() * shootDelay * 0.5;
+
+            // Motion prediction
+            Vec2D targetPosition = this.target.getBoundingBox().center();
+            Vec2D targetMotion = this.target.getMotion().clone();
+
+            targetPosition = targetPosition.add(targetMotion.clone().multiply(intelligence));
+
+            double rotation = center.rotationTo(targetPosition);
+
+            EntityProjectile proj = new EntityProjectile(
+                    scene.instance.atlas.projCanonBall,
+                    new BoundingBox(center.clone().subtract(projSize.clone().multiply(0.5)),
+                            projSize),
+                    this, rotation,
+                    shotSpeed, shotDamage, shotDistance);
+
+            world.entitiesLoaded.add(proj);
+        }
+    }
+
+    private ArrayList<Entity> findNewTargets(World world) {
+        Vec2D center = this.boundingBox.center();
+        ArrayList<Entity> targets = new ArrayList<>();
+        for (Entity entity : world.entitiesLoaded) {
+            if (entity instanceof EntityPlayer) {
+                targets.add(entity);
+            }
+        }
+        targets.sort(Comparator.comparingDouble(o -> o.getBoundingBox().center().distanceSqrt(center)));
+        return targets;
     }
 
     @Override

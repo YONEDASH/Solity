@@ -37,11 +37,16 @@ public class Vec2D {
         return this;
     }
 
-    // Multiply, math operation for Vec2D
-    public Vec2D multiply(double f) {
-        this.x *= f;
-        this.y *= f;
+    // Scalar, math operation for Vec2D
+    public Vec2D multiply(double scalar) {
+        this.x *= scalar;
+        this.y *= scalar;
         return this;
+    }
+
+    // Dot, dot product for Vec2D
+    public double dot(Vec2D vec2D) {
+        return this.x * vec2D.x + this.y * vec2D.y;
     }
 
     // Distance between both Vec2Ds
@@ -67,6 +72,11 @@ public class Vec2D {
         return -Math.toDegrees(theta) + 90.0;
     }
 
+    // Calculate length
+    public double length() {
+        return Math.sqrt((x * x) + (y * y));
+    }
+
     // Returns whether x & y are zero
     public boolean isZero() {
         return this.x == 0.0 && this.y == 0.0;
@@ -88,5 +98,9 @@ public class Vec2D {
 
     public static Vec2D zero() {
         return new Vec2D(0, 0);
+    }
+
+    public static Vec2D fromAngle(double angle, double x) {
+        return Vec2D.zero().add(angle, x);
     }
 }

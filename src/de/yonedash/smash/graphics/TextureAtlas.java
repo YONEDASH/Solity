@@ -29,10 +29,13 @@ public class TextureAtlas {
     public final Texture invalid;
 
     // UI
-    public Texture crossHair, arrow;
+    public Texture uiCrossHair, uiArrow, uiBorderText;
 
     // ING
     public Texture fork, animSlash, animAfterDeath, animHit;
+
+    // Projectile
+    public Texture projCanonBall;
 
     public Texture forest;
 
@@ -47,10 +50,20 @@ public class TextureAtlas {
     }
 
     public void load() {
-        this.crossHair = loadTexture("/ui/crosshair.png");
-        this.arrow = loadTexture("/ui/arrow.png");
         this.fork = loadTexture("/Fork.png");
         this.forest = loadTexture("/forest.png");
+
+        // Load UI
+        this.uiCrossHair = loadTexture("/ui/crosshair.png");
+        this.uiArrow = loadTexture("/ui/arrow.png");
+
+        Texture borders = loadTexture("/ui/borders.png");
+        this.uiBorderText = loadTexture(borders, 18 * 1, 18 * 1, 16 * 5, 16 * 5);
+
+        borders.flush();
+
+        // Load projectiles
+        this.projCanonBall = loadTexture("/projectile/CanonBall.png", 5.0, 0, 0, 16, 16, EAST, 5);
 
         // Load player assets
         TextureBundle playerBundle = getBundleOrCreate(EntityPlayer.class);

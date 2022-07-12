@@ -1,5 +1,7 @@
 package de.yonedash.smash;
 
+import de.yonedash.smash.graphics.GraphicsUtils;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;

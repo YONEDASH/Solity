@@ -29,32 +29,34 @@ public class FontRenderer {
     }
 
     private BoundingBox drawString0(Graphics2D g2d, String text, int x, int y, int alignHorizontal, int alignVertical) {
-        FontMetrics metrics = g2d.getFontMetrics(g2d.getFont());
-        BoundingBox vb = bounds(g2d, "XXX");
+        Vec2D vb = bounds(g2d, "!X,");
         double verticalModifier = switch(alignVertical) {
-            case CENTER -> metrics.getAscent() - vb.size.y;
+            case CENTER -> vb.y * 0.5;
             case BOTTOM -> 0;
-            case TOP -> metrics.getAscent() + vb.size.y / -2;
+            case TOP -> +vb.y;
             default -> throw new IllegalArgumentException("Unexpected vertical align");
         };
-        BoundingBox hb = bounds(g2d, text);
+        Vec2D hb = bounds(g2d, text);
         double horizontalModifier = switch(alignHorizontal) {
-            case CENTER -> -hb.size.x / 2;
+            case CENTER -> -hb.x / 2;
             case LEFT -> 0;
-            case RIGHT -> -hb.size.x;
+            case RIGHT -> -hb.x;
             default -> throw new IllegalArgumentException("Unexpected horizontal align");
         };
         g2d.drawString(text, x + (int) horizontalModifier, y + (int) verticalModifier);
-        return hb.add(new BoundingBox(new Vec2D(x, y), Vec2D.zero()));
+        return new BoundingBox(new Vec2D(x, y), hb);
     }
 
-    public BoundingBox bounds(Graphics2D g2d, String text) {
+    public Vec2D bounds(Graphics2D g2d, String text) {
         FontRenderContext context = g2d.getFontRenderContext();
         GlyphVector vector = g2d.getFont().createGlyphVector(context, text);
         Rectangle2D r2d = vector.getVisualBounds();
-        return new BoundingBox(
+        BoundingBox boundingBox = new BoundingBox(
                 new Vec2D(r2d.getX(), r2d.getY()), new Vec2D(r2d.getWidth(), r2d.getHeight())
         );
+        Vec2D bounds = boundingBox.abs();
+        bounds.y *= 0.5;
+        return bounds;
     }
 
 }

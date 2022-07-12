@@ -17,7 +17,8 @@ public class SceneInGame extends Scene {
 
     private final EntityPlayer player;
 
-    private boolean zoomingOut = false;
+    private double promptLettersRevealed = 0;
+    private double promptAutoNextTimer = 0;
 
     public SceneInGame(Instance instance) {
         super(instance);
@@ -41,14 +42,9 @@ public class SceneInGame extends Scene {
 
         // Scatter enemies
         for (int i = 0; i < 500; i++) {
-            EntityAnt ant = new EntityAnt(new BoundingBox(findEnemySpawn(), new Vec2D(60, 12)));
+            EntityAnt ant = new EntityAnt(new BoundingBox(findEnemySpawn(), new Vec2D(60 * 1.5, 12 * 1.5)));
             this.instance.world.entitiesLoaded.add(ant);
         }
-
-        // Zoom from player to map
-        this.zoomOut(7.5);
-
-        OpenSimplexNoise noise = new OpenSimplexNoise(123);
     }
 
     private Vec2D findEnemySpawn() {
@@ -62,11 +58,6 @@ public class SceneInGame extends Scene {
                 return findEnemySpawn();
         }
         return spawn.center();
-    }
-
-    private void zoomOut(double scale) {
-        this.zoomingOut = true;
-        this.scaleFactor = scale;
     }
 
     private final Vec2D mousePosition = new Vec2D(0, 0);
@@ -89,10 +80,11 @@ public class SceneInGame extends Scene {
 
         Vec2D projSize = new Vec2D(40, 40);
         EntityProjectile proj = new EntityProjectile(
+                instance.atlas.fork,
                 new BoundingBox(this.player.getBoundingBox().center().clone().subtract(projSize.clone().multiply(0.5)),
                        projSize),
                 this.player, this.player.getBoundingBox().center().rotationTo(this.mouseWorldPosition),
-                0.875, Tile.TILE_SIZE * 5);
+                0.875, 1.0, Tile.TILE_SIZE * 5);
         this.instance.world.entitiesLoaded.add(proj);
 
         int particleCount = (int) (proj.getMoveSpeed() / 0.1 * Constants.PARTICLE_PROJECTILE_COUNT_FACTOR);
@@ -132,6 +124,13 @@ public class SceneInGame extends Scene {
             if (scaleFactor <= 0)
                 scaleFactor = 0.05;
         }
+        if (key == KeyEvent.VK_P) {
+            Vec2D center = player.getBoundingBox().center();
+            System.out.println("Player Position: " + center);
+        }
+        if (key == KeyEvent.VK_R) {
+            this.promptLettersRevealed = 0.0;
+        }
     }
 
     private double timeNoChunksRefreshed;
@@ -142,18 +141,6 @@ public class SceneInGame extends Scene {
     public void update(Graphics2D g2d, double dt) {
         Display display = getDisplay();
         final int width = display.getWidth(), height = display.getHeight();
-
-        if (display.getInput().isKeyDown(KeyEvent.VK_Y)) {
-            zoomOut(7.5);
-        }
-        if (this.zoomingOut) {
-            if (this.scaleFactor > 1.0)
-                this.scaleFactor -= time(0.003, dt);
-            if (this.scaleFactor <= 1.0) {
-                this.scaleFactor = 1.0;
-                this.zoomingOut = false;
-            }
-        }
 
         // Update mouse world position
         updateMouseWorldPosition();
@@ -382,7 +369,7 @@ public class SceneInGame extends Scene {
             GraphicsUtils.setAlpha(g2d, 0.75f);
 
             GraphicsUtils.rotate(g2d, rotationToWaypoint, super.scaleToDisplay(arrowPos.x), super.scaleToDisplay(arrowPos.y));
-            g2d.drawImage(this.instance.atlas.arrow.getImage(), super.scaleToDisplay(arrowPos.x - arrowSize / 2),
+            g2d.drawImage(this.instance.atlas.uiArrow.getImage(), super.scaleToDisplay(arrowPos.x - arrowSize / 2),
                     super.scaleToDisplay(arrowPos.y - arrowSize / 2), super.scaleToDisplay(arrowSize), super.scaleToDisplay(arrowSize), null);
             GraphicsUtils.rotate(g2d, -rotationToWaypoint, super.scaleToDisplay(arrowPos.x), super.scaleToDisplay(arrowPos.y));
 
@@ -391,21 +378,133 @@ public class SceneInGame extends Scene {
 
 
         // Draw mouse crosshair
-        if (!this.zoomingOut) {
-            int crosshairSize = super.scaleToDisplay(100.0);
-            double crosshairRotation = mouseWorldPosition.rotationTo(player.getBoundingBox().center());
-            GraphicsUtils.rotate(g2d, crosshairRotation, super.scaleToDisplay(mouseWorldPosition.x), super.scaleToDisplay(mouseWorldPosition.y));
-            if (mouseWorldPosition.distanceSqrt(this.player.getBoundingBox().center()) < 450.0)
-                g2d.setColor(Color.WHITE);
-            else
-                g2d.setColor(Color.GRAY);
-            Texture texCrosshair = this.instance.atlas.crossHair;
-            g2d.drawImage(texCrosshair.getImage(), super.scaleToDisplay(mouseWorldPosition.x) - crosshairSize / 2, super.scaleToDisplay(mouseWorldPosition.y) - crosshairSize / 2, crosshairSize, crosshairSize, null);
-            GraphicsUtils.rotate(g2d, -crosshairRotation, super.scaleToDisplay(mouseWorldPosition.x), super.scaleToDisplay(mouseWorldPosition.y));
-        }
+        int crosshairSize = super.scaleToDisplay(100.0);
+        double crosshairRotation = mouseWorldPosition.rotationTo(player.getBoundingBox().center());
+        GraphicsUtils.rotate(g2d, crosshairRotation, super.scaleToDisplay(mouseWorldPosition.x), super.scaleToDisplay(mouseWorldPosition.y));
+        if (mouseWorldPosition.distanceSqrt(this.player.getBoundingBox().center()) < 450.0)
+            g2d.setColor(Color.WHITE);
+        else
+            g2d.setColor(Color.GRAY);
+        Texture texCrosshair = this.instance.atlas.uiCrossHair;
+        g2d.drawImage(texCrosshair.getImage(), super.scaleToDisplay(mouseWorldPosition.x) - crosshairSize / 2, super.scaleToDisplay(mouseWorldPosition.y) - crosshairSize / 2, crosshairSize, crosshairSize, null);
+        GraphicsUtils.rotate(g2d, -crosshairRotation, super.scaleToDisplay(mouseWorldPosition.x), super.scaleToDisplay(mouseWorldPosition.y));
 
         // Revert camera position translation
         g2d.translate(+this.cameraPos.x, +this.cameraPos.y);
+
+        // Draw prompt
+        TextPrompt prompt = world.getPrompt();
+        world.prompt(new TextPrompt("Joe's Mama", "Hello yo! This is an awesome game. You wanna play it? Ok lets go!", null));
+        if (prompt != null) {
+            // Draw background
+            double hSpace = 0.2;
+            double vInset = 0.075;
+            double vSize = 0.25;
+            BoundingBox promptBB = new BoundingBox(new Vec2D(hSpace * width, height - (height * vInset) - (height * vSize)), new Vec2D(width - (hSpace * width * 2), height * vSize));
+
+            g2d.setColor(new Color(0, 0, 0, 120));
+            g2d.fillRect((int) promptBB.position.x, (int) promptBB.position.y, (int) promptBB.size.x, (int) promptBB.size.y);
+
+            double bInset = super.scaleToDisplay(10.0);
+            BoundingBox promptBorderBB = promptBB.clone();
+            promptBorderBB.position.x += bInset;
+            promptBorderBB.position.y += bInset;
+            promptBorderBB.size.x -= 2 * bInset;
+            promptBorderBB.size.y -= 2 * bInset;
+            g2d.setColor(new Color(255, 255, 255, 255));
+            g2d.setStroke(new BasicStroke(super.scaleToDisplay(6.0)));
+            g2d.drawRect((int) promptBorderBB.position.x, (int) promptBorderBB.position.y, (int) promptBorderBB.size.x, (int) promptBorderBB.size.y);
+
+            Vec2D promptCenter = promptBB.center();
+
+            // Draw text
+            double textSpace = 0.8;
+
+            // Format lines
+            double textSize = 55.0;
+
+            // Set text font
+            g2d.setFont(this.instance.lexicon.equipmentPro.deriveFont((float) scaleToDisplay(textSize)));
+            ArrayList<String> lines = new ArrayList<>();
+            String text = prompt.text();
+            String[] words = text.contains(" ") ? text.split(" ") : new String[] { text };
+            String currentLine = "";
+            double textHeight = 0.0;
+            for (int i = 0; i < words.length; i++) {
+                String word = words[i];
+                currentLine += currentLine.isEmpty() ? word : " " + word;
+                Vec2D bounds = fontRenderer.bounds(g2d, currentLine);
+                double lineWidth = bounds.x;
+                if (lineWidth * 0.5 > promptBorderBB.size.x * textSpace * 0.5 || i == words.length - 1) {
+                    textHeight += bounds.y;
+                    lines.add(currentLine);
+                    currentLine = "";
+                }
+            }
+
+            double spaceBetweenLines = scaleToDisplay(4.0);
+
+            // Draw author
+            g2d.setFont(this.instance.lexicon.futilePro.deriveFont((float) scaleToDisplay(textSize * 1.0)));
+            Vec2D authorBounds = fontRenderer.bounds(g2d, prompt.author());
+            textHeight += authorBounds.y;
+            fontRenderer.drawString(g2d, prompt.author(), (int) promptCenter.x, (int) (promptCenter.y - textHeight * 0.5 - spaceBetweenLines - super.scaleToDisplay(12.0)), FontRenderer.CENTER, FontRenderer.CENTER, false);
+
+            // Draw lines
+            g2d.setFont(this.instance.lexicon.equipmentPro.deriveFont((float) scaleToDisplay(textSize)));
+            double lineOffsetY = authorBounds.y + 0.0 - (textHeight * 0.5) - (lines.size() * spaceBetweenLines * 0.5) + spaceBetweenLines * 0.5;
+            int charCount = 0;
+            for (String line : lines) {
+                String visibleText = "";
+                for (String c : line.split("")) {
+                    if (charCount <= promptLettersRevealed) {
+                        visibleText += c;
+                        charCount++;
+                    }
+                }
+                Vec2D bounds = fontRenderer.bounds(g2d, line.isEmpty() ? "X" : line);
+                fontRenderer.drawString(g2d, visibleText, (int) promptCenter.x, (int) (promptCenter.y + lineOffsetY), FontRenderer.CENTER, FontRenderer.CENTER, false);
+                lineOffsetY += bounds.y + spaceBetweenLines;
+            }
+
+            // Draw next button & handle auto next
+            if (this.promptLettersRevealed - 5 >= charCount) {
+                // Add time to auto next timer
+                int timeLeft = (int) Math.ceil(Constants.PROMPT_TEXT_AUTO_NEXT_THRESHOLD - this.promptAutoNextTimer / 1000.0);
+                this.promptAutoNextTimer += dt;
+
+                if (Constants.PROMPT_TEXT_AUTO_NEXT_THRESHOLD * 1000 < this.promptAutoNextTimer) {
+                    world.prompt(null);
+                    if (prompt.runnable() != null)
+                        prompt.runnable().run();
+                }
+
+                // Draw next
+                String nextText = "Next (" + timeLeft + ")";
+                double nextButtonInset = super.scaleToDisplay(12.0);
+                g2d.setFont(this.instance.lexicon.equipmentPro.deriveFont((float) scaleToDisplay(46.0)));
+                BoundingBox nextBounds = fontRenderer.
+                        drawString(g2d, nextText,
+                                (int) (promptBorderBB.position.x + promptBorderBB.size.x - nextButtonInset),
+                                (int) (promptBorderBB.position.y + promptBorderBB.size.y - nextButtonInset),
+                                FontRenderer.RIGHT, FontRenderer.BOTTOM, false);
+
+                // Draw keybind
+                double bindOffsetX = super.scaleToDisplay(8.0);
+                double bindSize = super.scaleToDisplay(30.0);
+                g2d.setColor(Color.WHITE);
+                g2d.fillRect((int) (nextBounds.position.x - nextBounds.size.x - bindOffsetX - bindSize),
+                        (int) (nextBounds.position.y - nextBounds.size.y * 0.5 - bindSize * 0.5), (int) bindSize, (int) bindSize);
+
+            }
+
+            // Reveal letters
+            this.promptLettersRevealed += super.time(Constants.PROMPT_TEXT_REVEAL_SPEED, dt);
+
+            // g2d.drawImage(this.instance.atlas.uiBorderText.getImage(), (int) promptBB.position.x, (int) promptBB.position.y, (int) promptBB.size.x, (int) promptBB.size.y, null);
+        } else {
+            this.promptLettersRevealed = this.promptAutoNextTimer = 0;
+        }
 
         // Draw HUD
 
@@ -429,14 +528,6 @@ public class SceneInGame extends Scene {
         g2d.setColor(Color.YELLOW);
         this.fontRenderer.drawString(g2d, "Item In Hand: " + player.getItemInHand().getName(), scaleToDisplay(20.0), scaleToDisplay(210.0), FontRenderer.LEFT, FontRenderer.TOP, true);
 
-        // Draw Wave
-        g2d.setColor(new Color(239, 93, 93));
-        g2d.setFont(this.instance.lexicon.compassPro.deriveFont((float) scaleToDisplay(90.0)));
-        BoundingBox waveTextBounds = this.fontRenderer.drawString(g2d, "Wave " + null, width / 2, height - scaleToDisplay(140.0), FontRenderer.CENTER, FontRenderer.BOTTOM, true);
-        g2d.setColor(new Color(208, 202, 202));
-        g2d.setFont(this.instance.lexicon.compassPro.deriveFont((float) scaleToDisplay(40.0)));
-        this.fontRenderer.drawString(g2d, null + " kills", width / 2, (int) (waveTextBounds.position.y + waveTextBounds.size.y) + scaleToDisplay(20.0), FontRenderer.CENTER, FontRenderer.TOP, true);
-
         // Set font
         g2d.setFont(this.instance.lexicon.equipmentPro.deriveFont((float) scaleToDisplay(50.0)));
         g2d.setColor(Color.WHITE);
@@ -454,8 +545,8 @@ public class SceneInGame extends Scene {
                     "col_t=" + collisionTime + "ms",
                     "weather=" + world.weatherProgress
             };
-            BoundingBox genericBounds = this.fontRenderer.bounds(g2d, "X");
-            Vec2D infoPos = new Vec2D(50, 400 + genericBounds.size.y + Math.abs(genericBounds.position.y));
+            Vec2D genericBounds = this.fontRenderer.bounds(g2d, "X");
+            Vec2D infoPos = new Vec2D(50, 400 + genericBounds.y);
             for (String info : extraInfo) {
                 BoundingBox bounds = this.fontRenderer.drawString(g2d, info, super.scaleToDisplay((infoPos.x) / this.scaleFactor), super.scaleToDisplay((infoPos.y) / this.scaleFactor), FontRenderer.LEFT, FontRenderer.TOP,true);
                 infoPos.add(new Vec2D(0, bounds.size.y * 2));
@@ -511,8 +602,6 @@ public class SceneInGame extends Scene {
         // Create camera target pos with center position of players bounding box
         Vec2D cameraTargetPos = this.player.getBoundingBox().center();
         // Add/Subtract mouse position, to follow crosshair a bit
-        if (this.zoomingOut)
-            return cameraTargetPos;
         return cameraTargetPos.subtract(cameraTargetPos.clone().subtract(this.mouseWorldPosition).multiply(Constants.CAMERA_MOUSE_FOLLOW_FACTOR));
     }
 
