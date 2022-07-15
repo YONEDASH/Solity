@@ -100,6 +100,8 @@ public abstract class EntityCharacter extends EntityBase {
 
     @Override
     public void update(Scene scene, double dt) {
+        super.update(scene, dt);
+
         Vec2D moveMotion = Vec2D.zero();
 
         move(scene, dt, moveMotion);
@@ -108,8 +110,6 @@ public abstract class EntityCharacter extends EntityBase {
 
         updateViewDirection(scene, moveMotion);
         updateAnimationState(scene.instance.atlas, !moveMotion.isZero());
-
-        super.update(scene, dt);
     }
 
     protected abstract void move(Scene scene, double dt, Vec2D moveMotion);

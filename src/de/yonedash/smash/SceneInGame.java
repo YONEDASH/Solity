@@ -1,9 +1,12 @@
 package de.yonedash.smash;
 
+import de.yonedash.smash.config.InputConfig;
+import de.yonedash.smash.config.KeyBind;
 import de.yonedash.smash.entity.*;
 import de.yonedash.smash.graphics.EntityFog;
 import de.yonedash.smash.graphics.GraphicsUtils;
 import de.yonedash.smash.graphics.VisualEffect;
+import de.yonedash.smash.progression.TutorialStory;
 import de.yonedash.smash.resource.Texture;
 
 import java.awt.*;
@@ -13,9 +16,9 @@ import java.util.List;
 
 public class SceneInGame extends Scene {
 
-    private final Vec2D cameraPos;
+    public final Vec2D cameraPos;
 
-    private final EntityPlayer player;
+    public final EntityPlayer player;
 
     private double promptLettersRevealed = 0;
     private double promptAutoNextTimer = 0;
@@ -23,8 +26,11 @@ public class SceneInGame extends Scene {
     public SceneInGame(Instance instance) {
         super(instance);
 
+        World world = this.instance.world;
+
+        // Add player
         this.player = new EntityPlayer(new BoundingBox(new Vec2D(0, 0), new Vec2D(40 * 2, 10 * 2)));
-        instance.world.entitiesLoaded.add(this.player);
+        world.entitiesLoaded.add(this.player);
 
         // Initialize camera vec
         this.cameraPos = calculateCameraTargetPos().subtract(new Vec2D(instance.display.getWidth(), instance.display.getHeight()).multiply(0.5));
@@ -41,10 +47,14 @@ public class SceneInGame extends Scene {
         player.setItemInHand(instance.itemRegistry.fork);
 
         // Scatter enemies
-        for (int i = 0; i < 500; i++) {
-            EntityAnt ant = new EntityAnt(new BoundingBox(findEnemySpawn(), new Vec2D(60 * 1.5, 12 * 1.5)));
-            this.instance.world.entitiesLoaded.add(ant);
-        }
+//        for (int i = 0; i < 500; i++) {
+//            EntityAnt ant = new EntityAnt(findEnemySpawn());
+//            this.instance.world.entitiesLoaded.add(ant);
+//        }
+
+        // Init & start story
+        world.story = new TutorialStory();
+        world.story.start();
     }
 
     private Vec2D findEnemySpawn() {
@@ -60,7 +70,7 @@ public class SceneInGame extends Scene {
         return spawn.center();
     }
 
-    private final Vec2D mousePosition = new Vec2D(0, 0);
+    public final Vec2D mousePosition = new Vec2D(0, 0);
     public final Vec2D mouseWorldPosition = new Vec2D(0, 0);
 
     @Override
@@ -111,6 +121,39 @@ public class SceneInGame extends Scene {
     }
 
     @Override
+    public void devicePressed(KeyBind.Device device, int code) {
+        InputConfig inputConfig = this.instance.inputConfig;
+        KeyBind skipDialog = inputConfig.getBind("skipDialog");
+
+        if (skipDialog.equals(device, code) && !skipDialog.isLocked()) {
+            // Lock bind in order to prevent holding down the button to keep doing this action
+            skipDialog.lock();
+
+            TextPrompt prompt = this.instance.world.getPrompt();
+            if (prompt == null)
+                return;
+
+            int promptTextLength = prompt.text().length();
+            if (promptLettersRevealed < promptTextLength)
+                promptLettersRevealed = promptTextLength + 10;
+            else if (prompt.waitTime() != TextPrompt.UNSKIPPABLE)
+                promptAutoNextTimer = (prompt.waitTime() + 10) * 1000.0;
+
+
+        }
+    }
+
+    @Override
+    public void deviceReleased(KeyBind.Device device, int code) {
+        InputConfig inputConfig = this.instance.inputConfig;
+        KeyBind skipDialog = inputConfig.getBind("skipDialog");
+
+        if (skipDialog.equals(device, code) && skipDialog.isLocked()) {
+            skipDialog.unlock();
+        }
+    }
+
+    @Override
     public void keyPressed(int key) {
         if (key == KeyEvent.VK_H) {
             Constants.SHOW_CHUNK_BORDERS = !Constants.SHOW_CHUNK_BORDERS;
@@ -135,7 +178,7 @@ public class SceneInGame extends Scene {
 
     private double timeNoChunksRefreshed;
 
-    double testD;
+    private TextPrompt currentPrompt;
 
     @Override
     public void update(Graphics2D g2d, double dt) {
@@ -335,7 +378,6 @@ public class SceneInGame extends Scene {
 
         collisionTime = System.currentTimeMillis() - collisionTime;
 
-        world.waypoint = new Vec2D(82 * Tile.TILE_SIZE, 58 * Tile.TILE_SIZE);
         // Draw waypoint arrow
         if (world.waypoint != null) {
             BoundingBox playerBB = player.getBoundingBox();
@@ -343,7 +385,7 @@ public class SceneInGame extends Scene {
             double rotationToWaypoint = center.rotationTo(world.waypoint);
             double arrowDistance = world.waypoint.distanceSqrt(center);
             double playerDistance = Tile.TILE_SIZE * 1.5;
-            double minDistance = Tile.TILE_SIZE * 1.3;
+            double minDistance = Tile.TILE_SIZE * 2.0;
             boolean isClose = arrowDistance < minDistance;
             double arrowSize = 100.0;
 
@@ -376,7 +418,6 @@ public class SceneInGame extends Scene {
             GraphicsUtils.setAlpha(g2d, 1.0f);
         }
 
-
         // Draw mouse crosshair
         int crosshairSize = super.scaleToDisplay(100.0);
         double crosshairRotation = mouseWorldPosition.rotationTo(player.getBoundingBox().center());
@@ -392,10 +433,19 @@ public class SceneInGame extends Scene {
         // Revert camera position translation
         g2d.translate(+this.cameraPos.x, +this.cameraPos.y);
 
+        // Update story
+        if (world.story != null) {
+            world.story.update(g2d, dt, this);
+        }
+
         // Draw prompt
         TextPrompt prompt = world.getPrompt();
-        world.prompt(new TextPrompt("Joe's Mama", "Hello yo! This is an awesome game. You wanna play it? Ok lets go!", null));
         if (prompt != null) {
+            // Reset timer & counter if there is a new prompt
+            if (prompt != currentPrompt) {
+                this.promptAutoNextTimer = this.promptLettersRevealed = 0.0;
+            }
+
             // Draw background
             double hSpace = 0.2;
             double vInset = 0.075;
@@ -405,14 +455,14 @@ public class SceneInGame extends Scene {
             g2d.setColor(new Color(0, 0, 0, 120));
             g2d.fillRect((int) promptBB.position.x, (int) promptBB.position.y, (int) promptBB.size.x, (int) promptBB.size.y);
 
-            double bInset = super.scaleToDisplay(10.0);
+            double bInset = super.scaleToDisplay(12.0);
             BoundingBox promptBorderBB = promptBB.clone();
             promptBorderBB.position.x += bInset;
             promptBorderBB.position.y += bInset;
             promptBorderBB.size.x -= 2 * bInset;
             promptBorderBB.size.y -= 2 * bInset;
             g2d.setColor(new Color(255, 255, 255, 255));
-            g2d.setStroke(new BasicStroke(super.scaleToDisplay(6.0)));
+            g2d.setStroke(new BasicStroke(super.scaleToDisplay(7.5)));
             g2d.drawRect((int) promptBorderBB.position.x, (int) promptBorderBB.position.y, (int) promptBorderBB.size.x, (int) promptBorderBB.size.y);
 
             Vec2D promptCenter = promptBB.center();
@@ -463,46 +513,51 @@ public class SceneInGame extends Scene {
                     }
                 }
                 Vec2D bounds = fontRenderer.bounds(g2d, line.isEmpty() ? "X" : line);
-                fontRenderer.drawString(g2d, visibleText, (int) promptCenter.x, (int) (promptCenter.y + lineOffsetY), FontRenderer.CENTER, FontRenderer.CENTER, false);
+                fontRenderer.drawString(g2d, visibleText, (int) (promptCenter.x - bounds.x * 0.5), (int) (promptCenter.y + lineOffsetY), FontRenderer.LEFT, FontRenderer.CENTER, false);
                 lineOffsetY += bounds.y + spaceBetweenLines;
             }
 
-            // Draw next button & handle auto next
+            // Draw next button & handle auto next once text has revealed
+            // (-5 chars for a later reveal of next button)
             if (this.promptLettersRevealed - 5 >= charCount) {
                 // Add time to auto next timer
-                int timeLeft = (int) Math.ceil(Constants.PROMPT_TEXT_AUTO_NEXT_THRESHOLD - this.promptAutoNextTimer / 1000.0);
-                this.promptAutoNextTimer += dt;
+                int timeLeft = (int) Math.ceil((Constants.PROMPT_TEXT_AUTO_NEXT_FACTOR * prompt.waitTime()) - (this.promptAutoNextTimer / 1000.0));
+                if (prompt.waitTime() > 0)
+                    this.promptAutoNextTimer += dt;
 
-                if (Constants.PROMPT_TEXT_AUTO_NEXT_THRESHOLD * 1000 < this.promptAutoNextTimer) {
+                if (timeLeft <= 0 && this.promptAutoNextTimer > 0) {
                     world.prompt(null);
                     if (prompt.runnable() != null)
                         prompt.runnable().run();
                 }
 
-                // Draw next
-                String nextText = "Next (" + timeLeft + ")";
-                double nextButtonInset = super.scaleToDisplay(12.0);
-                g2d.setFont(this.instance.lexicon.equipmentPro.deriveFont((float) scaleToDisplay(46.0)));
-                BoundingBox nextBounds = fontRenderer.
-                        drawString(g2d, nextText,
-                                (int) (promptBorderBB.position.x + promptBorderBB.size.x - nextButtonInset),
-                                (int) (promptBorderBB.position.y + promptBorderBB.size.y - nextButtonInset),
-                                FontRenderer.RIGHT, FontRenderer.BOTTOM, false);
+                if (prompt.waitTime() != TextPrompt.UNSKIPPABLE) {
+                    // Draw next
+                    String nextText = "Next" + (prompt.waitTime() > 0 ? " (" + Math.max(0, timeLeft) + ")" : "");
+                    double nextButtonInset = super.scaleToDisplay(12.0);
+                    g2d.setFont(this.instance.lexicon.equipmentPro.deriveFont((float) scaleToDisplay(46.0)));
+                    BoundingBox nextBounds = fontRenderer.
+                            drawString(g2d, nextText,
+                                    (int) (promptBorderBB.position.x + promptBorderBB.size.x - nextButtonInset),
+                                    (int) (promptBorderBB.position.y + promptBorderBB.size.y - nextButtonInset),
+                                    FontRenderer.RIGHT, FontRenderer.BOTTOM, false);
 
-                // Draw keybind
-                double bindOffsetX = super.scaleToDisplay(8.0);
-                double bindSize = super.scaleToDisplay(30.0);
-                g2d.setColor(Color.WHITE);
-                g2d.fillRect((int) (nextBounds.position.x - nextBounds.size.x - bindOffsetX - bindSize),
-                        (int) (nextBounds.position.y - nextBounds.size.y * 0.5 - bindSize * 0.5), (int) bindSize, (int) bindSize);
+                    // Draw key hint
+                    double bindOffsetX = super.scaleToDisplay(8.0);
+                    double bindSize = super.scaleToDisplay(nextBounds.size.y * 2 * 1.2);
 
+                    BindLocalizer.drawHint(g2d, this, instance.inputConfig.getBind("skipDialog"), (int) (nextBounds.position.x - nextBounds.size.x - bindOffsetX), (int) (nextBounds.position.y - nextBounds.size.y), (int) bindSize, Align.RIGHT);
+                }
             }
 
             // Reveal letters
             this.promptLettersRevealed += super.time(Constants.PROMPT_TEXT_REVEAL_SPEED, dt);
 
             // g2d.drawImage(this.instance.atlas.uiBorderText.getImage(), (int) promptBB.position.x, (int) promptBB.position.y, (int) promptBB.size.x, (int) promptBB.size.y, null);
+
+            this.currentPrompt = prompt;
         } else {
+            this.currentPrompt = null;
             this.promptLettersRevealed = this.promptAutoNextTimer = 0;
         }
 
@@ -603,6 +658,11 @@ public class SceneInGame extends Scene {
         Vec2D cameraTargetPos = this.player.getBoundingBox().center();
         // Add/Subtract mouse position, to follow crosshair a bit
         return cameraTargetPos.subtract(cameraTargetPos.clone().subtract(this.mouseWorldPosition).multiply(Constants.CAMERA_MOUSE_FOLLOW_FACTOR));
+    }
+
+    public boolean hasPromptRevealFinished() {
+        int promptTextLength = instance.world.getPrompt().text().length();
+        return promptLettersRevealed > promptTextLength;
     }
 
 }

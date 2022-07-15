@@ -1,6 +1,8 @@
 package de.yonedash.smash.entity;
 
 import de.yonedash.smash.*;
+import de.yonedash.smash.config.InputConfig;
+import de.yonedash.smash.config.KeyBind;
 import de.yonedash.smash.graphics.LightSource;
 
 import java.awt.*;
@@ -28,18 +30,25 @@ public class EntityPlayer extends EntityCharacter {
 
     @Override
     protected void move(Scene scene, double dt, Vec2D moveMotion) {
+        double moveSpeed = scene.time(0.3, dt);
+
         Input input = scene.instance.display.getInput();
-        double moveSpeed = scene.time(input.isKeyDown(KeyEvent.VK_SHIFT) ? 0.8 : 0.3, dt);
-        if (input.isKeyDown(KeyEvent.VK_W)) {
+        InputConfig inputConfig = scene.instance.inputConfig;
+        KeyBind moveUp = inputConfig.getBind("moveUp");
+        KeyBind moveLeft = inputConfig.getBind("moveLeft");
+        KeyBind moveRight = inputConfig.getBind("moveRight");
+        KeyBind moveDown = inputConfig.getBind("moveDown");
+
+        if (!moveUp.isLocked() && input.isBindPressed(moveUp)) {
             moveMotion.y -= moveSpeed;
         }
-        if (input.isKeyDown(KeyEvent.VK_S)) {
+        if (!moveDown.isLocked() && input.isBindPressed(moveDown)) {
             moveMotion.y += moveSpeed;
         }
-        if (input.isKeyDown(KeyEvent.VK_D)) {
+        if (!moveRight.isLocked() && input.isBindPressed(moveRight)) {
             moveMotion.x += moveSpeed;
         }
-        if (input.isKeyDown(KeyEvent.VK_A)) {
+        if (!moveLeft.isLocked() && input.isBindPressed(moveLeft)) {
             moveMotion.x -= moveSpeed;
         }
     }

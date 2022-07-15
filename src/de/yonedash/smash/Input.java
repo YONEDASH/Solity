@@ -1,5 +1,7 @@
 package de.yonedash.smash;
 
+import de.yonedash.smash.config.KeyBind;
+
 import java.awt.event.*;
 import java.util.ArrayList;
 
@@ -9,6 +11,7 @@ public class Input {
     private final Display display;
 
     private final ArrayList<Integer> keysDown;
+    private final ArrayList<Integer> buttonsDown;
     private final KeyAdapter keyboardAdapter;
     private final MouseAdapter mouseAdapter;
 
@@ -17,8 +20,11 @@ public class Input {
         this.instance = instance;
         this.display = display;
 
-        // Initialize input adapters
+        // Create pressed/down lists
         this.keysDown = new ArrayList<>();
+        this.buttonsDown = new ArrayList<>();
+
+        // Initialize input adapters
         this.keyboardAdapter = new KeyAdapter() {
 
             @Override
@@ -35,6 +41,7 @@ public class Input {
 
                 // Call corresponding scene function
                 Input.this.instance.scene.keyPressed(e.getKeyCode());
+                Input.this.instance.scene.devicePressed(KeyBind.Device.KEYBOARD, e.getKeyCode());
             }
 
             @Override
@@ -44,20 +51,31 @@ public class Input {
 
                 // Call corresponding scene function
                 Input.this.instance.scene.keyReleased(e.getKeyCode());
+                Input.this.instance.scene.deviceReleased(KeyBind.Device.KEYBOARD, e.getKeyCode());
             }
         };
 
         this.mouseAdapter = new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
+                // If button is not pressed add it to the buttonsDown list
+                if (!buttonsDown.contains(e.getButton())) {
+                    buttonsDown.add(e.getButton());
+                }
+
                 // Call corresponding scene function
                 Input.this.instance.scene.mousePressed(e.getX(), e.getY(), e.getButton());
+                Input.this.instance.scene.devicePressed(KeyBind.Device.MOUSE, e.getButton());
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
+                // If button is pressed remove it from the buttonsDown list
+                buttonsDown.removeIf(b -> b == e.getButton());
+
                 // Call corresponding scene function
                 Input.this.instance.scene.mouseReleased(e.getX(), e.getY(), e.getButton());
+                Input.this.instance.scene.deviceReleased(KeyBind.Device.MOUSE, e.getButton());
             }
 
             @Override
@@ -80,9 +98,17 @@ public class Input {
         };
     }
 
-    // Returns whether keyboard key is currently pressed
-    public boolean isKeyDown(int key) {
-        return keysDown.contains(key);
+    // Returns whether a devices button is pressed
+    public boolean isDeviceButtonPressed(KeyBind.Device device, int code) {
+        if (device == KeyBind.Device.KEYBOARD)
+            return keysDown.contains(code);
+        else if (device == KeyBind.Device.MOUSE)
+            return buttonsDown.contains(code);
+        return false;
+    }
+
+    public boolean isBindPressed(KeyBind bind) {
+        return isDeviceButtonPressed(bind.getDevice(), bind.getCode());
     }
 
     private boolean listening;

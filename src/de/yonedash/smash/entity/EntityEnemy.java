@@ -24,7 +24,7 @@ public class EntityEnemy extends EntityCharacter {
     Vec2D targetPosition;
     int pathInterest;
 
-    double shootIdleTime;
+    public double shootIdleTime;
 
     @Override
     public void update(Scene scene, double dt) {

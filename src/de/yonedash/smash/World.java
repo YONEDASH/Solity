@@ -2,6 +2,7 @@ package de.yonedash.smash;
 
 import de.yonedash.smash.entity.Entity;
 import de.yonedash.smash.entity.LevelObject;
+import de.yonedash.smash.progression.Story;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -12,6 +13,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 public class World implements ProgressReport {
 
     public Vec2D waypoint;
+    public Story story;
     public OpenSimplexNoise simplexNoise;
     public double fogOffset, weatherOffset, weatherProgress;
     public double particleOffset;
@@ -19,6 +21,7 @@ public class World implements ProgressReport {
     public final CopyOnWriteArraySet<Chunk> chunksLoaded;
     public final CopyOnWriteArraySet<Entity> entitiesLoaded;
     public Vec2D topLeft, bottomRight;
+
 
     private double randomOffset;
 
@@ -52,7 +55,7 @@ public class World implements ProgressReport {
         this.simplexNoise = new OpenSimplexNoise(level.seed());
 
         // Reset waypoint
-        this.waypoint = Vec2D.zero();
+        this.waypoint = null;
 
         // In order to prevent bugs, clear all lists/sets
         this.chunks.clear();

@@ -17,4 +17,8 @@ public interface Entity extends DisplayEntity {
 
     BoundingBox getBoundingBox();
 
+    void removeWhenHidden(); // Removes entity once it is no longer on screen
+
+    void remove(); // Remove entity when it is updated
+
 }

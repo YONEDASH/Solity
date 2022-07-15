@@ -1,5 +1,6 @@
 package de.yonedash.smash;
 
+import de.yonedash.smash.config.InputConfig;
 import de.yonedash.smash.graphics.GraphicsThread;
 import de.yonedash.smash.item.ItemRegistry;
 import de.yonedash.smash.resource.FontLexicon;
@@ -29,6 +30,8 @@ public class Instance implements Runnable {
 
     public final Thread fogThread;
 
+    public InputConfig inputConfig;
+
     public Instance() {
         // Instance constructor, initialize variables before running
 
@@ -57,11 +60,19 @@ public class Instance implements Runnable {
         // Initialize fog loop thread
         this.fogThread = new GraphicsThread(this);
 
+        // Initialize configs
+        this.inputConfig = new InputConfig();
+
     }
+
+
 
     @Override
     public void run() {
         // Starting game here
+
+        // Load configurations
+        this.inputConfig.load();
 
         // Show game window/"display"
         this.display.setVisible(true);

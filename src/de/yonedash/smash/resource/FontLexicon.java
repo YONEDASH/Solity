@@ -7,13 +7,14 @@ import java.io.InputStream;
 // This class stores fonts
 public class FontLexicon {
 
-    public Font compassPro, equipmentPro, futilePro;
+    public Font compassPro, equipmentPro, futilePro, arial;
 
     public FontLexicon() {
 
     }
 
     public void load() {
+        this.arial = new Font("Arial", Font.PLAIN, 0);
         this.compassPro = registerFont("/fonts/CompassPro.ttf");
         this.equipmentPro = registerFont("/fonts/EquipmentPro.ttf");
         this.futilePro = registerFont("/fonts/FutilePro.ttf");

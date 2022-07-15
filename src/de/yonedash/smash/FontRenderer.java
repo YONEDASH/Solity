@@ -5,9 +5,7 @@ import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.awt.geom.Rectangle2D;
 
-public class FontRenderer {
-
-    public static final int CENTER = 0, LEFT = 1, TOP = 2, RIGHT = 3, BOTTOM = 4;
+public class FontRenderer implements Align {
     private final Scene scene;
     
     public FontRenderer(Scene scene) {

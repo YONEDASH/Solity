@@ -1,5 +1,7 @@
 package de.yonedash.smash;
 
+import de.yonedash.smash.config.KeyBind;
+
 import java.awt.*;
 
 public abstract class Scene {
@@ -56,10 +58,10 @@ public abstract class Scene {
         return new BoundingBox(createScaledToDisplay(boundingBox.position), createScaledToDisplay(boundingBox.size));
     }
 
-    // Transfers delta time to milliseconds and multiplies them with value
+    // (Transfers delta time to milliseconds and) multiplies them with value
     // For example this results in constant movement speeds independent of the frame rate
     public double time(double val, double dt) {
-        return val * Math.min(100.0, dt);//* 0.0000001;
+        return val * Math.min(100.0, dt);//(* 0.0000001);
     }
 
     public float time(float val, double dt) {
@@ -67,6 +69,14 @@ public abstract class Scene {
     }
 
     // Dummy methods down here, can be used in different screen to react to user input
+
+    public void devicePressed(KeyBind.Device device, int code) {
+
+    }
+
+    public void deviceReleased(KeyBind.Device device, int code) {
+
+    }
 
     public void keyPressed(int key) {
 
