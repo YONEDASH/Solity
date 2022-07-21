@@ -1,7 +1,11 @@
 package de.yonedash.smash;
 
+import java.awt.*;
+
 public class Constants {
 
+    public static final Color MAP_BACKGROUND_COLOR = new Color(99, 144, 139);
+    public static double MAP_RESOLUTION_SCALE = 0.01;
     public static double FPS_LIMIT = 30.0;
     public static boolean LOW_POWER_MODE = true;
     public static int CHUNK_REFRESH_FRAME_DELAY = 5;

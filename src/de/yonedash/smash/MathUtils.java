@@ -1,6 +1,9 @@
 package de.yonedash.smash;
 
+import de.yonedash.smash.entity.EntityParticle;
 import de.yonedash.smash.entity.LevelObject;
+import de.yonedash.smash.graphics.TextureIndividual;
+import de.yonedash.smash.graphics.TextureStatic;
 
 public class MathUtils {
 
@@ -36,8 +39,8 @@ public class MathUtils {
                 for (LevelObject levelObject : chunk.getLevelObjects()) {
                     if (!levelObject.hasCollision())
                         continue;
-                    if (levelObject.getBoundingBox().contains(point))
-                        return levelObject;
+//                    if (levelObject.getBoundingBox().contains(point))
+//                        return levelObject;
                     for (BoundingBox bb : levelObject.getCollisionBoxes()) {
                         if (bb.contains(point)) {
                             return levelObject;
@@ -64,8 +67,8 @@ public class MathUtils {
                 for (LevelObject levelObject : chunk.getLevelObjects()) {
                     if (!levelObject.hasCollision())
                         continue;
-                    if (levelObject.getBoundingBox().isColliding(boundingBox, 0))
-                        return levelObject;
+//                    if (levelObject.getBoundingBox().isColliding(boundingBox, 0))
+//                        return levelObject;
                     for (BoundingBox bb : levelObject.getCollisionBoxes()) {
                         if (bb.isColliding(boundingBox, 0)) {
                             return levelObject;
@@ -73,9 +76,16 @@ public class MathUtils {
                     }
                 }
             }
+//
+//            double particleSize = stepSize;
+//            EntityParticle particle = new EntityParticle(
+//                    new BoundingBox(boundingBox.center().clone().subtract(new Vec2D(particleSize / 2, particleSize / 2)), new Vec2D(particleSize, particleSize)),
+//                    Instance.ONLY_FOR_DEBUGGING_PURPOSES().atlas.fork, rotation, 0, 100.0, 10, true);
+//            world.entitiesLoaded.add(particle);
             boundingBox.position.add(rotation, stepSize);
             d += stepSize;
         }
+
 
         return null;
     }

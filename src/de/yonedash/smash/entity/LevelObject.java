@@ -2,6 +2,7 @@ package de.yonedash.smash.entity;
 
 import de.yonedash.smash.BoundingBox;
 import de.yonedash.smash.Scene;
+import de.yonedash.smash.SceneInGame;
 import de.yonedash.smash.graphics.LightSource;
 
 import java.awt.*;

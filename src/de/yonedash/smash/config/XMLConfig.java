@@ -39,12 +39,12 @@ public abstract class XMLConfig {
         }
     }
 
-    public abstract void init();
+    protected abstract void init();
 
     private boolean changesMade = false;
 
     // Adds a certain property to properties if it does not already have it saved
-    protected void add(String key, Object defaultValue) {
+    public void add(String key, Object defaultValue) {
         if (this.properties.getProperty(key) == null) {
             this.changesMade = true;
             this.properties.setProperty(key, String.valueOf(defaultValue));
@@ -91,7 +91,6 @@ public abstract class XMLConfig {
     }
 
     // Return properties
-
     public Object get(String key) {
         return this.properties.get(key);
     }

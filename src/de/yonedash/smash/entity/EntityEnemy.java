@@ -26,6 +26,8 @@ public class EntityEnemy extends EntityCharacter {
 
     public double shootIdleTime;
 
+    private double reTargetIdleTime;
+
     @Override
     public void update(Scene scene, double dt) {
         super.update(scene, dt);
@@ -48,7 +50,7 @@ public class EntityEnemy extends EntityCharacter {
         World world = scene.instance.world;
 
         double maxDistance = Tile.TILE_SIZE * 8.0;
-        double shootDelay = 1000.0;
+        double shootDelay = 1000.0 * 1; // TODO DIFFICULTY HERE
         double shotDistance = maxDistance;
         double shotDamage = 1.0;
         double shotSpeed = 0.6;
@@ -58,6 +60,13 @@ public class EntityEnemy extends EntityCharacter {
         // If there is no target or target is too far away, look for a new target
         if (this.target == null || target.getBoundingBox().center().distanceSqrt(center) >= maxDistance) {
 
+            if (this.reTargetIdleTime < 250.0) {
+                this.reTargetIdleTime += dt;
+                return;
+            }
+
+            this.reTargetIdleTime = -100 * world.random();
+
             // Loop through found entities
             for (Entity temp : findNewTargets(world)) {
                 Vec2D tempCenter = temp.getBoundingBox().center();
@@ -66,7 +75,7 @@ public class EntityEnemy extends EntityCharacter {
                     continue;
 
                 // If target can not be seen, target is not viable
-                LevelObject casted = MathUtils.rayCast(world, new BoundingBox(center.clone().subtract(projSize.clone().multiply(0.5)), projSize), center.rotationTo(tempCenter), 5, center.distanceSqrt(tempCenter));
+                LevelObject casted = MathUtils.rayCast(world, new BoundingBox(center.clone().subtract(projSize.clone().multiply(0.5)), projSize), center.rotationTo(tempCenter), 50.0, center.distanceSqrt(tempCenter));
                 if (casted != null) {
                     continue;
                 }
@@ -76,12 +85,14 @@ public class EntityEnemy extends EntityCharacter {
                 break;
             }
 
-            // Reset shoot idle time
-            this.shootIdleTime = 0.0 - world.random() * shootDelay * 0.5;
-
             // If there was no target found, do nothing
             if (this.target == null)
                 return;
+
+            // Reset shoot idle time
+            if (world.random() > 0)
+                this.shootIdleTime = 0.0 - world.random() * shootDelay * 0.1;
+
         }
 
         this.shootIdleTime += dt;
@@ -95,6 +106,13 @@ public class EntityEnemy extends EntityCharacter {
             // Motion prediction
             Vec2D targetPosition = this.target.getBoundingBox().center();
             Vec2D targetMotion = this.target.getMotion().clone();
+
+            // Cancel shoot if target is not seen and remove target
+            LevelObject casted = MathUtils.rayCast(world, new BoundingBox(center.clone().subtract(projSize.clone().multiply(0.5)), projSize), center.rotationTo(targetPosition), 100.0, center.distanceSqrt(targetPosition));
+            if (casted != null) {
+                this.target = null;
+                return;
+            }
 
             targetPosition = targetPosition.add(targetMotion.clone().multiply(intelligence));
 

@@ -11,6 +11,8 @@ import de.yonedash.smash.resource.Texture;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.geom.Ellipse2D;
+import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
 
@@ -30,6 +32,7 @@ public class SceneInGame extends Scene {
 
         // Add player
         this.player = new EntityPlayer(new BoundingBox(new Vec2D(0, 0), new Vec2D(40 * 2, 10 * 2)));
+        this.player.setDashesLeft(instance.world.saveGame.getSkills().skillDash.getMaximumDashCount());
         world.entitiesLoaded.add(this.player);
 
         // Initialize camera vec
@@ -151,6 +154,12 @@ public class SceneInGame extends Scene {
         if (skipDialog.equals(device, code) && skipDialog.isLocked()) {
             skipDialog.unlock();
         }
+
+        KeyBind dash = inputConfig.getBind("dash");
+
+        if (dash.equals(device, code) && dash.isLocked()) {
+            dash.unlock();
+        }
     }
 
     @Override
@@ -160,12 +169,10 @@ public class SceneInGame extends Scene {
             Constants.SHOW_COLLISION = !Constants.SHOW_COLLISION;
         }
         if (key == KeyEvent.VK_M) {
-            scaleFactor += 0.05;
+            instance.world.story.initStep(0);
         }
         if (key == KeyEvent.VK_N) {
-            scaleFactor -= 0.05;
-            if (scaleFactor <= 0)
-                scaleFactor = 0.05;
+            instance.world.story.nextStep();
         }
         if (key == KeyEvent.VK_P) {
             Vec2D center = player.getBoundingBox().center();
@@ -408,7 +415,7 @@ public class SceneInGame extends Scene {
                 arrowPos.add(new Vec2D(0, bounceY));
             }
 
-            GraphicsUtils.setAlpha(g2d, 0.75f);
+            GraphicsUtils.setAlpha(g2d, 0.95f);
 
             GraphicsUtils.rotate(g2d, rotationToWaypoint, super.scaleToDisplay(arrowPos.x), super.scaleToDisplay(arrowPos.y));
             g2d.drawImage(this.instance.atlas.uiArrow.getImage(), super.scaleToDisplay(arrowPos.x - arrowSize / 2),
@@ -561,6 +568,76 @@ public class SceneInGame extends Scene {
             this.promptLettersRevealed = this.promptAutoNextTimer = 0;
         }
 
+        // Draw map
+       if (world.compiledObjectImage != null) {
+
+        BufferedImage mapImage = this.instance.world.compiledObjectImage;
+//
+//        BoundingBox mapBounds = new BoundingBox(world.topLeft, world.bottomRight);
+//        Vec2D vecMapSize = mapBounds.abs();
+//        double mapInset = 250.0;
+//        double mapCompileScale = ((mapImage.getWidth() / vecMapSize.x) + (mapImage.getHeight() / vecMapSize.y)) / 2.0;
+//        double mapDisplaySize = scaleToDisplay(400.0);
+//        double mapDisplayScale = ((mapImage.getWidth() / mapDisplaySize) + (mapImage.getHeight() / mapDisplaySize)) / 2.0;
+//        Vec2D mapOffset = player.getBoundingBox().center();
+//        int mapSize = (int) (mapDisplaySize * mapZoom * mapDisplayScale);
+//        int mapPosX =(int) ((mapBounds.position.x - mapOffset.x) * mapCompileScale * mapZoom) + mapSize / 2;
+//        int mapPosY = (int) ((mapBounds.position.y - mapOffset.y) * mapCompileScale * mapZoom) + mapSize / 2;
+//
+//
+//           Ellipse2D mapEllipse = new Ellipse2D.Double(mapPosX - mapDisplaySize / 2.0, mapPosY - mapDisplaySize / 2.0, mapDisplaySize, mapDisplaySize);
+//
+//        GraphicsUtils.setAlpha(g2d, 0.9f);
+//        g2d.drawImage(mapImage, mapPosX - mapSize / 2, mapPosY - mapSize / 2, (int) (mapSize), (int) (mapSize), null);
+
+
+           BoundingBox mapBounds = new BoundingBox(world.topLeft, world.bottomRight);
+           Vec2D vecMapSize = mapBounds.abs();
+           double mapCompileScale = ((mapImage.getWidth() / vecMapSize.x) + (mapImage.getHeight() / vecMapSize.y)) / 2.0;
+           double mapDisplaySize = 200.0;
+           double mapZoom = 4.0;
+           double mapInset = 100.0;
+           double mapDisplayScaleX = mapDisplaySize / mapImage.getWidth();
+           double mapDisplayScaleY = mapDisplaySize / mapImage.getWidth();
+           double centerX = player.getBoundingBox().center().x - mapBounds.position.x;
+           double centerY = player.getBoundingBox().center().y - mapBounds.position.y;
+
+           double mapX = centerX * mapCompileScale * mapDisplayScaleX * mapZoom;
+           double mapY = centerY * mapCompileScale * mapDisplayScaleY * mapZoom;
+           double mapWidth = mapImage.getWidth() * mapDisplayScaleX;
+           double mapHeight = mapImage.getHeight() * mapDisplayScaleY;
+           int mapCenterX = width - scaleToDisplay(mapInset + mapWidth / 2);
+           int mapCenterY = scaleToDisplay(mapInset + mapHeight / 2);
+
+           Shape ellipseClip = new Ellipse2D.Double(mapCenterX - scaleToDisplay(mapDisplaySize / 2), mapCenterY - scaleToDisplay(mapDisplaySize / 2), scaleToDisplay(mapDisplaySize), scaleToDisplay(mapDisplaySize));
+
+           g2d.setClip(ellipseClip);
+           g2d.setColor(Constants.MAP_BACKGROUND_COLOR);
+           g2d.fill(ellipseClip);
+           g2d.drawImage(mapImage, mapCenterX - scaleToDisplay(mapWidth / 2) + scaleToDisplay(-mapX + mapWidth / 2), mapCenterY - scaleToDisplay(mapHeight / 2) + scaleToDisplay(-mapY + mapHeight / 2), scaleToDisplay(mapWidth * mapZoom), scaleToDisplay(mapHeight * mapZoom), null);
+           g2d.setColor(Color.GREEN);
+           g2d.fillRect(mapCenterX - scaleToDisplay(5), mapCenterY - scaleToDisplay(5), scaleToDisplay(10), scaleToDisplay(10));
+           g2d.setClip(null);
+
+           g2d.setStroke(new BasicStroke(scaleToDisplay(8.0)));
+           g2d.setColor(new Color(0, 0, 0, 100));
+           g2d.draw(ellipseClip);
+
+           g2d.setStroke(new BasicStroke(scaleToDisplay(1.0)));
+           g2d.setColor(Color.WHITE);
+           g2d.draw(ellipseClip);
+
+
+           GraphicsUtils.setAlpha(g2d, 1f);
+
+
+//
+//            g2d.drawImage(mapImage, mapX + zoomedMapOffsetX, mapY + zoomedMapOffsetY, zoomedWidth, zoomedHeight, null);
+//        g2d.setColor(Color.RED);
+//        g2d.fillRect(mapX - scaleToDisplay(10), mapY - scaleToDisplay(10), scaleToDisplay(20), scaleToDisplay(20));
+        g2d.setClip(null);
+            }
+
         // Draw HUD
 
         // Set font
@@ -572,7 +649,7 @@ public class SceneInGame extends Scene {
 
         // Draw Player Dashes
         g2d.setColor(Color.GREEN);
-        this.fontRenderer.drawString(g2d, "Player Dashes Left: " + null, scaleToDisplay(20.0), scaleToDisplay(90.0), FontRenderer.LEFT, FontRenderer.TOP, true);
+        this.fontRenderer.drawString(g2d, "Player Dashes Left: " + player.getDashesLeft(), scaleToDisplay(20.0), scaleToDisplay(90.0), FontRenderer.LEFT, FontRenderer.TOP, true);
 
         // Draw Player Heal Potions
         g2d.setColor(Color.CYAN);
@@ -661,6 +738,8 @@ public class SceneInGame extends Scene {
     }
 
     public boolean hasPromptRevealFinished() {
+        if (instance.world.getPrompt() == null)
+            return true;
         int promptTextLength = instance.world.getPrompt().text().length();
         return promptLettersRevealed > promptTextLength;
     }

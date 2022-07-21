@@ -1,10 +1,14 @@
 package de.yonedash.smash;
 
+import de.yonedash.smash.config.SaveGame;
 import de.yonedash.smash.entity.Entity;
 import de.yonedash.smash.entity.LevelObject;
 import de.yonedash.smash.progression.Story;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -12,6 +16,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 // This class represents the game world
 public class World implements ProgressReport {
 
+    public final SaveGame saveGame;
     public Vec2D waypoint;
     public Story story;
     public OpenSimplexNoise simplexNoise;
@@ -22,12 +27,15 @@ public class World implements ProgressReport {
     public final CopyOnWriteArraySet<Entity> entitiesLoaded;
     public Vec2D topLeft, bottomRight;
 
+    public BufferedImage compiledObjectImage;
 
     private double randomOffset;
 
     private TextPrompt prompt;
 
-    public World() {
+    public World(SaveGame saveGame) {
+        this.saveGame = saveGame;
+
         this.chunks = new ArrayList<>();
 
         this.chunksLoaded = new CopyOnWriteArraySet<>();
@@ -50,9 +58,12 @@ public class World implements ProgressReport {
 
     private int progressTotal, progress;
 
-    public void loadLevel(LevelData level) {
+    public void load(Instance instance, LevelData level) {
         // Init simplex noise
         this.simplexNoise = new OpenSimplexNoise(level.seed());
+
+        // Init save game
+        this.saveGame.load();
 
         // Reset waypoint
         this.waypoint = null;
@@ -125,6 +136,37 @@ public class World implements ProgressReport {
                 this.chunks.add(chunk);
             }
         }
+
+        // Compile world objects to image (for map)
+        this.compileWorldObjectsToImage(instance);
+    }
+
+    public BufferedImage compileWorldObjectsToImage(Instance instance) {
+        BoundingBox bounds = new BoundingBox(topLeft, bottomRight);
+        Vec2D size = bounds.abs();
+        double scale = Constants.MAP_RESOLUTION_SCALE;
+        BufferedImage bufferedImage = new BufferedImage((int) (size.x * scale), (int) (size.y * scale), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = bufferedImage.createGraphics();
+
+        Scene dummyScene = new Scene(instance) {
+            @Override
+            public void update(Graphics2D g2d, double dt) {
+
+            }
+
+            @Override
+            public double calculateDisplayScaleFactor() {
+                return scale;
+            }
+        };
+
+        g2d.translate(-bounds.position.x * scale, -bounds.position.y * scale);
+
+        // Draw objects
+        this.chunks.forEach(chunk -> Arrays.stream(chunk.getLevelObjects()).forEach(levelObject -> levelObject.draw(dummyScene, g2d, 0)));
+
+        g2d.dispose();
+        return this.compiledObjectImage = bufferedImage;
     }
 
     @Override

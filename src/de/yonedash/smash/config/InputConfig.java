@@ -30,6 +30,7 @@ public class InputConfig extends XMLConfig {
         addBind("moveDown", new KeyBind(KeyBind.Device.KEYBOARD, KeyEvent.VK_S));
         addBind("moveRight", new KeyBind(KeyBind.Device.KEYBOARD, KeyEvent.VK_D));
         addBind("shoot", new KeyBind(KeyBind.Device.MOUSE, 1));
+        addBind("dash", new KeyBind(KeyBind.Device.KEYBOARD, KeyEvent.VK_SHIFT));
     }
 
     @Override

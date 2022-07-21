@@ -77,6 +77,11 @@ public class Vec2D {
         return Math.sqrt((x * x) + (y * y));
     }
 
+    // Calculate angle
+    public double angle() {
+        return Vec2D.zero().rotationTo(this);
+    }
+
     // Returns whether x & y are zero
     public boolean isZero() {
         return this.x == 0.0 && this.y == 0.0;

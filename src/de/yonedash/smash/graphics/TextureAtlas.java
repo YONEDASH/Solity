@@ -132,6 +132,9 @@ public class TextureAtlas {
         if (bundle != null && (texture = bundle.pull(id)) != null)
             return texture;
 
+        if (owner.getSuperclass() != null)
+            return getTexture((Class<? extends Entity>) owner.getSuperclass(), id);
+
         return this.invalid;
     }
 

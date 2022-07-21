@@ -46,37 +46,44 @@ public class TutorialStory extends Story {
             }
             case 5 -> world.prompt(new TextPrompt("Tutorial", "Well done.", this::nextStep, 3));
             case 6 -> world.prompt(new TextPrompt("Tutorial", "You have probably noticed the crosshair on your screen. Move it with your " + KeyBind.Device.MOUSE.name() + "!", this::nextStep, TextPrompt.UNSKIPPABLE));
-            case 7 -> {
-                // Set waypoint
-                world.waypoint = new Vec2D(Tile.TILE_SIZE * 25, Tile.TILE_SIZE * 28);
-
-                // Spawn ant
-                this.timesTargetHit = 0;
-                this.tutorialTarget = new EntityAnt(world.waypoint) {
-                    @Override
-                    public boolean collide(Scene s, Entity entity) {
-                        if (entity instanceof EntityProjectile proj && proj.getShooter() == scene.player) {
-                            TutorialStory.this.timesTargetHit++;
-
-                            if (TutorialStory.this.step == 8) {
-                                nextStep();
-                            }
-                        }
-
-                        return super.collide(scene, entity);
-                    }
-                };
-                world.entitiesLoaded.add(this.tutorialTarget);
-
-
-                world.prompt(new TextPrompt("Tutorial", "Now it's time to let the action begin. Head to the waypoint.", this::nextStep, TextPrompt.UNSKIPPABLE));
-            }
-            case 8 -> world.prompt(new TextPrompt("Tutorial", "Shoot the ant while aiming on it and pressing " + BindLocalizer.getActualBindName(inputConfig.getBind("shoot")) + ".", this::nextStep, TextPrompt.UNSKIPPABLE));
-            case 9 -> {
-                world.prompt(new TextPrompt("Tutorial", "Great work!", this::nextStep, TextPrompt.UNSKIPPABLE));
+            case 7 -> step7(world, scene);
+            case 8 -> world.prompt(new TextPrompt("Tutorial", "Shoot the ant few times ant while aiming on it and pressing " + BindLocalizer.getActualBindName(inputConfig.getBind("shoot")) + ".", this::nextStep, TextPrompt.UNSKIPPABLE));
+            case 9 -> world.prompt(new TextPrompt("Tutorial", "Now try to dodge a few shots. Pressing " + BindLocalizer.getActualBindName(inputConfig.getBind("dash")) + " to dash might help. But beware: you only have a limited number of dashes before they recharge.", this::nextStep, TextPrompt.UNSKIPPABLE));
+            case 10 -> {
+                world.prompt(new TextPrompt("Tutorial", "Great work!", this::nextStep, 3));
                 this.tutorialTarget.removeWhenHidden();
             }
         }
+    }
+
+    private void step7(World world, SceneInGame scene) {
+        // Spawn ant
+        this.timesTargetHit = 0;
+        this.tutorialTarget = new EntityAnt(world.waypoint) {
+            @Override
+            public boolean collide(Scene s, Entity entity) {
+                if (entity instanceof EntityProjectile proj && proj.getShooter() == scene.player && scene.hasPromptRevealFinished()) {
+                    TutorialStory.this.timesTargetHit++;
+
+                    if (TutorialStory.this.step == 8 && TutorialStory.this.timesTargetHit >= 7) {
+                        nextStep();
+                    }
+                }
+
+                return super.collide(scene, entity);
+            }
+        };
+        this.tutorialTarget.getBoundingBox().position = new Vec2D(Tile.TILE_SIZE * 0.0, Tile.TILE_SIZE * 0.0);
+
+        // Set waypoint
+        world.waypoint = this.tutorialTarget.getBoundingBox().center();
+
+        ;
+        world.entitiesLoaded.add(this.tutorialTarget);
+
+
+        world.prompt(new TextPrompt("Tutorial", "Now it's time to let the action begin. Head to the waypoint.", this::nextStep, TextPrompt.UNSKIPPABLE));
+
     }
 
     private double distanceMoved;
@@ -121,7 +128,7 @@ public class TutorialStory extends Story {
             }
         }
 
-        if (this.step >= 7 && world.entitiesLoaded.contains(tutorialTarget)) {
+        if (world.entitiesLoaded.contains(tutorialTarget) && ((this.step >= 7 && this.step <= 8) || !scene.hasPromptRevealFinished())) {
             // Freeze target
             tutorialTarget.getMotion().multiply(0.0); // No movement
             tutorialTarget.shootIdleTime = 0.0; // No shooting

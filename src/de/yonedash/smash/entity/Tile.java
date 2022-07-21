@@ -31,6 +31,7 @@ public class Tile extends LevelObject {
 
         if (!Constants.PARTICLE_EMIT_IN_LOADED_CHUNKS)
             emitParticles(scene, dt);
+
     }
 
     public void emitParticles(Scene scene, double dt) {

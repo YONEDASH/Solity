@@ -24,7 +24,7 @@ public class SceneWorldLoading extends SceneLoading {
                 this.instance.stop(1);
             }
 
-            this.instance.world.loadLevel(this.levelData);
+            this.instance.world.load(instance, this.levelData);
 
             if (!this.instance.fogThread.isAlive())
                 this.instance.fogThread.start();

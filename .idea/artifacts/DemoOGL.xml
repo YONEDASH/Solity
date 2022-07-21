@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="DemoOGL">
+    <output-path>$PROJECT_DIR$/compile/</output-path>
+    <root id="archive" name="DemoOGL.jar">
+      <element id="module-output" name="JavaSmash" />
+    </root>
+  </artifact>
+</component>

@@ -39,7 +39,6 @@ public abstract class EntityBase implements Entity {
                 if (!cameraView.isColliding(this.boundingBox, 0)) {
                     // And remove it
                     scene.instance.world.entitiesLoaded.remove(this);
-                    System.out.println("HIDDEN REMOVE");
                 }
             } else {
                 // removeState was changed, so lets just remove the entity

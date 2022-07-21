@@ -1,21 +1,25 @@
 package de.yonedash.smash;
 
 import de.yonedash.smash.config.InputConfig;
+import de.yonedash.smash.config.SaveGame;
 import de.yonedash.smash.graphics.GraphicsThread;
 import de.yonedash.smash.item.ItemRegistry;
 import de.yonedash.smash.resource.FontLexicon;
 import de.yonedash.smash.graphics.TextureAtlas;
 
+import java.io.File;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 // "Main" class of game
 public class Instance implements Runnable {
 
+    private static Instance isntanceREMOVEMEEEEEEE;
+
     public static void main(String[] args) {
         // Program starts here
         // Create new instance and run
-        (new Instance()).run();
+        (isntanceREMOVEMEEEEEEE = new Instance()).run();
     }
 
     public final Display display;
@@ -48,7 +52,7 @@ public class Instance implements Runnable {
         this.itemRegistry = new ItemRegistry(this);
 
         // Initialize world
-        this.world = new World();
+        this.world = new World(new SaveGame(new File("GAMEFOLDER/saves/", "testsavegamelol.xml")));
 
         // Initialize scene
         //this.scene = new SceneInGame(this);
@@ -95,5 +99,9 @@ public class Instance implements Runnable {
 
         // Exit program with status (exit-code)
         System.exit(status);
+    }
+
+    public static Instance ONLY_FOR_DEBUGGING_PURPOSES() {
+        return isntanceREMOVEMEEEEEEE;
     }
 }
