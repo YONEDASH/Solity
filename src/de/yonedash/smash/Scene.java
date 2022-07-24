@@ -10,7 +10,7 @@ public abstract class Scene {
     public final Instance instance;
 
     // Access to font renderer in screen children
-    protected final FontRenderer fontRenderer;
+    public final FontRenderer fontRenderer;
 
     // Scales scale
     protected double scaleFactor = 1.0;
@@ -66,6 +66,11 @@ public abstract class Scene {
 
     public float time(float val, double dt) {
         return val * (float) Math.min(100f, dt);//* 0.0000001f;
+    }
+
+    // Localize text
+    public String localize(String key, Object... args) {
+        return this.instance.gameConfig.language.getProvider().localize(key, args);
     }
 
     // Dummy methods down here, can be used in different screen to react to user input

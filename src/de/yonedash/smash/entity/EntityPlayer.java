@@ -5,7 +5,6 @@ import de.yonedash.smash.config.InputConfig;
 import de.yonedash.smash.config.KeyBind;
 import de.yonedash.smash.graphics.LightSource;
 import de.yonedash.smash.progression.skills.SkillDash;
-import de.yonedash.smash.progression.skills.Skills;
 
 import java.awt.*;
 
@@ -14,8 +13,9 @@ public class EntityPlayer extends EntityCharacter {
     private float dashesLeft;
     private double timeDashingLeft, dashParticleDelay;
 
-    public EntityPlayer(BoundingBox boundingBox) {
-        super(boundingBox);
+    public EntityPlayer(Vec2D position) {
+        super(new BoundingBox(position.clone(), new Vec2D(50, 20)));
+        this.texScale = 1.5;
         this.lightSource = new LightSource(Color.WHITE, 25.0);
     }
 
@@ -36,7 +36,7 @@ public class EntityPlayer extends EntityCharacter {
 
     @Override
     protected void move(Scene scene, double dt, Vec2D moveMotion) {
-        double moveSpeed = scene.time(0.25, dt);
+        double moveSpeed = scene.time(0.2, dt);
 
         Input input = scene.instance.display.getInput();
         InputConfig inputConfig = scene.instance.inputConfig;

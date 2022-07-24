@@ -110,7 +110,7 @@ public class TiledMap implements ProgressReport {
         HashMap<String, HashMap<Integer, Texture>> textures = new HashMap<>();
 
         int tileSize = 16;
-        String texturePrefix = "/";
+        String texturePrefix = "/assets/map/textures/";
 
         // Loop through every image source
         for (String imageSource : imageSources) {

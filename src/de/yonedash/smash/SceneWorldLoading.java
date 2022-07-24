@@ -11,10 +11,10 @@ public class SceneWorldLoading extends SceneLoading {
     private TiledMap tiledMap;
     private LevelData levelData;
 
-    public SceneWorldLoading(Instance instance) {
+    public SceneWorldLoading(Instance instance, String mapName) {
         super(instance);
 
-        this.tiledMap = new TiledMap("/forest.tmx");
+        this.tiledMap = new TiledMap("/assets/map/" + mapName + ".tmx");
 
         this.thread = new Thread(() -> {
             this.levelData = this.tiledMap.load(this.instance.atlas);

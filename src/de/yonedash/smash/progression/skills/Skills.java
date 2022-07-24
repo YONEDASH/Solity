@@ -8,11 +8,13 @@ import java.util.List;
 public final class Skills {
 
     private final ArrayList<Skill> skillArrayList;
+    public final SkillHealth skillHealth;
     public final SkillDash skillDash;
 
     public Skills(SaveGame saveGame) {
         this.skillArrayList = new ArrayList<>();
 
+        this.skillHealth = (SkillHealth) this.store(new SkillHealth(saveGame));
         this.skillDash = (SkillDash) this.store(new SkillDash(saveGame));
     }
 

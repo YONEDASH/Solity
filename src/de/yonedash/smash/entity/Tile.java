@@ -20,7 +20,7 @@ public class Tile extends LevelObject {
 
     @Override
     public void draw(Scene scene, Graphics2D g2d, double dt) {
-        double padding = 1.0 / scene.calculateDisplayScaleFactor();
+        double padding = (1 / scene.calculateDisplayScaleFactor()) - 1;
         g2d.drawImage(this.texture.getImage(),
                 scene.scaleToDisplay(this.boundingBox.position.x - padding),
                 scene.scaleToDisplay(this.boundingBox.position.y - padding),

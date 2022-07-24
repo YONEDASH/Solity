@@ -27,7 +27,7 @@ public class FontRenderer implements Align {
     }
 
     private BoundingBox drawString0(Graphics2D g2d, String text, int x, int y, int alignHorizontal, int alignVertical) {
-        Vec2D vb = bounds(g2d, "!X,");
+        Vec2D vb = bounds(g2d, "!Xy");
         double verticalModifier = switch(alignVertical) {
             case CENTER -> vb.y * 0.5;
             case BOTTOM -> 0;

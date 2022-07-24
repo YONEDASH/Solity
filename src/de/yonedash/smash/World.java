@@ -1,10 +1,12 @@
 package de.yonedash.smash;
 
 import de.yonedash.smash.config.SaveGame;
+import de.yonedash.smash.entity.DisplayEntity;
 import de.yonedash.smash.entity.Entity;
 import de.yonedash.smash.entity.LevelObject;
 import de.yonedash.smash.progression.Story;
 
+import javax.swing.text.AbstractDocument;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -163,7 +165,12 @@ public class World implements ProgressReport {
         g2d.translate(-bounds.position.x * scale, -bounds.position.y * scale);
 
         // Draw objects
-        this.chunks.forEach(chunk -> Arrays.stream(chunk.getLevelObjects()).forEach(levelObject -> levelObject.draw(dummyScene, g2d, 0)));
+        ArrayList<LevelObject> zSortedLevelObjects = new ArrayList<>();
+        this.chunks.forEach(chunk -> zSortedLevelObjects.addAll(Arrays.stream(chunk.getLevelObjects()).toList()));
+
+        // Sort list by z value
+        zSortedLevelObjects.sort(Comparator.comparingInt(DisplayEntity::getZ));
+        zSortedLevelObjects.forEach(levelObject -> levelObject.draw(dummyScene, g2d, 0));
 
         g2d.dispose();
         return this.compiledObjectImage = bufferedImage;

@@ -1,5 +1,9 @@
-package de.yonedash.smash;
+package de.yonedash.smash.localization;
 
+import de.yonedash.smash.Align;
+import de.yonedash.smash.FontRenderer;
+import de.yonedash.smash.Scene;
+import de.yonedash.smash.Vec2D;
 import de.yonedash.smash.config.KeyBind;
 
 import java.awt.*;
@@ -18,11 +22,15 @@ public class BindLocalizer implements Align {
             return null;
     }
 
+    public static String getDeviceName(Scene scene, KeyBind.Device device) {
+        return device != null ? scene.localize("device." + device.name().toLowerCase()) : null;
+    }
+
     public static String getActualBindName(KeyBind bind) {
         if (bind.getDevice() == KeyBind.Device.KEYBOARD)
-            return getActualKeyName(bind.getCode());
+            return "[" + getActualKeyName(bind.getCode()) + "]";
         else if (bind.getDevice() == KeyBind.Device.MOUSE)
-            return getMouseButtonName(bind.getCode());
+            return "[" + getMouseButtonName(bind.getCode()) + "]";
         else
             return null;
     }
@@ -223,7 +231,7 @@ public class BindLocalizer implements Align {
     }
 
     public static Vec2D drawHint(Graphics2D g2d, Scene scene, KeyBind keyBind, int x, int y, int height, int alignHorizontal) {
-        g2d.setFont(scene.instance.lexicon.arial.deriveFont((float) scene.scaleToDisplay(height * 1.7)));
+        g2d.setFont(scene.instance.lexicon.arial.deriveFont((float) scene.scaleToDisplay(height * 1.6)));
 
         String text = getBindNameOrUnicode(keyBind);
         FontRenderer fontRenderer = scene.fontRenderer;
@@ -240,6 +248,7 @@ public class BindLocalizer implements Align {
         g2d.fillRect(x, y, width, height);
 
         g2d.setColor(Color.DARK_GRAY);
+        g2d.setFont(scene.instance.lexicon.arial.deriveFont((float) scene.scaleToDisplay(height * 1.4)));
         fontRenderer.drawString(g2d, text, x + width / 2, y + height / 2, Align.CENTER, Align.CENTER, false);
 
         return new Vec2D(width, height);

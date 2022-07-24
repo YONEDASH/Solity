@@ -29,7 +29,7 @@ public class TextureAtlas {
     public final Texture invalid;
 
     // UI
-    public Texture uiCrossHair, uiArrow, uiBorderText;
+    public Texture uiCrossHair, uiArrow;
 
     // ING
     public Texture fork, animSlash, animAfterDeath, animHit;
@@ -54,13 +54,8 @@ public class TextureAtlas {
         this.forest = loadTexture("/forest.png");
 
         // Load UI
-        this.uiCrossHair = loadTexture("/ui/crosshair.png");
-        this.uiArrow = loadTexture("/ui/arrow.png");
-
-        Texture borders = loadTexture("/ui/borders.png");
-        this.uiBorderText = loadTexture(borders, 18 * 1, 18 * 1, 16 * 5, 16 * 5);
-
-        borders.flush();
+        this.uiCrossHair = loadTexture("/assets/ui/crosshair.png");
+        this.uiArrow = loadTexture("/assets/ui/arrow.png");
 
         // Load projectiles
         this.projCanonBall = loadTexture("/projectile/CanonBall.png", 5.0, 0, 0, 16, 16, EAST, 5);
@@ -158,6 +153,9 @@ public class TextureAtlas {
 
     public Texture loadTexture(String path) {
         BufferedImage bufferedImage = loadBufferedImage(path);
+
+        if (bufferedImage == null)
+            System.err.println("Texture " + path + " not found");
 
         Texture result = bufferedImage == null ? createMissingTexture() : new TextureStatic(this, bufferedImage);
         this.texturesLoaded.add(result);

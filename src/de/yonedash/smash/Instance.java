@@ -1,9 +1,11 @@
 package de.yonedash.smash;
 
+import de.yonedash.smash.config.GameConfig;
 import de.yonedash.smash.config.InputConfig;
 import de.yonedash.smash.config.SaveGame;
 import de.yonedash.smash.graphics.GraphicsThread;
 import de.yonedash.smash.item.ItemRegistry;
+import de.yonedash.smash.localization.Language;
 import de.yonedash.smash.resource.FontLexicon;
 import de.yonedash.smash.graphics.TextureAtlas;
 
@@ -34,6 +36,8 @@ public class Instance implements Runnable {
 
     public final Thread fogThread;
 
+
+    public GameConfig gameConfig;
     public InputConfig inputConfig;
 
     public Instance() {
@@ -56,7 +60,7 @@ public class Instance implements Runnable {
 
         // Initialize scene
         //this.scene = new SceneInGame(this);
-        this.scene = new SceneWorldLoading(this);
+        this.scene = new SceneWorldLoading(this, "tutorial");
 
         // Initialize game loop thread
         this.gameLoop = new GameLoop(this);
@@ -65,6 +69,7 @@ public class Instance implements Runnable {
         this.fogThread = new GraphicsThread(this);
 
         // Initialize configs
+        this.gameConfig = new GameConfig();
         this.inputConfig = new InputConfig();
 
     }
@@ -76,6 +81,7 @@ public class Instance implements Runnable {
         // Starting game here
 
         // Load configurations
+        this.gameConfig.load();
         this.inputConfig.load();
 
         // Show game window/"display"

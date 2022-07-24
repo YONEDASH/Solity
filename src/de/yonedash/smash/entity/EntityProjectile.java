@@ -32,6 +32,16 @@ public class EntityProjectile extends EntityBase {
     public void draw(Scene scene, Graphics2D g2d, double dt) {
         this.texture.update(dt);
 
+        // Calculate how far projectile has travelled in %
+        double d = this.boundingBox.center().distanceSqrt(this.origin) / maxDistance;
+
+        double fadeThreshold = 0.075;
+        double fadeBegin = 1.0 - fadeThreshold;
+        if (d >= fadeBegin) {
+            double f = Math.min((d - fadeBegin) / fadeThreshold, 1);
+            GraphicsUtils.setAlpha(g2d, 1.0f - (float) f);
+        }
+
         Vec2D center = this.boundingBox.center();
         double rotationDegView = this.rotation + 90.0;
         GraphicsUtils.rotate(g2d, rotationDegView, scene.scaleToDisplay(center.x), scene.scaleToDisplay(center.y));
@@ -43,7 +53,8 @@ public class EntityProjectile extends EntityBase {
         );
         GraphicsUtils.rotate(g2d, -rotationDegView, scene.scaleToDisplay(center.x), scene.scaleToDisplay(center.y));
 
-        g2d.setColor(Color.WHITE);
+        if (d >= fadeBegin)
+            GraphicsUtils.setAlpha(g2d, 1f);
 
     }
 
@@ -98,11 +109,18 @@ public class EntityProjectile extends EntityBase {
             return false;
 
         scene.instance.world.entitiesLoaded.remove(this);
-        // scene.instance.world.entitiesLoaded.remove(entity);
 
-        {
-            EntityParticle particle = new EntityParticle(entity.getBoundingBox().clone().scale(2.0), scene.instance.atlas.animAfterDeath, 0.0, 0.0, 350.0, entity.getZ(), false);
-            scene.instance.world.entitiesLoaded.add(particle);
+        // Damage entity
+        if (entity instanceof EntityDamageable entityDamageable) {
+            entityDamageable.setHealth(entityDamageable.getHealth() - damage);
+
+            if (entityDamageable.getHealth() <= 0) {
+                if (!(entity instanceof EntityPlayer))
+                    scene.instance.world.entitiesLoaded.remove(entity);
+
+                EntityParticle particle = new EntityParticle(entity.getBoundingBox().clone().scale(2.0), scene.instance.atlas.animAfterDeath, 0.0, 0.0, 350.0, entity.getZ() - 1, false);
+                scene.instance.world.entitiesLoaded.add(particle);
+            }
         }
 
         double particleHitScale = 0.75;

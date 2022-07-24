@@ -1,9 +1,8 @@
 package de.yonedash.smash;
 
-import de.yonedash.smash.entity.EntityParticle;
 import de.yonedash.smash.entity.LevelObject;
-import de.yonedash.smash.graphics.TextureIndividual;
-import de.yonedash.smash.graphics.TextureStatic;
+
+import java.util.List;
 
 public class MathUtils {
 
@@ -30,17 +29,22 @@ public class MathUtils {
     }
 
     public static LevelObject rayCast(World world, Vec2D vec2D, double rotation, double stepSize, double maxDistance) {
+        return rayCast(world, vec2D, rotation, stepSize, maxDistance, true);
+    }
+
+    public static LevelObject rayCast(World world, Vec2D vec2D, double rotation, double stepSize, double maxDistance, boolean restrictToLoadedChunks) {
         Vec2D point = vec2D.clone();
         stepSize = Math.max(1, stepSize);
         maxDistance = Math.max(1, maxDistance);
         double d = 0;
+        List<Chunk> chunkList = restrictToLoadedChunks ? world.chunksLoaded.stream().toList() : world.chunks;
         while (d < maxDistance + stepSize) {
-            for (Chunk chunk : world.chunksLoaded) {
+            for (Chunk chunk : chunkList) {
+                if (!chunk.getBoundingBox().contains(point))
+                    continue;
                 for (LevelObject levelObject : chunk.getLevelObjects()) {
                     if (!levelObject.hasCollision())
                         continue;
-//                    if (levelObject.getBoundingBox().contains(point))
-//                        return levelObject;
                     for (BoundingBox bb : levelObject.getCollisionBoxes()) {
                         if (bb.contains(point)) {
                             return levelObject;
@@ -55,20 +59,23 @@ public class MathUtils {
         return null;
     }
 
-
-
     public static LevelObject rayCast(World world, BoundingBox boundingBox, double rotation, double stepSize, double maxDistance) {
+        return rayCast(world, boundingBox, rotation, stepSize, maxDistance, true);
+    }
+
+    public static LevelObject rayCast(World world, BoundingBox boundingBox, double rotation, double stepSize, double maxDistance, boolean restrictToLoadedChunks) {
         boundingBox = boundingBox.clone();
         stepSize = Math.max(1, stepSize);
         maxDistance = Math.max(1, maxDistance);
         double d = 0;
+        List<Chunk> chunkList = restrictToLoadedChunks ? world.chunksLoaded.stream().toList() : world.chunks;
         while (d < maxDistance + stepSize) {
-            for (Chunk chunk : world.chunksLoaded) {
+            for (Chunk chunk : chunkList) {
+                if (!chunk.getBoundingBox().isColliding(boundingBox, 0))
+                    continue;
                 for (LevelObject levelObject : chunk.getLevelObjects()) {
                     if (!levelObject.hasCollision())
                         continue;
-//                    if (levelObject.getBoundingBox().isColliding(boundingBox, 0))
-//                        return levelObject;
                     for (BoundingBox bb : levelObject.getCollisionBoxes()) {
                         if (bb.isColliding(boundingBox, 0)) {
                             return levelObject;
@@ -76,12 +83,7 @@ public class MathUtils {
                     }
                 }
             }
-//
-//            double particleSize = stepSize;
-//            EntityParticle particle = new EntityParticle(
-//                    new BoundingBox(boundingBox.center().clone().subtract(new Vec2D(particleSize / 2, particleSize / 2)), new Vec2D(particleSize, particleSize)),
-//                    Instance.ONLY_FOR_DEBUGGING_PURPOSES().atlas.fork, rotation, 0, 100.0, 10, true);
-//            world.entitiesLoaded.add(particle);
+
             boundingBox.position.add(rotation, stepSize);
             d += stepSize;
         }

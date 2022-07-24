@@ -31,6 +31,7 @@ public class InputConfig extends XMLConfig {
         addBind("moveRight", new KeyBind(KeyBind.Device.KEYBOARD, KeyEvent.VK_D));
         addBind("shoot", new KeyBind(KeyBind.Device.MOUSE, 1));
         addBind("dash", new KeyBind(KeyBind.Device.KEYBOARD, KeyEvent.VK_SHIFT));
+        addBind("use", new KeyBind(KeyBind.Device.KEYBOARD, KeyEvent.VK_E));
     }
 
     @Override
@@ -57,4 +58,7 @@ public class InputConfig extends XMLConfig {
         }
     }
 
+    public HashMap<String, KeyBind> getBinds() {
+        return binds;
+    }
 }

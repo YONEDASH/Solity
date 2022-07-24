@@ -23,7 +23,7 @@ public abstract class XMLConfig {
         }
 
         try {
-            System.out.println("Initializing " + this.file.getCanonicalPath());
+            System.out.println("Initializing XMLConfig " + this.file.getCanonicalPath());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -63,7 +63,7 @@ public abstract class XMLConfig {
         inputStream.close();
 
         // Debug
-        System.out.println("Loaded " + file.getCanonicalPath());
+        System.out.println("Loaded XMLConfig " + file.getCanonicalPath());
     }
 
     // Saves properties to file
@@ -82,7 +82,7 @@ public abstract class XMLConfig {
         changesMade = false;
 
         // Debug
-        System.out.println("Saved " + file.getCanonicalPath());
+        System.out.println("Saved XMLConfig " + file.getCanonicalPath());
     }
 
     // Set property

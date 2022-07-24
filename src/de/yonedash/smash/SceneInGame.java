@@ -6,6 +6,7 @@ import de.yonedash.smash.entity.*;
 import de.yonedash.smash.graphics.EntityFog;
 import de.yonedash.smash.graphics.GraphicsUtils;
 import de.yonedash.smash.graphics.VisualEffect;
+import de.yonedash.smash.localization.BindLocalizer;
 import de.yonedash.smash.progression.TutorialStory;
 import de.yonedash.smash.resource.Texture;
 
@@ -31,8 +32,8 @@ public class SceneInGame extends Scene {
         World world = this.instance.world;
 
         // Add player
-        this.player = new EntityPlayer(new BoundingBox(new Vec2D(0, 0), new Vec2D(40 * 2, 10 * 2)));
-        this.player.setDashesLeft(instance.world.saveGame.getSkills().skillDash.getMaximumDashCount());
+        this.player = new EntityPlayer(Vec2D.zero());
+        this.resetPlayerStats();
         world.entitiesLoaded.add(this.player);
 
         // Initialize camera vec
@@ -91,6 +92,7 @@ public class SceneInGame extends Scene {
         updateMousePosition(x, y);
         updateMouseWorldPosition();
 
+        // TODO add device compat
         Vec2D projSize = new Vec2D(40, 40);
         EntityProjectile proj = new EntityProjectile(
                 instance.atlas.fork,
@@ -174,9 +176,12 @@ public class SceneInGame extends Scene {
         if (key == KeyEvent.VK_N) {
             instance.world.story.nextStep();
         }
+        if (key == KeyEvent.VK_K) {
+            player.setHealth(0);
+        }
         if (key == KeyEvent.VK_P) {
             Vec2D center = player.getBoundingBox().center();
-            System.out.println("Player Position: " + center);
+            System.out.println("Player Position: " + center + " new Vec2D(" + center.x + ", " + center.y + ")");
         }
         if (key == KeyEvent.VK_R) {
             this.promptLettersRevealed = 0.0;
@@ -186,6 +191,9 @@ public class SceneInGame extends Scene {
     private double timeNoChunksRefreshed;
 
     private TextPrompt currentPrompt;
+
+    private double timeSincePlayerDeath;
+    private boolean checkpointLoaded;
 
     @Override
     public void update(Graphics2D g2d, double dt) {
@@ -334,6 +342,15 @@ public class SceneInGame extends Scene {
 
             countDrawnOnScreen += batch.size();
             batch.clear();
+        }
+
+        // Draw character health bars
+        for (Entity e : world.entitiesLoaded.stream().filter(entity -> entity instanceof EntityCharacter).toList()) {
+            EntityCharacter entityCharacter = (EntityCharacter) e;
+
+            if (entityCharacter != player && cameraView.isColliding(createScaledToDisplay(entityCharacter.getBoundingBox()), 0)) {
+                entityCharacter.drawHealthBar(g2d, this);
+            }
         }
 
         if (Constants.SHOW_CHUNK_BORDERS || Constants.SHOW_COLLISION) {
@@ -551,7 +568,7 @@ public class SceneInGame extends Scene {
 
                     // Draw key hint
                     double bindOffsetX = super.scaleToDisplay(8.0);
-                    double bindSize = super.scaleToDisplay(nextBounds.size.y * 2 * 1.2);
+                    double bindSize = nextBounds.size.y * 1.1;
 
                     BindLocalizer.drawHint(g2d, this, instance.inputConfig.getBind("skipDialog"), (int) (nextBounds.position.x - nextBounds.size.x - bindOffsetX), (int) (nextBounds.position.y - nextBounds.size.y), (int) bindSize, Align.RIGHT);
                 }
@@ -645,7 +662,7 @@ public class SceneInGame extends Scene {
 
         // Draw Player Health
         g2d.setColor(Color.RED);
-        this.fontRenderer.drawString(g2d, "Player Health: " + null, scaleToDisplay(20.0), scaleToDisplay(30.0), FontRenderer.LEFT, FontRenderer.TOP, true);
+        this.fontRenderer.drawString(g2d, "Player Health: " + player.getHealth() + "/" + player.getMaxHealth(), scaleToDisplay(20.0), scaleToDisplay(30.0), FontRenderer.LEFT, FontRenderer.TOP, true);
 
         // Draw Player Dashes
         g2d.setColor(Color.GREEN);
@@ -660,6 +677,39 @@ public class SceneInGame extends Scene {
         g2d.setColor(Color.YELLOW);
         this.fontRenderer.drawString(g2d, "Item In Hand: " + player.getItemInHand().getName(), scaleToDisplay(20.0), scaleToDisplay(210.0), FontRenderer.LEFT, FontRenderer.TOP, true);
 
+        // Handle death and draw overlay
+        if (player.getHealth() <= 0.0 || this.timeSincePlayerDeath > 0) {
+            // Lock binds
+            this.instance.inputConfig.getBinds().values().forEach(KeyBind::lock);
+
+            if (this.timeSincePlayerDeath == 0.0)
+                checkpointLoaded = false;
+
+            this.timeSincePlayerDeath += dt;
+
+            double restartTime = 1000.0;
+
+            if (this.timeSincePlayerDeath < restartTime / 2) {
+                double d = timeSincePlayerDeath / (restartTime / 2);
+                g2d.setColor(new Color(0f, 0f, 0f, (float) d));
+            } else if (this.timeSincePlayerDeath > restartTime / 2) {
+                double d = Math.min(1, (timeSincePlayerDeath - (restartTime / 2)) / (restartTime / 2));
+                g2d.setColor(new Color(0f, 0f, 0f, 1.0f - (float) d));
+            }
+
+            g2d.fillRect(0, 0, width, height);
+
+            if (this.timeSincePlayerDeath > restartTime / 2 && !checkpointLoaded) {
+                this.loadCheckpoint();
+            }
+            if (this.timeSincePlayerDeath > restartTime) {
+                this.timeSincePlayerDeath = 0.0;
+
+                // Unlock binds
+                this.instance.inputConfig.getBinds().values().forEach(KeyBind::unlock);
+            }
+        }
+
         // Set font
         g2d.setFont(this.instance.lexicon.equipmentPro.deriveFont((float) scaleToDisplay(50.0)));
         g2d.setColor(Color.WHITE);
@@ -667,7 +717,7 @@ public class SceneInGame extends Scene {
         Runtime runtime = Runtime.getRuntime();
         double memoryUsage = (runtime.totalMemory() - runtime.freeMemory()) * 1e-6;
         double memoryTotal = (runtime.totalMemory()) * 1e-6;
-        this.fontRenderer.drawString(g2d, (Math.round(this.instance.gameLoop.getFramesPerSecond() * 10.0) / 10.0) + " FPS, " + (Math.round(memoryUsage * 10.0) / 10.0) + "M / " +  (Math.round(memoryTotal * 10.0) / 10.0) + "M", width / 2, super.scaleToDisplay(50.0 / this.scaleFactor), FontRenderer.CENTER, FontRenderer.TOP,false);
+        this.fontRenderer.drawString(g2d, (Math.round(this.instance.gameLoop.getFramesPerSecond() * 10.0) / 10.0) + " FPS, " + (Math.round(memoryUsage * 10.0) / 10.0) + "M / " +  (Math.round(memoryTotal * 10.0) / 10.0) + "M", super.scaleToDisplay(50.0), height / 2, FontRenderer.LEFT, FontRenderer.CENTER,false);
 
         if (Constants.SHOW_COLLISION || Constants.SHOW_CHUNK_BORDERS) {
             String[] extraInfo = {
@@ -730,6 +780,18 @@ public class SceneInGame extends Scene {
         }
     }
 
+    private void loadCheckpoint() {
+        resetPlayerStats();
+        checkpointLoaded = true;
+        instance.world.story.loadCheckpoint();
+    }
+
+    private void resetPlayerStats() {
+        this.player.setDashesLeft(instance.world.saveGame.getSkills().skillDash.getMaximumDashCount());
+        this.player.setMaxHealth(instance.world.saveGame.getSkills().skillHealth.getMaxHealth());
+        this.player.setHealth(this.player.getMaxHealth());
+    }
+
     private Vec2D calculateCameraTargetPos() {
         // Create camera target pos with center position of players bounding box
         Vec2D cameraTargetPos = this.player.getBoundingBox().center();
@@ -737,11 +799,17 @@ public class SceneInGame extends Scene {
         return cameraTargetPos.subtract(cameraTargetPos.clone().subtract(this.mouseWorldPosition).multiply(Constants.CAMERA_MOUSE_FOLLOW_FACTOR));
     }
 
+    public void resetCameraPosition() {
+        Vec2D target = calculateCameraTargetPos().subtract(new Vec2D(instance.display.getWidth(), instance.display.getHeight()).multiply(0.5));
+        this.cameraPos.x = target.x;
+        this.cameraPos.y = target.y;
+    }
+
     public boolean hasPromptRevealFinished() {
         if (instance.world.getPrompt() == null)
             return true;
         int promptTextLength = instance.world.getPrompt().text().length();
-        return promptLettersRevealed > promptTextLength;
+        return currentPrompt == instance.world.getPrompt() && promptLettersRevealed > promptTextLength;
     }
 
 }
