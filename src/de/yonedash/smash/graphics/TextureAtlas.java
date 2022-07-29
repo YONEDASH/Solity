@@ -29,7 +29,7 @@ public class TextureAtlas {
     public final Texture invalid;
 
     // UI
-    public Texture uiCrossHair, uiArrow;
+    public Texture uiCrossHair, uiArrow, uiHeartEmpty, uiHeartFull;
 
     // ING
     public Texture fork, animSlash, animAfterDeath, animHit;
@@ -56,6 +56,8 @@ public class TextureAtlas {
         // Load UI
         this.uiCrossHair = loadTexture("/assets/ui/crosshair.png");
         this.uiArrow = loadTexture("/assets/ui/arrow.png");
+        this.uiHeartEmpty = loadTexture("/assets/ui/heartEmpty.png");
+        this.uiHeartFull = loadTexture("/assets/ui/heartFull.png");
 
         // Load projectiles
         this.projCanonBall = loadTexture("/projectile/CanonBall.png", 5.0, 0, 0, 16, 16, EAST, 5);

@@ -1,0 +1,29 @@
+**Programming
+
+*Engine
+Til
+
+*Physics
+Til
+
+*Visual Effects
+Til
+
+**Story
+
+*Writing
+Til
+
+*Scripting
+Til
+
+**Assets
+
+*World Textures
+pixivan LINK:https://pixivan.itch.io/simple-forest-tileset
+
+*Enemy Textures
+deepdivegamestudio LINK:https://deepdivegamestudio.itch.io/vermin-asset-pack
+
+*Fonts
+somepx LINK:https://somepx.itch.io/humble-fonts-free

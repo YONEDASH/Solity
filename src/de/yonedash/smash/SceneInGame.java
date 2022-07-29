@@ -8,6 +8,7 @@ import de.yonedash.smash.graphics.GraphicsUtils;
 import de.yonedash.smash.graphics.VisualEffect;
 import de.yonedash.smash.localization.BindLocalizer;
 import de.yonedash.smash.progression.TutorialStory;
+import de.yonedash.smash.progression.skills.SkillDash;
 import de.yonedash.smash.resource.Texture;
 
 import java.awt.*;
@@ -194,6 +195,8 @@ public class SceneInGame extends Scene {
 
     private double timeSincePlayerDeath;
     private boolean checkpointLoaded;
+
+    private double healthDisplayed, dashesDisplayed;
 
     @Override
     public void update(Graphics2D g2d, double dt) {
@@ -570,7 +573,7 @@ public class SceneInGame extends Scene {
                     double bindOffsetX = super.scaleToDisplay(8.0);
                     double bindSize = nextBounds.size.y * 1.1;
 
-                    BindLocalizer.drawHint(g2d, this, instance.inputConfig.getBind("skipDialog"), (int) (nextBounds.position.x - nextBounds.size.x - bindOffsetX), (int) (nextBounds.position.y - nextBounds.size.y), (int) bindSize, Align.RIGHT);
+                    BindLocalizer.drawHint(g2d, this, instance.inputConfig.getBind("skipDialog"), (int) (nextBounds.position.x - bindOffsetX), (int) (nextBounds.position.y + 2.0), (int) bindSize, Align.RIGHT);
                 }
             }
 
@@ -588,7 +591,7 @@ public class SceneInGame extends Scene {
         // Draw map
        if (world.compiledObjectImage != null) {
 
-        BufferedImage mapImage = this.instance.world.compiledObjectImage;
+           BufferedImage mapImage = this.instance.world.compiledObjectImage;
 //
 //        BoundingBox mapBounds = new BoundingBox(world.topLeft, world.bottomRight);
 //        Vec2D vecMapSize = mapBounds.abs();
@@ -652,8 +655,8 @@ public class SceneInGame extends Scene {
 //            g2d.drawImage(mapImage, mapX + zoomedMapOffsetX, mapY + zoomedMapOffsetY, zoomedWidth, zoomedHeight, null);
 //        g2d.setColor(Color.RED);
 //        g2d.fillRect(mapX - scaleToDisplay(10), mapY - scaleToDisplay(10), scaleToDisplay(20), scaleToDisplay(20));
-        g2d.setClip(null);
-            }
+           g2d.setClip(null);
+       }
 
         // Draw HUD
 
@@ -661,21 +664,75 @@ public class SceneInGame extends Scene {
         g2d.setFont(this.instance.lexicon.equipmentPro.deriveFont((float) scaleToDisplay(40.0)));
 
         // Draw Player Health
-        g2d.setColor(Color.RED);
-        this.fontRenderer.drawString(g2d, "Player Health: " + player.getHealth() + "/" + player.getMaxHealth(), scaleToDisplay(20.0), scaleToDisplay(30.0), FontRenderer.LEFT, FontRenderer.TOP, true);
+        this.healthDisplayed += (this.player.getHealth() - this.healthDisplayed) * 0.3; // Animates health add/remove
+        int hearts = (int) (player.getMaxHealth() / 2);
+        double heartSize = 100.0;
+        double heartGap = 7.5;
+        double heartsX = 40.0;
+        double heartsY = 40.0;
+
+        for (int i = 0; i < hearts; i++) {
+            double ratio = Math.min(1, (this.healthDisplayed - (i * 2.0)) / 2.0);
+
+            Rectangle heart = new Rectangle(super.scaleToDisplay(heartsX + (heartGap + heartSize) * i), super.scaleToDisplay(heartsY), super.scaleToDisplay(heartSize), super.scaleToDisplay(heartSize));
+
+            if (ratio < 1) {
+                g2d.setClip(null);
+                g2d.drawImage(this.instance.atlas.uiHeartEmpty.getBufferedImage(), heart.x, heart.y, heart.width, heart.height, null);
+            }
+
+            if (ratio <= 0.0)
+                continue;
+
+            heart.width *= ratio;
+            g2d.setClip(heart);
+            heart.width /= ratio;
+            g2d.drawImage(this.instance.atlas.uiHeartFull.getBufferedImage(), heart.x, heart.y, heart.width, heart.height, null);
+
+        }
+        g2d.setClip(null);
 
         // Draw Player Dashes
-        g2d.setColor(Color.GREEN);
-        this.fontRenderer.drawString(g2d, "Player Dashes Left: " + player.getDashesLeft(), scaleToDisplay(20.0), scaleToDisplay(90.0), FontRenderer.LEFT, FontRenderer.TOP, true);
+        SkillDash skillDash = this.instance.world.saveGame.getSkills().skillDash;
+        this.dashesDisplayed += (this.player.getDashesLeft() - this.dashesDisplayed) * 0.3; // Animates dash add/remove
+        int dashes = (int) skillDash.getMaximumDashCount();
+        double dashSize = 100.0;
+        double dashGap = 7.5;
+        double dashX = 40.0;
+        double dashY = 40.0 + heartSize + heartGap;
 
-        // Draw Player Heal Potions
-        g2d.setColor(Color.CYAN);
-        this.fontRenderer.drawString(g2d, "Player Heal Potions Left: " + null, scaleToDisplay(20.0), scaleToDisplay(150.0), FontRenderer.LEFT, FontRenderer.TOP, true);
+        for (int i = 0; i < dashes; i++) {
+            double ratio = Math.min(1, this.dashesDisplayed - i);
 
-        // Draw Player Inventory
-        // Draw Item in Hand
-        g2d.setColor(Color.YELLOW);
-        this.fontRenderer.drawString(g2d, "Item In Hand: " + player.getItemInHand().getName(), scaleToDisplay(20.0), scaleToDisplay(210.0), FontRenderer.LEFT, FontRenderer.TOP, true);
+            Rectangle heart = new Rectangle(super.scaleToDisplay(dashX + (dashGap + dashSize) * i), super.scaleToDisplay(dashY), super.scaleToDisplay(dashSize), super.scaleToDisplay(dashSize));
+
+            if (ratio < 1) {
+                g2d.setClip(null);
+                g2d.drawImage(this.instance.atlas.uiHeartEmpty.getBufferedImage(), heart.x, heart.y, heart.width, heart.height, null);
+            }
+
+            if (ratio <= 0.0)
+                continue;
+
+            heart.width *= ratio;
+            g2d.setClip(heart);
+            heart.width /= ratio;
+            g2d.drawImage(this.instance.atlas.uiHeartFull.getBufferedImage(), heart.x, heart.y, heart.width, heart.height, null);
+
+        }
+        g2d.setClip(null);
+//
+//        g2d.setColor(Color.GREEN);
+//        this.fontRenderer.drawString(g2d, "Player Dashes Left: " + player.getDashesLeft(), scaleToDisplay(20.0), scaleToDisplay(90.0), FontRenderer.LEFT, FontRenderer.TOP, true);
+////
+//        // Draw Player Heal Potions
+//        g2d.setColor(Color.CYAN);
+//        this.fontRenderer.drawString(g2d, "Player Heal Potions Left: " + null, scaleToDisplay(20.0), scaleToDisplay(150.0), FontRenderer.LEFT, FontRenderer.TOP, true);
+//
+//        // Draw Player Inventory
+//        // Draw Item in Hand
+//        g2d.setColor(Color.YELLOW);
+//        this.fontRenderer.drawString(g2d, "Item In Hand: " + player.getItemInHand().getName(), scaleToDisplay(20.0), scaleToDisplay(210.0), FontRenderer.LEFT, FontRenderer.TOP, true);
 
         // Handle death and draw overlay
         if (player.getHealth() <= 0.0 || this.timeSincePlayerDeath > 0) {
@@ -711,13 +768,13 @@ public class SceneInGame extends Scene {
         }
 
         // Set font
-        g2d.setFont(this.instance.lexicon.equipmentPro.deriveFont((float) scaleToDisplay(50.0)));
+        g2d.setFont(this.instance.lexicon.arial.deriveFont((float) scaleToDisplay(30.0)));
         g2d.setColor(Color.WHITE);
 
         Runtime runtime = Runtime.getRuntime();
         double memoryUsage = (runtime.totalMemory() - runtime.freeMemory()) * 1e-6;
         double memoryTotal = (runtime.totalMemory()) * 1e-6;
-        this.fontRenderer.drawString(g2d, (Math.round(this.instance.gameLoop.getFramesPerSecond() * 10.0) / 10.0) + " FPS, " + (Math.round(memoryUsage * 10.0) / 10.0) + "M / " +  (Math.round(memoryTotal * 10.0) / 10.0) + "M", super.scaleToDisplay(50.0), height / 2, FontRenderer.LEFT, FontRenderer.CENTER,false);
+        this.fontRenderer.drawString(g2d, (Math.round(this.instance.gameLoop.getFramesPerSecond() * 10.0) / 10.0) + " FPS, " + (Math.round(memoryUsage * 10.0) / 10.0) + "M / " +  (Math.round(memoryTotal * 10.0) / 10.0) + "M", width - scaleToDisplay(10.0), scaleToDisplay(10.0), FontRenderer.RIGHT, FontRenderer.TOP,true);
 
         if (Constants.SHOW_COLLISION || Constants.SHOW_CHUNK_BORDERS) {
             String[] extraInfo = {

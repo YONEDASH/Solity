@@ -15,9 +15,9 @@ public class FontLexicon {
 
     public void load() {
         this.arial = new Font("Arial", Font.PLAIN, 0);
-        this.compassPro = registerFont("/fonts/CompassPro.ttf");
-        this.equipmentPro = registerFont("/fonts/EquipmentPro.ttf");
-        this.futilePro = registerFont("/fonts/FutilePro.ttf");
+        this.compassPro = registerFont("/assets/fonts/CompassPro.ttf");
+        this.equipmentPro = registerFont("/assets/fonts/EquipmentPro.ttf");
+        this.futilePro = registerFont("/assets/fonts/FutilePro.ttf");
     }
 
     // Register a font from resource path
