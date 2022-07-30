@@ -19,11 +19,8 @@ Til
 
 **Assets
 
-*World Textures
 pixivan LINK:https://pixivan.itch.io/simple-forest-tileset
-
-*Enemy Textures
 deepdivegamestudio LINK:https://deepdivegamestudio.itch.io/vermin-asset-pack
-
-*Fonts
+o-lobster LINK:https://o-lobster.itch.io/simple-dungeon-crawler-16x16-pixel-pack
+QBE LINK:https://qbe-e.itch.io/tp-shooter-assets
 somepx LINK:https://somepx.itch.io/humble-fonts-free

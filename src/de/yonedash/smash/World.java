@@ -4,9 +4,8 @@ import de.yonedash.smash.config.SaveGame;
 import de.yonedash.smash.entity.DisplayEntity;
 import de.yonedash.smash.entity.Entity;
 import de.yonedash.smash.entity.LevelObject;
-import de.yonedash.smash.progression.Story;
+import de.yonedash.smash.progression.story.Story;
 
-import javax.swing.text.AbstractDocument;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;

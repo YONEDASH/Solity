@@ -13,6 +13,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import static de.yonedash.smash.Direction.*;
@@ -29,7 +30,7 @@ public class TextureAtlas {
     public final Texture invalid;
 
     // UI
-    public Texture uiCrossHair, uiArrow, uiHeartEmpty, uiHeartFull;
+    public Texture uiCrossHair, uiArrow, uiHeartEmpty, uiHeartFull, uiDashEmpty, uiDashFull, uiCoin;
 
     // ING
     public Texture fork, animSlash, animAfterDeath, animHit;
@@ -58,6 +59,9 @@ public class TextureAtlas {
         this.uiArrow = loadTexture("/assets/ui/arrow.png");
         this.uiHeartEmpty = loadTexture("/assets/ui/heartEmpty.png");
         this.uiHeartFull = loadTexture("/assets/ui/heartFull.png");
+        this.uiDashEmpty = loadTexture("/assets/ui/dashEmpty.png");
+        this.uiDashFull = loadTexture("/assets/ui/dashFull.png");
+        this.uiCoin = loadTexture(8.0, loadTexture("/assets/ui/coin/coin_anim_f0.png"), loadTexture("/assets/ui/coin/coin_anim_f1.png"), loadTexture("/assets/ui/coin/coin_anim_f2.png"), loadTexture("/assets/ui/coin/coin_anim_f3.png"));
 
         // Load projectiles
         this.projCanonBall = loadTexture("/projectile/CanonBall.png", 5.0, 0, 0, 16, 16, EAST, 5);
@@ -168,6 +172,12 @@ public class TextureAtlas {
         Texture texture = loadTexture(path);
         Texture result = loadTexture(texture, playbackSpeed, x, y, width, height, direction, size);
         texture.flush();
+        return result;
+    }
+
+    public Texture loadTexture(double playbackSpeed, Texture... textures) {
+        Texture result = new TextureAnimated(this, playbackSpeed, textures);
+        this.texturesLoaded.add(result);
         return result;
     }
 

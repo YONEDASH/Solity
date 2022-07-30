@@ -18,6 +18,8 @@ public abstract class EntityCharacter extends EntityBase implements EntityDamage
 
     protected double texScale;
 
+    private double healthDisplayed;
+
     public EntityCharacter(BoundingBox boundingBox) {
         super(boundingBox);
         this.texScale = 1.0;
@@ -25,9 +27,29 @@ public abstract class EntityCharacter extends EntityBase implements EntityDamage
 
     protected Texture lastDrawnTexture;
 
+    private double shake;
+
     @Override
     public void draw(Scene scene, Graphics2D g2d, double dt) {
         Texture texture = getTexture(scene);
+
+        Vec2D shakeVec = null;
+        if (this.shake > 0 && scene instanceof SceneInWorld sceneInWorld) {
+            double d = this.shake / Constants.SHAKE_LENGTH;
+            double scalar = d < 0.5 ? 1.0 - d * 2 : (d - 0.5) * 2;
+
+            shakeVec = new Vec2D(Math.sin(this.shake), Math.cos(this.shake)).multiply(2).multiply(scalar);
+
+            if (this instanceof EntityPlayer) {
+                sceneInWorld.cameraPos.add(shakeVec.multiply(1 / scene.calculateDisplayScaleFactor()));
+                shakeVec = null;
+            } else
+                shakeVec = shakeVec.multiply(scene.calculateDisplayScaleFactor());
+
+            this.shake -= dt;
+        }
+
+        if (shakeVec != null) g2d.translate(shakeVec.x, shakeVec.y);
 
         // If texture was changed, restart animation
         if (texture != this.lastDrawnTexture && texture instanceof TextureAnimated textureAnimated)
@@ -79,7 +101,7 @@ public abstract class EntityCharacter extends EntityBase implements EntityDamage
             BoundingBox itemBB = new BoundingBox(texBB.center().clone().add(vecSize.clone().multiply(new Vec2D(0.5 * 0.8 * (viewDirection == Direction.WEST ? -1 : 1), 0.5 * 0.3))).subtract(new Vec2D(itemSize / 2.0, itemSize / 2.0)), new Vec2D(itemSize, itemSize));
             Vec2D itemBBCenter = itemBB.center();
             double rotationDegView = 0;
-            if (scene instanceof SceneInGame sig)
+            if (scene instanceof SceneInWorld sig)
                 rotationDegView = itemBBCenter.rotationTo(sig.mouseWorldPosition) + 90.0;
             GraphicsUtils.rotate(g2d, rotationDegView, scene.scaleToDisplay(itemBBCenter.x), scene.scaleToDisplay(itemBBCenter.y));
             g2d.drawImage(
@@ -92,6 +114,8 @@ public abstract class EntityCharacter extends EntityBase implements EntityDamage
             );
             GraphicsUtils.rotate(g2d, -rotationDegView, scene.scaleToDisplay(itemBBCenter.x), scene.scaleToDisplay(itemBBCenter.y));
         }
+
+        if (shakeVec != null) g2d.translate(-shakeVec.x, -shakeVec.y);
     }
 
     public void drawHealthBar(Graphics2D g2d, Scene scene) {
@@ -109,6 +133,7 @@ public abstract class EntityCharacter extends EntityBase implements EntityDamage
         double healthBarHeight = 12.0;
         double healthBarLineThickness = 1;
         double healthBarArc = 15.0;
+        this.healthDisplayed += (this.health - this.healthDisplayed) * Constants.HUD_VALUE_ANIMATION_SPEED; // Animates health add/remove
 
         // Background
         g2d.setColor(Color.DARK_GRAY);
@@ -131,7 +156,7 @@ public abstract class EntityCharacter extends EntityBase implements EntityDamage
         );
 
         // Colored Bar
-        float f = (float) Math.max(Math.min(this.health / this.maxHealth, 1), 0);
+        float f = (float) Math.max(Math.min(this.healthDisplayed / this.maxHealth, 1), 0);
         Color color = new Color(f, 1f - f, 0f,1f).brighter();
         g2d.setColor(color);
         g2d.fillRoundRect(
@@ -240,6 +265,8 @@ public abstract class EntityCharacter extends EntityBase implements EntityDamage
 
     @Override
     public void setHealth(double health) {
+        if (health < this.health)
+            shake = Constants.SHAKE_LENGTH;
         this.health = health;
     }
 

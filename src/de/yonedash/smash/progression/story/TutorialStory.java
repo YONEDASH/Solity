@@ -1,4 +1,4 @@
-package de.yonedash.smash.progression;
+package de.yonedash.smash.progression.story;
 
 import de.yonedash.smash.*;
 import de.yonedash.smash.config.InputConfig;
@@ -13,7 +13,7 @@ public class TutorialStory extends Story {
     private EntityAnt starterAnt;
 
     @Override
-    protected void initStep(double dt, SceneInGame scene, int step) {
+    protected void initStep(double dt, SceneInWorld scene, int step) {
         Instance instance = scene.instance;
         World world = instance.world;
         InputConfig inputConfig = instance.inputConfig;
@@ -124,7 +124,7 @@ public class TutorialStory extends Story {
     private double distanceMoved;
 
     @Override
-    protected void updateStep(Graphics2D g2d, double dt, SceneInGame scene, int step) {
+    protected void updateStep(Graphics2D g2d, double dt, SceneInWorld scene, int step) {
         EntityPlayer player = scene.player;
         World world = scene.instance.world;
 
@@ -194,7 +194,7 @@ public class TutorialStory extends Story {
         }
 
         // Freeze every entity if prompt is shown
-        if (this.step < 3) {
+        if (this.step < 3 || (this.step == 5 && !scene.hasPromptRevealFinished())) {
             // Freeze target
             for (Entity entity : world.entitiesLoaded) {
                 if (entity == player)

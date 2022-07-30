@@ -5,9 +5,10 @@ import de.yonedash.smash.config.KeyBind;
 import de.yonedash.smash.entity.*;
 import de.yonedash.smash.graphics.EntityFog;
 import de.yonedash.smash.graphics.GraphicsUtils;
+import de.yonedash.smash.graphics.TextureAnimated;
 import de.yonedash.smash.graphics.VisualEffect;
 import de.yonedash.smash.localization.BindLocalizer;
-import de.yonedash.smash.progression.TutorialStory;
+import de.yonedash.smash.progression.story.TutorialStory;
 import de.yonedash.smash.progression.skills.SkillDash;
 import de.yonedash.smash.resource.Texture;
 
@@ -18,7 +19,7 @@ import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
 
-public class SceneInGame extends Scene {
+public class SceneInWorld extends Scene {
 
     public final Vec2D cameraPos;
 
@@ -27,7 +28,7 @@ public class SceneInGame extends Scene {
     private double promptLettersRevealed = 0;
     private double promptAutoNextTimer = 0;
 
-    public SceneInGame(Instance instance) {
+    public SceneInWorld(Instance instance) {
         super(instance);
 
         World world = this.instance.world;
@@ -405,45 +406,7 @@ public class SceneInGame extends Scene {
 
         collisionTime = System.currentTimeMillis() - collisionTime;
 
-        // Draw waypoint arrow
-        if (world.waypoint != null) {
-            BoundingBox playerBB = player.getBoundingBox();
-            Vec2D center = playerBB.center();
-            double rotationToWaypoint = center.rotationTo(world.waypoint);
-            double arrowDistance = world.waypoint.distanceSqrt(center);
-            double playerDistance = Tile.TILE_SIZE * 1.5;
-            double minDistance = Tile.TILE_SIZE * 2.0;
-            boolean isClose = arrowDistance < minDistance;
-            double arrowSize = 100.0;
-
-            Vec2D arrowPos = !isClose ? center.clone().add(rotationToWaypoint, Math.min(arrowDistance, playerDistance))
-                    : world.waypoint.clone().add(-90, arrowSize * 1.25);
-
-            rotationToWaypoint -= 90.0;
-
-            if (isClose) {
-                rotationToWaypoint = 0.0;
-
-                // Up and down animation
-                double d = ((System.currentTimeMillis() % 1000) / 1000.0) * 2;
-
-                if (d > 1)
-                    d = 1 - d + 1;
-                d /= 2;
-
-                double bounceY = arrowSize * d;
-                arrowPos.add(new Vec2D(0, bounceY));
-            }
-
-            GraphicsUtils.setAlpha(g2d, 0.95f);
-
-            GraphicsUtils.rotate(g2d, rotationToWaypoint, super.scaleToDisplay(arrowPos.x), super.scaleToDisplay(arrowPos.y));
-            g2d.drawImage(this.instance.atlas.uiArrow.getImage(), super.scaleToDisplay(arrowPos.x - arrowSize / 2),
-                    super.scaleToDisplay(arrowPos.y - arrowSize / 2), super.scaleToDisplay(arrowSize), super.scaleToDisplay(arrowSize), null);
-            GraphicsUtils.rotate(g2d, -rotationToWaypoint, super.scaleToDisplay(arrowPos.x), super.scaleToDisplay(arrowPos.y));
-
-            GraphicsUtils.setAlpha(g2d, 1.0f);
-        }
+        drawWaypointArrow(g2d, world);
 
         // Draw mouse crosshair
         int crosshairSize = super.scaleToDisplay(100.0);
@@ -465,7 +428,83 @@ public class SceneInGame extends Scene {
             world.story.update(g2d, dt, this);
         }
 
-        // Draw prompt
+        // Draw HUD
+        drawHUD(g2d, width, height, world, dt);
+
+        // Handle death and draw overlay
+       handlePlayerDeath(g2d, width, height, dt);
+
+        // Set font
+        g2d.setFont(this.instance.lexicon.arial.deriveFont((float) scaleToDisplay(32.0)));
+        g2d.setColor(Color.WHITE);
+
+        Runtime runtime = Runtime.getRuntime();
+        double memoryUsage = (runtime.totalMemory() - runtime.freeMemory()) * 1e-6;
+        double memoryTotal = (runtime.totalMemory()) * 1e-6;
+        this.fontRenderer.drawString(g2d, (Math.round(this.instance.gameLoop.getFramesPerSecond() * 10.0) / 10.0) + " FPS, " + (Math.round(memoryUsage * 10.0) / 10.0) + "M / " +  (Math.round(memoryTotal * 10.0) / 10.0) + "M", width - scaleToDisplay(10.0), scaleToDisplay(10.0), FontRenderer.RIGHT, FontRenderer.TOP,false);
+
+        if (Constants.SHOW_COLLISION || Constants.SHOW_CHUNK_BORDERS) {
+            String[] extraInfo = {
+                    "chunks=" + this.instance.world.chunksLoaded.size() + "/" + this.instance.world.chunks.size() + ", tiles=" + tilesLoaded + ", entities=" + this.instance.world.entitiesLoaded.size() + " " + countDrawnOnScreen + " drawn",
+                    "dt=" + dt + "ms",
+                    "chu_t=" + chunkRefreshDelay + "ms / " + chunkTime + "ms",
+                    "col_t=" + collisionTime + "ms",
+                    "weather=" + world.weatherProgress
+            };
+            Vec2D genericBounds = this.fontRenderer.bounds(g2d, "X");
+            Vec2D infoPos = new Vec2D(50, 400 + genericBounds.y);
+            for (String info : extraInfo) {
+                BoundingBox bounds = this.fontRenderer.drawString(g2d, info, super.scaleToDisplay((infoPos.x) / this.scaleFactor), super.scaleToDisplay((infoPos.y) / this.scaleFactor), FontRenderer.LEFT, FontRenderer.TOP,false);
+                infoPos.add(new Vec2D(0, bounds.size.y * 2 + scaleToDisplay(10.0)));
+            }
+        }
+
+        // Update camera
+
+        // Scale target position to display
+        Vec2D cameraTargetScaledPos = super.createScaledToDisplay(this.calculateCameraTargetPos());
+        // Calculate speed
+        float cameraSpeed = super.time(0.004f, dt);
+        // Move camera by multiplying speed with position delta minus half the screen size (for screen center)
+        this.cameraPos.x += cameraSpeed * (cameraTargetScaledPos.x - this.cameraPos.x - (width / 2f));
+        this.cameraPos.y += cameraSpeed * (cameraTargetScaledPos.y - this.cameraPos.y - (height / 2f));
+
+    }
+
+    private void reloadChunks(BoundingBox cameraView) {
+        // Clear current loaded chunks
+        this.instance.world.chunksLoaded.clear();
+
+        // Loop through every chunk
+        for (Chunk chunk : this.instance.world.chunks) {
+            // Now check if the chunk is on screen
+            if (createScaledToDisplay(chunk.getBoundingBox()).isColliding(cameraView, 0)) {
+                // If on screen, add to loaded chunks
+                this.instance.world.chunksLoaded.add(chunk);
+
+                // Add entities
+                if (chunk.getEntities().size() > 0) {
+                    this.instance.world.entitiesLoaded.addAll(chunk.getEntities());
+                    chunk.getEntities().clear();
+                }
+            }
+        }
+
+        // Unload entities
+        for (Entity entity : this.instance.world.entitiesLoaded) {
+            if (this.instance.world.chunksLoaded.stream().noneMatch(chunk -> entity.getBoundingBox().isColliding(chunk.getBoundingBox(), 0))) {
+                this.instance.world.entitiesLoaded.remove(entity);
+                for (Chunk chunk : this.instance.world.chunks) {
+                    if (chunk.getBoundingBox().isColliding(entity.getBoundingBox(), 0)) {
+                        chunk.getEntities().add(entity);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    private void drawTextPrompt(Graphics2D g2d, int width, int height, World world, double dt) {
         TextPrompt prompt = world.getPrompt();
         if (prompt != null) {
             // Reset timer & counter if there is a new prompt
@@ -587,154 +626,52 @@ public class SceneInGame extends Scene {
             this.currentPrompt = null;
             this.promptLettersRevealed = this.promptAutoNextTimer = 0;
         }
+    }
 
-        // Draw map
-       if (world.compiledObjectImage != null) {
+    private void drawWaypointArrow(Graphics2D g2d, World world) {
 
-           BufferedImage mapImage = this.instance.world.compiledObjectImage;
-//
-//        BoundingBox mapBounds = new BoundingBox(world.topLeft, world.bottomRight);
-//        Vec2D vecMapSize = mapBounds.abs();
-//        double mapInset = 250.0;
-//        double mapCompileScale = ((mapImage.getWidth() / vecMapSize.x) + (mapImage.getHeight() / vecMapSize.y)) / 2.0;
-//        double mapDisplaySize = scaleToDisplay(400.0);
-//        double mapDisplayScale = ((mapImage.getWidth() / mapDisplaySize) + (mapImage.getHeight() / mapDisplaySize)) / 2.0;
-//        Vec2D mapOffset = player.getBoundingBox().center();
-//        int mapSize = (int) (mapDisplaySize * mapZoom * mapDisplayScale);
-//        int mapPosX =(int) ((mapBounds.position.x - mapOffset.x) * mapCompileScale * mapZoom) + mapSize / 2;
-//        int mapPosY = (int) ((mapBounds.position.y - mapOffset.y) * mapCompileScale * mapZoom) + mapSize / 2;
-//
-//
-//           Ellipse2D mapEllipse = new Ellipse2D.Double(mapPosX - mapDisplaySize / 2.0, mapPosY - mapDisplaySize / 2.0, mapDisplaySize, mapDisplaySize);
-//
-//        GraphicsUtils.setAlpha(g2d, 0.9f);
-//        g2d.drawImage(mapImage, mapPosX - mapSize / 2, mapPosY - mapSize / 2, (int) (mapSize), (int) (mapSize), null);
+        // Draw waypoint arrow
+        if (world.waypoint != null) {
+            BoundingBox playerBB = player.getBoundingBox();
+            Vec2D center = playerBB.center();
+            double rotationToWaypoint = center.rotationTo(world.waypoint);
+            double arrowDistance = world.waypoint.distanceSqrt(center);
+            double playerDistance = Tile.TILE_SIZE * 1.5;
+            double minDistance = Tile.TILE_SIZE * 2.0;
+            boolean isClose = arrowDistance < minDistance;
+            double arrowSize = 100.0;
 
+            Vec2D arrowPos = !isClose ? center.clone().add(rotationToWaypoint, Math.min(arrowDistance, playerDistance))
+                    : world.waypoint.clone().add(-90, arrowSize * 1.25);
 
-           BoundingBox mapBounds = new BoundingBox(world.topLeft, world.bottomRight);
-           Vec2D vecMapSize = mapBounds.abs();
-           double mapCompileScale = ((mapImage.getWidth() / vecMapSize.x) + (mapImage.getHeight() / vecMapSize.y)) / 2.0;
-           double mapDisplaySize = 200.0;
-           double mapZoom = 4.0;
-           double mapInset = 100.0;
-           double mapDisplayScaleX = mapDisplaySize / mapImage.getWidth();
-           double mapDisplayScaleY = mapDisplaySize / mapImage.getWidth();
-           double centerX = player.getBoundingBox().center().x - mapBounds.position.x;
-           double centerY = player.getBoundingBox().center().y - mapBounds.position.y;
+            rotationToWaypoint -= 90.0;
 
-           double mapX = centerX * mapCompileScale * mapDisplayScaleX * mapZoom;
-           double mapY = centerY * mapCompileScale * mapDisplayScaleY * mapZoom;
-           double mapWidth = mapImage.getWidth() * mapDisplayScaleX;
-           double mapHeight = mapImage.getHeight() * mapDisplayScaleY;
-           int mapCenterX = width - scaleToDisplay(mapInset + mapWidth / 2);
-           int mapCenterY = scaleToDisplay(mapInset + mapHeight / 2);
+            if (isClose) {
+                rotationToWaypoint = 0.0;
 
-           Shape ellipseClip = new Ellipse2D.Double(mapCenterX - scaleToDisplay(mapDisplaySize / 2), mapCenterY - scaleToDisplay(mapDisplaySize / 2), scaleToDisplay(mapDisplaySize), scaleToDisplay(mapDisplaySize));
+                // Up and down animation
+                double d = ((System.currentTimeMillis() % 1000) / 1000.0) * 2;
 
-           g2d.setClip(ellipseClip);
-           g2d.setColor(Constants.MAP_BACKGROUND_COLOR);
-           g2d.fill(ellipseClip);
-           g2d.drawImage(mapImage, mapCenterX - scaleToDisplay(mapWidth / 2) + scaleToDisplay(-mapX + mapWidth / 2), mapCenterY - scaleToDisplay(mapHeight / 2) + scaleToDisplay(-mapY + mapHeight / 2), scaleToDisplay(mapWidth * mapZoom), scaleToDisplay(mapHeight * mapZoom), null);
-           g2d.setColor(Color.GREEN);
-           g2d.fillRect(mapCenterX - scaleToDisplay(5), mapCenterY - scaleToDisplay(5), scaleToDisplay(10), scaleToDisplay(10));
-           g2d.setClip(null);
+                if (d > 1)
+                    d = 1 - d + 1;
+                d /= 2;
 
-           g2d.setStroke(new BasicStroke(scaleToDisplay(8.0)));
-           g2d.setColor(new Color(0, 0, 0, 100));
-           g2d.draw(ellipseClip);
-
-           g2d.setStroke(new BasicStroke(scaleToDisplay(1.0)));
-           g2d.setColor(Color.WHITE);
-           g2d.draw(ellipseClip);
-
-
-           GraphicsUtils.setAlpha(g2d, 1f);
-
-
-//
-//            g2d.drawImage(mapImage, mapX + zoomedMapOffsetX, mapY + zoomedMapOffsetY, zoomedWidth, zoomedHeight, null);
-//        g2d.setColor(Color.RED);
-//        g2d.fillRect(mapX - scaleToDisplay(10), mapY - scaleToDisplay(10), scaleToDisplay(20), scaleToDisplay(20));
-           g2d.setClip(null);
-       }
-
-        // Draw HUD
-
-        // Set font
-        g2d.setFont(this.instance.lexicon.equipmentPro.deriveFont((float) scaleToDisplay(40.0)));
-
-        // Draw Player Health
-        this.healthDisplayed += (this.player.getHealth() - this.healthDisplayed) * 0.3; // Animates health add/remove
-        int hearts = (int) (player.getMaxHealth() / 2);
-        double heartSize = 100.0;
-        double heartGap = 7.5;
-        double heartsX = 40.0;
-        double heartsY = 40.0;
-
-        for (int i = 0; i < hearts; i++) {
-            double ratio = Math.min(1, (this.healthDisplayed - (i * 2.0)) / 2.0);
-
-            Rectangle heart = new Rectangle(super.scaleToDisplay(heartsX + (heartGap + heartSize) * i), super.scaleToDisplay(heartsY), super.scaleToDisplay(heartSize), super.scaleToDisplay(heartSize));
-
-            if (ratio < 1) {
-                g2d.setClip(null);
-                g2d.drawImage(this.instance.atlas.uiHeartEmpty.getBufferedImage(), heart.x, heart.y, heart.width, heart.height, null);
+                double bounceY = arrowSize * d;
+                arrowPos.add(new Vec2D(0, bounceY));
             }
 
-            if (ratio <= 0.0)
-                continue;
+            GraphicsUtils.setAlpha(g2d, 0.95f);
 
-            heart.width *= ratio;
-            g2d.setClip(heart);
-            heart.width /= ratio;
-            g2d.drawImage(this.instance.atlas.uiHeartFull.getBufferedImage(), heart.x, heart.y, heart.width, heart.height, null);
+            GraphicsUtils.rotate(g2d, rotationToWaypoint, super.scaleToDisplay(arrowPos.x), super.scaleToDisplay(arrowPos.y));
+            g2d.drawImage(this.instance.atlas.uiArrow.getImage(), super.scaleToDisplay(arrowPos.x - arrowSize / 2),
+                    super.scaleToDisplay(arrowPos.y - arrowSize / 2), super.scaleToDisplay(arrowSize), super.scaleToDisplay(arrowSize), null);
+            GraphicsUtils.rotate(g2d, -rotationToWaypoint, super.scaleToDisplay(arrowPos.x), super.scaleToDisplay(arrowPos.y));
 
+            GraphicsUtils.setAlpha(g2d, 1.0f);
         }
-        g2d.setClip(null);
+    }
 
-        // Draw Player Dashes
-        SkillDash skillDash = this.instance.world.saveGame.getSkills().skillDash;
-        this.dashesDisplayed += (this.player.getDashesLeft() - this.dashesDisplayed) * 0.3; // Animates dash add/remove
-        int dashes = (int) skillDash.getMaximumDashCount();
-        double dashSize = 100.0;
-        double dashGap = 7.5;
-        double dashX = 40.0;
-        double dashY = 40.0 + heartSize + heartGap;
-
-        for (int i = 0; i < dashes; i++) {
-            double ratio = Math.min(1, this.dashesDisplayed - i);
-
-            Rectangle heart = new Rectangle(super.scaleToDisplay(dashX + (dashGap + dashSize) * i), super.scaleToDisplay(dashY), super.scaleToDisplay(dashSize), super.scaleToDisplay(dashSize));
-
-            if (ratio < 1) {
-                g2d.setClip(null);
-                g2d.drawImage(this.instance.atlas.uiHeartEmpty.getBufferedImage(), heart.x, heart.y, heart.width, heart.height, null);
-            }
-
-            if (ratio <= 0.0)
-                continue;
-
-            heart.width *= ratio;
-            g2d.setClip(heart);
-            heart.width /= ratio;
-            g2d.drawImage(this.instance.atlas.uiHeartFull.getBufferedImage(), heart.x, heart.y, heart.width, heart.height, null);
-
-        }
-        g2d.setClip(null);
-//
-//        g2d.setColor(Color.GREEN);
-//        this.fontRenderer.drawString(g2d, "Player Dashes Left: " + player.getDashesLeft(), scaleToDisplay(20.0), scaleToDisplay(90.0), FontRenderer.LEFT, FontRenderer.TOP, true);
-////
-//        // Draw Player Heal Potions
-//        g2d.setColor(Color.CYAN);
-//        this.fontRenderer.drawString(g2d, "Player Heal Potions Left: " + null, scaleToDisplay(20.0), scaleToDisplay(150.0), FontRenderer.LEFT, FontRenderer.TOP, true);
-//
-//        // Draw Player Inventory
-//        // Draw Item in Hand
-//        g2d.setColor(Color.YELLOW);
-//        this.fontRenderer.drawString(g2d, "Item In Hand: " + player.getItemInHand().getName(), scaleToDisplay(20.0), scaleToDisplay(210.0), FontRenderer.LEFT, FontRenderer.TOP, true);
-
-        // Handle death and draw overlay
+    private void handlePlayerDeath(Graphics2D g2d, int width, int height,  double dt) {
         if (player.getHealth() <= 0.0 || this.timeSincePlayerDeath > 0) {
             // Lock binds
             this.instance.inputConfig.getBinds().values().forEach(KeyBind::lock);
@@ -766,75 +703,144 @@ public class SceneInGame extends Scene {
                 this.instance.inputConfig.getBinds().values().forEach(KeyBind::unlock);
             }
         }
-
-        // Set font
-        g2d.setFont(this.instance.lexicon.arial.deriveFont((float) scaleToDisplay(30.0)));
-        g2d.setColor(Color.WHITE);
-
-        Runtime runtime = Runtime.getRuntime();
-        double memoryUsage = (runtime.totalMemory() - runtime.freeMemory()) * 1e-6;
-        double memoryTotal = (runtime.totalMemory()) * 1e-6;
-        this.fontRenderer.drawString(g2d, (Math.round(this.instance.gameLoop.getFramesPerSecond() * 10.0) / 10.0) + " FPS, " + (Math.round(memoryUsage * 10.0) / 10.0) + "M / " +  (Math.round(memoryTotal * 10.0) / 10.0) + "M", width - scaleToDisplay(10.0), scaleToDisplay(10.0), FontRenderer.RIGHT, FontRenderer.TOP,true);
-
-        if (Constants.SHOW_COLLISION || Constants.SHOW_CHUNK_BORDERS) {
-            String[] extraInfo = {
-                    "chunks=" + this.instance.world.chunksLoaded.size() + "/" + this.instance.world.chunks.size() + ", tiles=" + tilesLoaded + ", entities=" + this.instance.world.entitiesLoaded.size() + " " + countDrawnOnScreen + " drawn",
-                    "dt=" + dt + "ms",
-                    "chu_t=" + chunkRefreshDelay + "ms / " + chunkTime + "ms",
-                    "col_t=" + collisionTime + "ms",
-                    "weather=" + world.weatherProgress
-            };
-            Vec2D genericBounds = this.fontRenderer.bounds(g2d, "X");
-            Vec2D infoPos = new Vec2D(50, 400 + genericBounds.y);
-            for (String info : extraInfo) {
-                BoundingBox bounds = this.fontRenderer.drawString(g2d, info, super.scaleToDisplay((infoPos.x) / this.scaleFactor), super.scaleToDisplay((infoPos.y) / this.scaleFactor), FontRenderer.LEFT, FontRenderer.TOP,true);
-                infoPos.add(new Vec2D(0, bounds.size.y * 2));
-            }
-        }
-
-        // Update camera
-
-        // Scale target position to display
-        Vec2D cameraTargetScaledPos = super.createScaledToDisplay(this.calculateCameraTargetPos());
-        // Calculate speed
-        float cameraSpeed = super.time(0.003969420f, dt);
-        // Move camera by multiplying speed with position delta minus half the screen size (for screen center)
-        this.cameraPos.x += cameraSpeed * (cameraTargetScaledPos.x - this.cameraPos.x - (width / 2f));
-        this.cameraPos.y += cameraSpeed * (cameraTargetScaledPos.y - this.cameraPos.y - (height / 2f));
-
     }
 
-    private void reloadChunks(BoundingBox cameraView) {
-        // Clear current loaded chunks
-        this.instance.world.chunksLoaded.clear();
+    private void drawMiniMap(Graphics2D g2d) {
+        World world = this.instance.world;
+        int width = this.instance.display.getWidth();
 
-        // Loop through every chunk
-        for (Chunk chunk : this.instance.world.chunks) {
-            // Now check if the chunk is on screen
-            if (createScaledToDisplay(chunk.getBoundingBox()).isColliding(cameraView, 0)) {
-                // If on screen, add to loaded chunks
-                this.instance.world.chunksLoaded.add(chunk);
+        // Draw map
+        if (world.compiledObjectImage != null) {
+            BufferedImage mapImage = this.instance.world.compiledObjectImage;
+            BoundingBox mapBounds = new BoundingBox(world.topLeft, world.bottomRight);
+            Vec2D vecMapSize = mapBounds.abs();
+            double mapCompileScale = ((mapImage.getWidth() / vecMapSize.x) + (mapImage.getHeight() / vecMapSize.y)) / 2.0;
+            double mapDisplaySize = 200.0;
+            double mapZoom = 4.0;
+            double mapInset = 100.0;
+            double mapDisplayScaleX = mapDisplaySize / mapImage.getWidth();
+            double mapDisplayScaleY = mapDisplaySize / mapImage.getWidth();
+            double centerX = player.getBoundingBox().center().x - mapBounds.position.x;
+            double centerY = player.getBoundingBox().center().y - mapBounds.position.y;
 
-                // Add entities
-                if (chunk.getEntities().size() > 0) {
-                    this.instance.world.entitiesLoaded.addAll(chunk.getEntities());
-                    chunk.getEntities().clear();
-                }
-            }
+            double mapX = centerX * mapCompileScale * mapDisplayScaleX * mapZoom;
+            double mapY = centerY * mapCompileScale * mapDisplayScaleY * mapZoom;
+            double mapWidth = mapImage.getWidth() * mapDisplayScaleX;
+            double mapHeight = mapImage.getHeight() * mapDisplayScaleY;
+            int mapCenterX = width - scaleToDisplay(mapInset + mapWidth / 2);
+            int mapCenterY = scaleToDisplay(mapInset + mapHeight / 2);
+
+            Shape ellipseClip = new Ellipse2D.Double(mapCenterX - scaleToDisplay(mapDisplaySize / 2), mapCenterY - scaleToDisplay(mapDisplaySize / 2), scaleToDisplay(mapDisplaySize), scaleToDisplay(mapDisplaySize));
+
+            g2d.setClip(ellipseClip);
+            g2d.setColor(Constants.MAP_BACKGROUND_COLOR);
+            g2d.fill(ellipseClip);
+            g2d.drawImage(mapImage, mapCenterX - scaleToDisplay(mapWidth / 2) + scaleToDisplay(-mapX + mapWidth / 2), mapCenterY - scaleToDisplay(mapHeight / 2) + scaleToDisplay(-mapY + mapHeight / 2), scaleToDisplay(mapWidth * mapZoom), scaleToDisplay(mapHeight * mapZoom), null);
+            g2d.setColor(Color.GREEN);
+            g2d.fillRect(mapCenterX - scaleToDisplay(5), mapCenterY - scaleToDisplay(5), scaleToDisplay(10), scaleToDisplay(10));
+            g2d.setClip(null);
+
+            g2d.setStroke(new BasicStroke(scaleToDisplay(8.0)));
+            g2d.setColor(new Color(0, 0, 0, 100));
+            g2d.draw(ellipseClip);
+
+            g2d.setStroke(new BasicStroke(scaleToDisplay(1.0)));
+            g2d.setColor(Color.WHITE);
+            g2d.draw(ellipseClip);
+
+
+            GraphicsUtils.setAlpha(g2d, 1f);
+            g2d.setClip(null);
+        }
+    }
+
+    private void drawHUD(Graphics2D g2d, int width, int height, World world, double dt) {
+        // drawMiniMap(g2d);
+
+        // Draw text prompt
+        drawTextPrompt(g2d, width, height, world, dt);
+
+        // Set font
+        g2d.setFont(this.instance.lexicon.equipmentPro.deriveFont((float) scaleToDisplay(40.0)));
+
+        double hudGap = 20.0;
+
+        // Draw Player Health
+        this.healthDisplayed += (this.player.getHealth() - this.healthDisplayed) * Constants.HUD_VALUE_ANIMATION_SPEED; // Animates health add/remove
+        int hearts = (int) (player.getMaxHealth() / 2);
+        double heartSize = 100.0;
+        double heartGap = 7.5;
+        double heartsX = 40.0;
+        double heartsY = 40.0;
+        double heartFullCutoff = 0.084;
+
+        for (int i = 0; i < hearts; i++) {
+            double ratio = Math.min(1, (this.healthDisplayed - (i * 2.0)) / 2.0);
+
+            Rectangle heart = new Rectangle(super.scaleToDisplay(heartsX + (heartGap + heartSize) * i), super.scaleToDisplay(heartsY), super.scaleToDisplay(heartSize), super.scaleToDisplay(heartSize));
+
+            g2d.setClip(null);
+            g2d.drawImage(this.instance.atlas.uiHeartEmpty.getBufferedImage(), heart.x, heart.y, heart.width, heart.height, null);
+
+            if (ratio <= 0.0)
+                continue;
+
+            Rectangle clip = new Rectangle(heart.x, heart.y, heart.width, heart.height);
+
+            clip.x += heartSize * heartFullCutoff;
+            clip.width -= heartSize * heartFullCutoff * 2;
+            clip.width *= ratio;
+            g2d.setClip(clip);
+            g2d.drawImage(this.instance.atlas.uiHeartFull.getBufferedImage(), heart.x, heart.y, heart.width, heart.height, null);
+
+        }
+        g2d.setClip(null);
+
+        // Draw Player Dashes
+        SkillDash skillDash = this.instance.world.saveGame.getSkills().skillDash;
+        this.dashesDisplayed += (this.player.getDashesLeft() - this.dashesDisplayed) * Constants.HUD_VALUE_ANIMATION_SPEED; // Animates dash add/remove
+        int dashes = (int) skillDash.getMaximumDashCount();
+        double dashSize = 50.0;
+        double dashGap = 7.5;
+        double dashX = heartsX;
+        double dashY = 40.0 + heartSize + hudGap;
+        double dashFullCutoff = 0.19;
+
+        double dashArc = 15.0;
+        double dashWidth = dashes * 100.0;
+        double dashInset = 10.0;
+        double dashBarWidth = 7.5;
+        double dashAreaWidth = (dashWidth - dashInset * 2) / dashes;
+
+        g2d.setColor(new Color(48, 44, 46));
+        g2d.fillRoundRect(super.scaleToDisplay(dashX), super.scaleToDisplay(dashY), super.scaleToDisplay(dashWidth), super.scaleToDisplay(dashSize), super.scaleToDisplay(dashArc), super.scaleToDisplay(dashArc));
+
+        Color dashColorBarBackground = new Color(79, 84, 107);
+
+        g2d.setColor(dashColorBarBackground);
+        g2d.fillRoundRect(super.scaleToDisplay(dashX + dashInset), super.scaleToDisplay(dashY + dashInset), super.scaleToDisplay(dashWidth - (dashInset * 2)), super.scaleToDisplay(dashSize - (dashInset * 2)), super.scaleToDisplay(dashArc), super.scaleToDisplay(dashArc));
+
+        g2d.setColor(new Color(62, 179, 51));
+        g2d.fillRoundRect(super.scaleToDisplay(dashX + dashInset), super.scaleToDisplay(dashY + dashInset), super.scaleToDisplay((dashWidth - (dashInset * 2)) * (this.dashesDisplayed / skillDash.getMaximumDashCount())), super.scaleToDisplay(dashSize - (dashInset * 2)), super.scaleToDisplay(dashArc * 0.2), super.scaleToDisplay(dashArc * 0.2));
+
+        for (int i = 1; i < dashes; i++) {
+            g2d.setColor(this.dashesDisplayed >= i ? new Color(73, 218, 62) : dashColorBarBackground.brighter());
+            g2d.fillRect(super.scaleToDisplay(dashX + dashInset + (dashAreaWidth * i) - (dashBarWidth * 0.5)), super.scaleToDisplay(dashY + dashInset), super.scaleToDisplay(dashBarWidth), super.scaleToDisplay(dashSize - (dashInset * 2)));
         }
 
-        // Unload entities
-        for (Entity entity : this.instance.world.entitiesLoaded) {
-            if (this.instance.world.chunksLoaded.stream().noneMatch(chunk -> entity.getBoundingBox().isColliding(chunk.getBoundingBox(), 0))) {
-                this.instance.world.entitiesLoaded.remove(entity);
-                for (Chunk chunk : this.instance.world.chunks) {
-                    if (chunk.getBoundingBox().isColliding(entity.getBoundingBox(), 0)) {
-                        chunk.getEntities().add(entity);
-                        break;
-                    }
-                }
-            }
-        }
+        double coinX = dashX;
+        double coinY = dashY + dashSize + hudGap;
+        double coinSize = 50.0;
+        double coinGap = heartGap;
+        double coinTextSize = 62.0;
+
+        Image coinImage = this.instance.atlas.uiCoin instanceof TextureAnimated animated ? animated.getImage(0) : this.instance.atlas.uiCoin.getBufferedImage();
+        g2d.drawImage(coinImage, super.scaleToDisplay(coinX), super.scaleToDisplay(coinY), super.scaleToDisplay(coinSize), super.scaleToDisplay(coinSize), null);
+
+        g2d.setColor(new Color(234, 234, 234));
+        g2d.setFont(this.instance.lexicon.equipmentPro.deriveFont((float) super.scaleToDisplay(coinTextSize)));
+        fontRenderer.drawStringAccurately(g2d,  String.valueOf(0), super.scaleToDisplay(coinX + coinSize + coinGap), super.scaleToDisplay(coinY + coinSize * 0.5 + coinSize * 0.075), Align.LEFT, Align.CENTER, false);
+
     }
 
     private void loadCheckpoint() {

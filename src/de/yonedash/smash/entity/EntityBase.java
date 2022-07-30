@@ -30,7 +30,7 @@ public abstract class EntityBase implements Entity {
         // Handle remove
         if (this.removeState > 0) {
             // Handle remove when hidden
-            if (this.removeState == 1 && scene instanceof SceneInGame sig) {
+            if (this.removeState == 1 && scene instanceof SceneInWorld sig) {
                 // Calculate camera view
                 Display display = scene.getDisplay();
                 BoundingBox cameraView = new BoundingBox(sig.cameraPos, new Vec2D(display.getWidth(), display.getHeight()));

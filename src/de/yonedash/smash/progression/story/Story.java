@@ -1,4 +1,4 @@
-package de.yonedash.smash.progression;
+package de.yonedash.smash.progression.story;
 
 import de.yonedash.smash.*;
 import de.yonedash.smash.entity.*;
@@ -146,7 +146,7 @@ public abstract class Story {
         initStep(this.checkpoint);
     }
 
-    public void update(Graphics2D g2d, double dt, SceneInGame scene) {
+    public void update(Graphics2D g2d, double dt, SceneInWorld scene) {
         if (!stepInitialized) {
             stepInitialized = true;
             initStep(dt, scene, step);
@@ -156,8 +156,8 @@ public abstract class Story {
         updateStep(g2d, dt, scene, step);
     }
 
-    protected abstract void initStep(double dt, SceneInGame scene, int step);
-    protected abstract void updateStep(Graphics2D g2d, double dt, SceneInGame scene, int step);
+    protected abstract void initStep(double dt, SceneInWorld scene, int step);
+    protected abstract void updateStep(Graphics2D g2d, double dt, SceneInWorld scene, int step);
 
     public void initStep(int step) {
         this.step = step;

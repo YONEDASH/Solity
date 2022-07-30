@@ -47,6 +47,22 @@ public class TextureAnimated implements Texture {
         this.blank = Arrays.stream(this.bufferedImages).anyMatch(bi -> !ImageUtils.isBufferedImageBlank(bi));
     }
 
+    protected TextureAnimated(TextureAtlas atlas, double playbackSpeed, Texture... textures) {
+        this.atlas = atlas;
+        this.width = textures[0].getWidth();
+        this.height = textures[1].getWidth();
+
+        this.bufferedImages = new BufferedImage[textures.length];
+        for (int i = 0; i < this.bufferedImages.length; i++) {
+            this.bufferedImages[i] = textures[i].getBufferedImage();
+        }
+
+        double playbackDelay = 1000.0 / playbackSpeed;
+        this.playbackLength = playbackDelay * this.bufferedImages.length;
+
+        this.blank = Arrays.stream(this.bufferedImages).anyMatch(bi -> !ImageUtils.isBufferedImageBlank(bi));
+    }
+
     public void update(double dt) {
         this.playbackTime += dt;
         if (this.playbackTime >= this.playbackLength)

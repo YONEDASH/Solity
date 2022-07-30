@@ -53,7 +53,7 @@ public class SceneWorldLoading extends SceneLoading {
         if (this.levelData == null && !this.threadRunning) {
             startLoadThread();
         } else if (!this.threadRunning) {
-            this.instance.scene = new SceneInGame(this.instance);
+            this.instance.scene = new SceneInWorld(this.instance);
         }
     }
 }

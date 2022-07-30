@@ -5,6 +5,8 @@ import java.awt.*;
 public class Constants {
 
     public static final Color MAP_BACKGROUND_COLOR = new Color(99, 144, 139);
+    public static double HUD_VALUE_ANIMATION_SPEED = 0.6;
+    public static double SHAKE_LENGTH = 150.0; // in ms
     public static double MAP_RESOLUTION_SCALE = 0.02;
     public static double FPS_LIMIT = 30.0;
     public static boolean LOW_POWER_MODE = true;

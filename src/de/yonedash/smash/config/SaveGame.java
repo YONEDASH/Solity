@@ -16,10 +16,15 @@ public class SaveGame extends XMLConfig {
     @Override
     public void init() {
         this.skills.init();
+        add("checkpoint/step", 0);
     }
 
     public Skills getSkills() {
         return this.skills;
+    }
+
+    public int getCheckpointStep() {
+        return getInt("checkpoint/step");
     }
 
 }

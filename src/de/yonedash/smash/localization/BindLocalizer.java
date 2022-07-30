@@ -249,7 +249,7 @@ public class BindLocalizer implements Align {
 
         g2d.setColor(Color.DARK_GRAY);
         g2d.setFont(scene.instance.lexicon.arial.deriveFont((float) scene.scaleToDisplay(height * 1.4)));
-        fontRenderer.drawString(g2d, text, x + width / 2, y + height / 2, Align.CENTER, Align.CENTER, false);
+        fontRenderer.drawStringAccurately(g2d, text, x + width / 2, y + height / 2, Align.CENTER, Align.CENTER, false);
 
         return new Vec2D(width, height);
     }

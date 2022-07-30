@@ -19,7 +19,6 @@ public class EntityPlayer extends EntityCharacter {
         this.lightSource = new LightSource(Color.WHITE, 25.0);
     }
 
-
     @Override
     public void draw(Scene scene, Graphics2D g2d, double dt) {
         super.draw(scene, g2d, dt);
@@ -129,7 +128,7 @@ public class EntityPlayer extends EntityCharacter {
 
     @Override
     protected void updateViewDirection(Scene scene, Vec2D moveMotion) {
-        if (scene instanceof SceneInGame sig)
+        if (scene instanceof SceneInWorld sig)
             this.viewDirection = Direction.getDirectionFromRotation(sig.mouseWorldPosition.rotationTo(this.boundingBox.center()));
     }
 
