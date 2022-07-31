@@ -1,7 +1,7 @@
 package de.yonedash.smash.entity;
 
 import de.yonedash.smash.BoundingBox;
-import de.yonedash.smash.Scene;
+import de.yonedash.smash.scene.Scene;
 import de.yonedash.smash.Vec2D;
 
 // This interface represents every entity in the game world/level

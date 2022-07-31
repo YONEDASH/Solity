@@ -2,34 +2,26 @@ package de.yonedash.smash;
 
 import de.yonedash.smash.config.GameConfig;
 import de.yonedash.smash.config.InputConfig;
-import de.yonedash.smash.config.SaveGame;
 import de.yonedash.smash.graphics.GraphicsThread;
 import de.yonedash.smash.item.ItemRegistry;
-import de.yonedash.smash.localization.Language;
+import de.yonedash.smash.launch.LaunchConfig;
 import de.yonedash.smash.resource.FontLexicon;
 import de.yonedash.smash.graphics.TextureAtlas;
+import de.yonedash.smash.scene.Scene;
+import de.yonedash.smash.scene.SceneLoadMainMenu;
 
-import java.io.File;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 // "Main" class of game
 public class Instance implements Runnable {
 
-    private static Instance isntanceREMOVEMEEEEEEE;
-
-    public static void main(String[] args) {
-        // Program starts here
-        // Create new instance and run
-        (isntanceREMOVEMEEEEEEE = new Instance()).run();
-    }
-
     public final Display display;
     public final TextureAtlas atlas;
     public final FontLexicon lexicon;
 
     public final ItemRegistry itemRegistry;
-    public final World world;
+    public World world;
 
     public Scene scene;
     public final GameLoop gameLoop;
@@ -39,9 +31,13 @@ public class Instance implements Runnable {
 
     public GameConfig gameConfig;
     public InputConfig inputConfig;
+    public LaunchConfig launchData;
 
-    public Instance() {
+    public Instance(LaunchConfig launchData) {
         // Instance constructor, initialize variables before running
+
+        // Set launch data
+        this.launchData = launchData;
 
         // Initialize display
         this.display = new Display(this);
@@ -55,12 +51,10 @@ public class Instance implements Runnable {
         // Initialize item registry
         this.itemRegistry = new ItemRegistry(this);
 
-        // Initialize world
-        this.world = new World(new SaveGame(new File("GAMEFOLDER/saves/", "testsavegamelol.xml")));
-
         // Initialize scene
         //this.scene = new SceneInGame(this);
-        this.scene = new SceneWorldLoading(this, "tutorial");
+        //this.scene = new SceneLoadWorld(this, "tutorial");
+        this.scene = new SceneLoadMainMenu(this);
 
         // Initialize game loop thread
         this.gameLoop = new GameLoop(this);
@@ -107,7 +101,4 @@ public class Instance implements Runnable {
         System.exit(status);
     }
 
-    public static Instance ONLY_FOR_DEBUGGING_PURPOSES() {
-        return isntanceREMOVEMEEEEEEE;
-    }
 }

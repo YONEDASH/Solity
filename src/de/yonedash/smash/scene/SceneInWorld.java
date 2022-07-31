@@ -1,5 +1,6 @@
-package de.yonedash.smash;
+package de.yonedash.smash.scene;
 
+import de.yonedash.smash.*;
 import de.yonedash.smash.config.InputConfig;
 import de.yonedash.smash.config.KeyBind;
 import de.yonedash.smash.entity.*;
@@ -52,15 +53,8 @@ public class SceneInWorld extends Scene {
 
         player.setItemInHand(instance.itemRegistry.fork);
 
-        // Scatter enemies
-//        for (int i = 0; i < 500; i++) {
-//            EntityAnt ant = new EntityAnt(findEnemySpawn());
-//            this.instance.world.entitiesLoaded.add(ant);
-//        }
-
-        // Init & start story
-        world.story = new TutorialStory();
-        world.story.start();
+        // Init story step
+        world.story.initStep(world.saveGame.getCheckpointStep());
     }
 
     private Vec2D findEnemySpawn() {
@@ -322,9 +316,6 @@ public class SceneInWorld extends Scene {
 
         // Sort list by z value
         zSortedLevelObjects.sort(Comparator.comparingInt(DisplayEntity::getZ));
-
-        // Update texture atlas
-        this.instance.atlas.update(dt);
 
         // Draw chunk entities
         ArrayList<DisplayEntity> batch = new ArrayList<>();
@@ -754,7 +745,7 @@ public class SceneInWorld extends Scene {
         }
     }
 
-    private void drawHUD(Graphics2D g2d, int width, int height, World world, double dt) {
+    protected void drawHUD(Graphics2D g2d, int width, int height, World world, double dt) {
         // drawMiniMap(g2d);
 
         // Draw text prompt

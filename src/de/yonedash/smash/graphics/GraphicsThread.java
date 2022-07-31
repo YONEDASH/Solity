@@ -29,7 +29,7 @@ public class GraphicsThread extends Thread{
                 for (Chunk chunk : world.chunksLoaded) {
 
                     // Update Fog
-                    chunk.getEntityFog().updateFog(instance.scene);
+                    chunk.getEntityFog().updateFog(instance.world.fogOffset, instance.world.weatherProgress, instance.world.simplexNoise);
                 }
 
                 // Save entities with a light source

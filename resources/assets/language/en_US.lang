@@ -1,6 +1,18 @@
 device.keyboard=Keyboard
 device.mouse=Mouse
 
+main.continue=Continue
+main.loadjourney=Load Journey
+main.startnewjourney=Start New Journey
+main.options=Options
+main.quit=Quit
+main.starttutorial=Start Tutorial
+
+difficulty.grandchallenge=Grand Challenge
+difficulty.hard=Hard
+difficulty.normal=Normal
+difficulty.explorer=Explorer
+
 story.objective=Objective
 
 story.tutorial.title=Tutorial

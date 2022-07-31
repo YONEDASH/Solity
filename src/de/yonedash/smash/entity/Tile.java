@@ -3,6 +3,7 @@ package de.yonedash.smash.entity;
 import de.yonedash.smash.*;
 import de.yonedash.smash.resource.Texture;
 import de.yonedash.smash.graphics.TextureAtlas;
+import de.yonedash.smash.scene.Scene;
 
 import java.awt.*;
 

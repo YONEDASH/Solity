@@ -24,6 +24,9 @@ public class Display extends JFrame {
         // Set display dimensions
         super.setSize(1280, 720);
 
+        // Reset relative position
+        this.setLocationRelativeTo(null);
+
         // Set title
         super.setTitle("Solity Immortal");
 
@@ -188,6 +191,9 @@ public class Display extends JFrame {
         // Clear screen
         g2d.setColor(Color.BLACK);
         g2d.fillRect(0, 0, getWidth(), getHeight());
+
+        // Update texture atlas
+        this.instance.atlas.update(dt / 1_000_000.0);
 
         // Update scene
         try {

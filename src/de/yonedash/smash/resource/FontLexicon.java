@@ -13,11 +13,18 @@ public class FontLexicon {
 
     }
 
+    private boolean isLoaded;
+
     public void load() {
+        if (isLoaded)
+            return;
+
         this.arial = new Font("Arial", Font.PLAIN, 0);
         this.compassPro = registerFont("/assets/fonts/CompassPro.ttf");
         this.equipmentPro = registerFont("/assets/fonts/EquipmentPro.ttf");
         this.futilePro = registerFont("/assets/fonts/FutilePro.ttf");
+
+        this.isLoaded = true;
     }
 
     // Register a font from resource path

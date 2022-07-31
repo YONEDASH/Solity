@@ -2,6 +2,8 @@ package de.yonedash.smash.entity;
 
 import de.yonedash.smash.*;
 import de.yonedash.smash.graphics.LightSource;
+import de.yonedash.smash.scene.Scene;
+import de.yonedash.smash.scene.SceneInWorld;
 
 public abstract class EntityBase implements Entity {
 

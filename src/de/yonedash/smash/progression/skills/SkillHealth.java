@@ -1,6 +1,6 @@
 package de.yonedash.smash.progression.skills;
 
-import de.yonedash.smash.config.SaveGame;
+import de.yonedash.smash.progression.saves.SaveGame;
 
 public class SkillHealth extends Skill {
 

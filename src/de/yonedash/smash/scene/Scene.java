@@ -1,8 +1,13 @@
-package de.yonedash.smash;
+package de.yonedash.smash.scene;
 
+import de.yonedash.smash.*;
 import de.yonedash.smash.config.KeyBind;
+import de.yonedash.smash.scene.components.Button;
+import de.yonedash.smash.scene.components.Component;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public abstract class Scene {
 
@@ -15,9 +20,13 @@ public abstract class Scene {
     // Scales scale
     protected double scaleFactor = 1.0;
 
+    // Components
+    protected final CopyOnWriteArrayList<Component> components;
+
     public Scene(Instance instance) {
         this.instance = instance;
         this.fontRenderer = new FontRenderer(this);
+        this.components = new CopyOnWriteArrayList<>();
     }
 
     // Easy access to display
@@ -28,6 +37,10 @@ public abstract class Scene {
     // Abstract function, forces children of this class to write their own implementation
     // Graphics2D for drawing to the screen, dt as delta-time for game logic
     public abstract void update(Graphics2D g2d, double dt);
+
+    protected void updateComponents(Graphics2D g2d, double dt) {
+        this.components.forEach(component -> component.update(g2d, dt));
+    }
 
     public double calculateDisplayScaleFactor() {
         // Get display width & height
@@ -76,11 +89,11 @@ public abstract class Scene {
     // Dummy methods down here, can be used in different screen to react to user input
 
     public void devicePressed(KeyBind.Device device, int code) {
-
+        this.components.forEach(component -> component.devicePressed(device, code));
     }
 
     public void deviceReleased(KeyBind.Device device, int code) {
-
+        this.components.forEach(component -> component.deviceReleased(device, code));
     }
 
     public void keyPressed(int key) {
@@ -100,15 +113,18 @@ public abstract class Scene {
     }
 
     public void mouseWheelMoved(int x, int y, double amount) {
-
+        this.components.forEach(component -> component.mouseWheelMoved(x, y, amount));
     }
 
     public void mouseDragged(int x, int y, int button) {
-
+        this.components.forEach(component -> component.mouseDragged(x, y, button));
     }
 
     public void mouseMoved(int x, int y) {
-
+        this.components.forEach(component -> component.mouseMoved(x, y));
     }
 
+    public void fireComponent(Component component) {
+
+    }
 }

@@ -5,12 +5,17 @@ import de.yonedash.smash.config.InputConfig;
 import de.yonedash.smash.config.KeyBind;
 import de.yonedash.smash.entity.*;
 import de.yonedash.smash.localization.BindLocalizer;
+import de.yonedash.smash.scene.SceneInWorld;
 
 import java.awt.*;
 
 public class TutorialStory extends Story {
 
     private EntityAnt starterAnt;
+
+    public TutorialStory() {
+        super("tutorial");
+    }
 
     @Override
     protected void initStep(double dt, SceneInWorld scene, int step) {
@@ -189,7 +194,7 @@ public class TutorialStory extends Story {
             }
 
             if (this.step == 6 || this.step == 7) {
-                drawObjectiveText(scene.localize("story.tutorial.antsremaining", antCount), g2d, scene);
+                drawObjectiveText(scene.localize("story.tutorial.ants remaining", antCount), g2d, scene);
             }
         }
 

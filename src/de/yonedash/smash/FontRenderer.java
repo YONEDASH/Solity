@@ -1,5 +1,7 @@
 package de.yonedash.smash;
 
+import de.yonedash.smash.scene.Scene;
+
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
@@ -64,7 +66,7 @@ public class FontRenderer implements Align {
 
 
     public BoundingBox drawStringAccurately(Graphics2D g2d, String text, int x, int y, int alignHorizontal, int alignVertical, boolean shadowed) {
-        BoundingBox bounds = bounds(g2d, text, x, y, alignHorizontal, alignVertical);
+        BoundingBox bounds = boundsAccurately(g2d, text, x, y, alignHorizontal, alignVertical);
 
         // if shadows enabled draw shadow
         if (shadowed) {
@@ -82,7 +84,7 @@ public class FontRenderer implements Align {
                 Vec2D charSize = bounds(g2d, c);
                 g2d.setFont(font.deriveFont(Font.BOLD).deriveFont(font.getSize2D() * 1.1f));
                 Vec2D boldSize = bounds(g2d, text);
-                drawString0Accurately(g2d, c, posX + (int) lineSize.x - (int) charSize.x + (int) (charSize.x / 2), posY + (int) (boldSize.y / 2), CENTER, CENTER);
+                drawString0Accurately(g2d, c, posX + (int) lineSize.x - (int) charSize.x + (int) (charSize.x / 2), y + (int) (boldSize.y / 2), CENTER, alignVertical == Align.CENTER ? Align.BOTTOM : alignVertical == Align.TOP ? Align.CENTER : alignVertical == Align.BOTTOM ? Align.TOP : 0);
             }
 
             g2d.setFont(font);
@@ -115,6 +117,25 @@ public class FontRenderer implements Align {
 
     private BoundingBox bounds(Graphics2D g2d, String text, int x, int y, int alignHorizontal, int alignVertical) {
         Vec2D vb = bounds(g2d, "!Xy");
+        double verticalModifier = switch(alignVertical) {
+            case CENTER -> vb.y * 0.5;
+            case BOTTOM -> 0;
+            case TOP -> +vb.y;
+            default -> throw new IllegalArgumentException("Unexpected vertical align");
+        };
+        Vec2D hb = bounds(g2d, text);
+        double horizontalModifier = switch(alignHorizontal) {
+            case CENTER -> -hb.x / 2;
+            case LEFT -> 0;
+            case RIGHT -> -hb.x;
+            default -> throw new IllegalArgumentException("Unexpected horizontal align");
+        };
+        return new BoundingBox(new Vec2D(x + horizontalModifier, y + verticalModifier - vb.y), new Vec2D(hb.x, vb.y));
+    }
+
+
+    private BoundingBox boundsAccurately(Graphics2D g2d, String text, int x, int y, int alignHorizontal, int alignVertical) {
+        Vec2D vb = bounds(g2d, text);
         double verticalModifier = switch(alignVertical) {
             case CENTER -> vb.y * 0.5;
             case BOTTOM -> 0;

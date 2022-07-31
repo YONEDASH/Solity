@@ -4,6 +4,7 @@ import de.yonedash.smash.*;
 import de.yonedash.smash.entity.Entity;
 import de.yonedash.smash.entity.EntityBase;
 import de.yonedash.smash.entity.LevelObject;
+import de.yonedash.smash.scene.Scene;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -33,11 +34,7 @@ public class EntityFog extends EntityBase implements VisualEffect {
         );
     }
 
-    public void updateFog(Scene scene) {
-        OpenSimplexNoise simplexNoise = scene.instance.world.simplexNoise;
-
-        double fogOffset = scene.instance.world.fogOffset;
-        double weatherProgress = scene.instance.world.weatherProgress;
+    public void updateFog(double fogOffset, double weatherProgress, OpenSimplexNoise simplexNoise) {
         double fogSize = 1500.0f;
         double fogX = this.boundingBox.position.x - 1 + fogOffset;
         double fogY = this.boundingBox.position.y - 1 + fogOffset * 0.4;
@@ -63,6 +60,10 @@ public class EntityFog extends EntityBase implements VisualEffect {
                 image.setRGB(x, y, argb);
             }
         }
+    }
+
+    public BufferedImage getImage() {
+        return image;
     }
 
     @Override

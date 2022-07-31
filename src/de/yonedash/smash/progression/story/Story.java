@@ -4,6 +4,8 @@ import de.yonedash.smash.*;
 import de.yonedash.smash.entity.*;
 import de.yonedash.smash.graphics.VisualEffect;
 import de.yonedash.smash.resource.FontLexicon;
+import de.yonedash.smash.scene.Scene;
+import de.yonedash.smash.scene.SceneInWorld;
 
 import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
@@ -12,13 +14,15 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public abstract class Story {
 
+    private final String mapName;
     protected int checkpoint;
     protected int step;
     protected boolean stepInitialized;
 
     protected boolean checkpointLoaded;
 
-    protected Story() {
+    protected Story(String mapName) {
+        this.mapName = mapName;
         this.step = -1;
         this.checkpoint = 0;
         this.stepInitialized = false;
@@ -168,8 +172,7 @@ public abstract class Story {
         initStep(++this.step);
     }
 
-    public void start() {
-        initStep(0);
+    public String getMapName() {
+        return mapName;
     }
-
 }

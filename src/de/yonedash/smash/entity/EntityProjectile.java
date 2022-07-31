@@ -4,6 +4,7 @@ import de.yonedash.smash.*;
 import de.yonedash.smash.graphics.GraphicsUtils;
 import de.yonedash.smash.graphics.TextureIndividual;
 import de.yonedash.smash.resource.Texture;
+import de.yonedash.smash.scene.Scene;
 
 import java.awt.*;
 

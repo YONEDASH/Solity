@@ -2,7 +2,7 @@ package de.yonedash.smash.localization;
 
 import de.yonedash.smash.Align;
 import de.yonedash.smash.FontRenderer;
-import de.yonedash.smash.Scene;
+import de.yonedash.smash.scene.Scene;
 import de.yonedash.smash.Vec2D;
 import de.yonedash.smash.config.KeyBind;
 

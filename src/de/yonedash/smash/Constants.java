@@ -4,6 +4,7 @@ import java.awt.*;
 
 public class Constants {
 
+    public static final String GAME_ROOT = "GAMEFOLDER";
     public static final Color MAP_BACKGROUND_COLOR = new Color(99, 144, 139);
     public static double HUD_VALUE_ANIMATION_SPEED = 0.6;
     public static double SHAKE_LENGTH = 150.0; // in ms

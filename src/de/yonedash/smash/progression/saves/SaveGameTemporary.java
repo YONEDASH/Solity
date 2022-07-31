@@ -1,4 +1,4 @@
-package de.yonedash.smash.config;
+package de.yonedash.smash.progression.saves;
 
 import java.io.File;
 import java.io.IOException;

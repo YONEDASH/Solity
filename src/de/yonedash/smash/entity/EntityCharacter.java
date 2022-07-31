@@ -6,6 +6,8 @@ import de.yonedash.smash.item.Item;
 import de.yonedash.smash.resource.Texture;
 import de.yonedash.smash.graphics.TextureAnimated;
 import de.yonedash.smash.graphics.TextureAtlas;
+import de.yonedash.smash.scene.Scene;
+import de.yonedash.smash.scene.SceneInWorld;
 
 import java.awt.*;
 

@@ -1,10 +1,11 @@
 package de.yonedash.smash;
 
-import de.yonedash.smash.config.SaveGame;
+import de.yonedash.smash.progression.saves.SaveGame;
 import de.yonedash.smash.entity.DisplayEntity;
 import de.yonedash.smash.entity.Entity;
 import de.yonedash.smash.entity.LevelObject;
 import de.yonedash.smash.progression.story.Story;
+import de.yonedash.smash.scene.Scene;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -65,6 +66,9 @@ public class World implements ProgressReport {
 
         // Init save game
         this.saveGame.load();
+
+        // Set last access
+        this.saveGame.set("lastAccess", System.currentTimeMillis());
 
         // Reset waypoint
         this.waypoint = null;

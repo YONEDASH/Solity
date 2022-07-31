@@ -46,7 +46,7 @@ public class LangProvider {
 
     public String localize(String key, Object... args) {
         String value = properties.getProperty(key);
-        return value != null ? args == null ? value : MessageFormat.format(value, args) : args.length > 0 ? key + "<<" + Arrays.toString(args) : key;
+        return value != null ? (args == null ? value : MessageFormat.format(value, args)) : args == null ? key + "<<" + null : (args.length > 0 ? key + "<<" + Arrays.toString(args) : key);
     }
 
     public Language getLanguage() {

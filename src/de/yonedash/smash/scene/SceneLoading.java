@@ -1,6 +1,11 @@
-package de.yonedash.smash;
+package de.yonedash.smash.scene;
+
+import de.yonedash.smash.Display;
+import de.yonedash.smash.Instance;
 
 import java.awt.*;
+import java.lang.reflect.Field;
+import java.util.Arrays;
 
 public class SceneLoading extends Scene {
 
@@ -27,5 +32,18 @@ public class SceneLoading extends Scene {
                 super.scaleToDisplay(barWidth), super.scaleToDisplay(barHeight));
         g2d.fillRect(width / 2 - super.scaleToDisplay(barWidth) / 2 + super.scaleToDisplay(barInset), height / 2 - super.scaleToDisplay(barHeight) / 2 + super.scaleToDisplay(barInset),
                 super.scaleToDisplay((barWidth - barInset * 2) * progress), super.scaleToDisplay(barHeight - barInset * 2));
+    }
+
+    protected double getFieldsInitializedRatio(Object object) {
+        Class<?> clazz = object.getClass();
+        Field[] fields = clazz.getFields();
+        long initialized = Arrays.stream(fields).filter(field -> {
+            try {
+                return field.get(object) != null;
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }).count();
+        return initialized / (double) fields.length;
     }
 }

@@ -1,6 +1,7 @@
 package de.yonedash.smash.entity;
 
 import de.yonedash.smash.*;
+import de.yonedash.smash.scene.Scene;
 
 import java.awt.*;
 import java.util.ArrayList;

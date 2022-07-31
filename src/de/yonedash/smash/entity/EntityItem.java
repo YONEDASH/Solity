@@ -1,7 +1,7 @@
 package de.yonedash.smash.entity;
 
 import de.yonedash.smash.BoundingBox;
-import de.yonedash.smash.Scene;
+import de.yonedash.smash.scene.Scene;
 
 public abstract class EntityItem extends EntityBase {
 

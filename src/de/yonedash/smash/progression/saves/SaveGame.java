@@ -1,5 +1,6 @@
-package de.yonedash.smash.config;
+package de.yonedash.smash.progression.saves;
 
+import de.yonedash.smash.config.XMLConfig;
 import de.yonedash.smash.progression.skills.Skills;
 
 import java.io.File;
@@ -17,6 +18,7 @@ public class SaveGame extends XMLConfig {
     public void init() {
         this.skills.init();
         add("checkpoint/step", 0);
+        add("difficulty", 0);
     }
 
     public Skills getSkills() {
@@ -25,6 +27,10 @@ public class SaveGame extends XMLConfig {
 
     public int getCheckpointStep() {
         return getInt("checkpoint/step");
+    }
+
+    public double getDifficulty() {
+        return getDouble("difficulty");
     }
 
 }
