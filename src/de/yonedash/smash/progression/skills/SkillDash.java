@@ -25,7 +25,7 @@ public class SkillDash extends Skill {
 
     public float getChargeFactor() {
         int level = getLevel();
-        return 1f + level * 0.02f;
+        return 1f + level * 0.075f;
     }
 
 

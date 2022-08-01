@@ -57,7 +57,7 @@ public abstract class Scene {
     // Scale value to display dimension-scale
     public int scaleToDisplay(double d) {
         // Scale value
-        return (int) Math.floor(d * calculateDisplayScaleFactor());
+        return (int) Math.round(d * calculateDisplayScaleFactor());
     }
 
     // Scales Vec2D to display dimension-scale

@@ -13,7 +13,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import static de.yonedash.smash.Direction.*;
@@ -30,10 +29,10 @@ public class TextureAtlas {
     public final Texture invalid;
 
     // UI
-    public Texture uiCrossHair, uiArrow, uiHeartEmpty, uiHeartFull, uiDashEmpty, uiDashFull, uiCoin;
+    public Texture uiBackground, uiCrossHair, uiArrow, uiHeartEmpty, uiHeartFull, uiDashEmpty, uiDashFull;
 
     // ING
-    public Texture fork, animSlash, animAfterDeath, animHit;
+    public Texture fork, coin, potionGreen, potionRed, potionYellow, animSlash, animAfterDeath, animHit;
 
     // Projectile
     public Texture projCanonBall;
@@ -55,13 +54,14 @@ public class TextureAtlas {
         this.forest = loadTexture("/forest.png");
 
         // Load UI
+        this.uiBackground = loadTexture("/assets/ui/menuBackground.png");
         this.uiCrossHair = loadTexture("/assets/ui/crosshair.png");
         this.uiArrow = loadTexture("/assets/ui/arrow.png");
         this.uiHeartEmpty = loadTexture("/assets/ui/heartEmpty.png");
         this.uiHeartFull = loadTexture("/assets/ui/heartFull.png");
         this.uiDashEmpty = loadTexture("/assets/ui/dashEmpty.png");
         this.uiDashFull = loadTexture("/assets/ui/dashFull.png");
-        this.uiCoin = loadTexture(8.0, loadTexture("/assets/ui/coin/coin_anim_f0.png"), loadTexture("/assets/ui/coin/coin_anim_f1.png"), loadTexture("/assets/ui/coin/coin_anim_f2.png"), loadTexture("/assets/ui/coin/coin_anim_f3.png"));
+        this.coin = loadTexture(8.0, loadTexture("/assets/gameplay/coin/coin_anim_f0.png"), loadTexture("/assets/gameplay/coin/coin_anim_f1.png"), loadTexture("/assets/gameplay/coin/coin_anim_f2.png"), loadTexture("/assets/gameplay/coin/coin_anim_f3.png"));
 
         // Load projectiles
         this.projCanonBall = loadTexture("/projectile/CanonBall.png", 5.0, 0, 0, 16, 16, EAST, 5);
@@ -107,6 +107,11 @@ public class TextureAtlas {
 
         this.animHit = loadTexture("/hit_effect_anim_spritesheet.png",
                 10.0, 0, 0, 8, 8, EAST, 3);
+
+        // Load potions
+        this.potionGreen = loadTexture("/assets/gameplay/potion/potion_green.png");
+        this.potionRed = loadTexture("/assets/gameplay/potion/potion_red.png");
+        this.potionYellow = loadTexture("/assets/gameplay/potion/potion_yellow.png");
     }
 
     public void update(double dt) {

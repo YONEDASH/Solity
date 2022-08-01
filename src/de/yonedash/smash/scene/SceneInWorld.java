@@ -9,7 +9,6 @@ import de.yonedash.smash.graphics.GraphicsUtils;
 import de.yonedash.smash.graphics.TextureAnimated;
 import de.yonedash.smash.graphics.VisualEffect;
 import de.yonedash.smash.localization.BindLocalizer;
-import de.yonedash.smash.progression.story.TutorialStory;
 import de.yonedash.smash.progression.skills.SkillDash;
 import de.yonedash.smash.resource.Texture;
 
@@ -55,6 +54,9 @@ public class SceneInWorld extends Scene {
 
         // Init story step
         world.story.initStep(world.saveGame.getCheckpointStep());
+
+        // Hide cursor
+        this.instance.display.hideCursor();
     }
 
     private Vec2D findEnemySpawn() {
@@ -776,11 +778,7 @@ public class SceneInWorld extends Scene {
             if (ratio <= 0.0)
                 continue;
 
-            Rectangle clip = new Rectangle(heart.x, heart.y, heart.width, heart.height);
-
-            clip.x += heartSize * heartFullCutoff;
-            clip.width -= heartSize * heartFullCutoff * 2;
-            clip.width *= ratio;
+            Rectangle clip = new Rectangle(super.scaleToDisplay(heartsX + (heartGap + heartSize) * i + heartSize * heartFullCutoff), super.scaleToDisplay(heartsY), super.scaleToDisplay((heartSize - heartSize * heartFullCutoff * 2) * ratio), super.scaleToDisplay(heartSize));
             g2d.setClip(clip);
             g2d.drawImage(this.instance.atlas.uiHeartFull.getBufferedImage(), heart.x, heart.y, heart.width, heart.height, null);
 
@@ -791,7 +789,7 @@ public class SceneInWorld extends Scene {
         SkillDash skillDash = this.instance.world.saveGame.getSkills().skillDash;
         this.dashesDisplayed += (this.player.getDashesLeft() - this.dashesDisplayed) * Constants.HUD_VALUE_ANIMATION_SPEED; // Animates dash add/remove
         int dashes = (int) skillDash.getMaximumDashCount();
-        double dashSize = 50.0;
+        double dashSize = 60.0;
         double dashGap = 7.5;
         double dashX = heartsX;
         double dashY = 40.0 + heartSize + hudGap;
@@ -821,16 +819,26 @@ public class SceneInWorld extends Scene {
 
         double coinX = dashX;
         double coinY = dashY + dashSize + hudGap;
-        double coinSize = 50.0;
+        double coinSize = dashSize;
         double coinGap = heartGap;
         double coinTextSize = 62.0;
+        double coinBoxWidth = heartSize * 2 - coinSize;
 
-        Image coinImage = this.instance.atlas.uiCoin instanceof TextureAnimated animated ? animated.getImage(0) : this.instance.atlas.uiCoin.getBufferedImage();
-        g2d.drawImage(coinImage, super.scaleToDisplay(coinX), super.scaleToDisplay(coinY), super.scaleToDisplay(coinSize), super.scaleToDisplay(coinSize), null);
+        int coinAmount = 0;
 
+        g2d.setColor(new Color(48, 44, 46));
+        g2d.fillRoundRect(super.scaleToDisplay(coinX), super.scaleToDisplay(coinY), super.scaleToDisplay(coinSize + coinBoxWidth), super.scaleToDisplay(coinSize), super.scaleToDisplay(dashArc), super.scaleToDisplay(dashArc));
+
+        g2d.setColor(dashColorBarBackground);
+        g2d.fillRoundRect(super.scaleToDisplay(coinX + dashInset), super.scaleToDisplay(coinY + dashInset), super.scaleToDisplay(coinSize + coinBoxWidth - dashInset * 2), super.scaleToDisplay(coinSize - dashInset * 2), super.scaleToDisplay(dashArc), super.scaleToDisplay(dashArc));
+
+
+        Image coinImage = this.instance.atlas.coin instanceof TextureAnimated animated ? animated.getImage(0) : this.instance.atlas.coin.getBufferedImage();
+        g2d.drawImage(coinImage, super.scaleToDisplay(coinX + dashInset * 1.1), super.scaleToDisplay(coinY + dashInset * 1.1), super.scaleToDisplay(coinSize - dashInset * 2.4), super.scaleToDisplay(coinSize - dashInset * 2.4), null);
+
+        g2d.setFont(this.instance.lexicon.equipmentPro.deriveFont((float) super.scaleToDisplay(coinTextSize - dashInset * 2)));
         g2d.setColor(new Color(234, 234, 234));
-        g2d.setFont(this.instance.lexicon.equipmentPro.deriveFont((float) super.scaleToDisplay(coinTextSize)));
-        fontRenderer.drawStringAccurately(g2d,  String.valueOf(0), super.scaleToDisplay(coinX + coinSize + coinGap), super.scaleToDisplay(coinY + coinSize * 0.5 + coinSize * 0.075), Align.LEFT, Align.CENTER, false);
+        fontRenderer.drawStringAccurately(g2d,  String.valueOf(coinAmount), super.scaleToDisplay(coinX + (coinSize + coinBoxWidth) / 2), super.scaleToDisplay(coinY + coinSize / 2), Align.CENTER, Align.CENTER, true);
 
     }
 

@@ -7,29 +7,34 @@ import java.awt.*;
 public class SceneLoadMainMenu extends SceneLoading {
 
     private Thread thread;
-    private boolean threadRunning;
+    private boolean threadRunning, done;
 
     public SceneLoadMainMenu(Instance instance) {
         super(instance);
 
         this.thread = new Thread(() -> {
             instance.atlas.flush();
+            System.out.println("flush");
 
             instance.atlas.load();
+            System.out.println("Aload");
 
             instance.lexicon.load();
+            System.out.println("Lload");
 
-            Thread me = this.thread;
-            this.thread = null;
             this.threadRunning = false;
+            this.done = true;
+            System.out.println("done");
 
             try {
-                me.join();
+                this.thread.join();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+
+            System.out.println("join");
         });
-        this.thread.setName("Scene World Load Thread");
+        this.thread.setName("Scene Main Menu Load Thread");
     }
 
     private void startLoadThread() {
@@ -42,10 +47,14 @@ public class SceneLoadMainMenu extends SceneLoading {
         this.progress = (getFieldsInitializedRatio(this.instance.atlas) + getFieldsInitializedRatio(this.instance.lexicon)) / 2.0;
         super.update(g2d, dt);
 
-        if (this.thread != null && !this.threadRunning) {
+        System.out.println(progress + " " + done + " " + threadRunning + " " + thread);
+
+        if (!done && !this.threadRunning) {
             startLoadThread();
-        } else if (!this.threadRunning) {
+            System.out.println("started");
+        } else if (done && !this.threadRunning) {
             this.instance.scene = new SceneMainMenu(this.instance);
+            System.out.println("nexted");
         }
     }
 }

@@ -48,8 +48,17 @@ public class Button extends LocalizedComponent {
 
         g2d.setClip(rect);
 
+        double inset = 0.0;
         if (this.backgroundVisible) {
-            g2d.setColor(Color.MAGENTA);
+            g2d.setColor(new Color(0, 0, 0, 40));
+            g2d.fill(rect);
+            g2d.setStroke(new BasicStroke(scene.scaleToDisplay(6.0)));
+            g2d.setColor(Color.WHITE);
+            inset = 8.0;
+            rect.x += scene.scaleToDisplay(inset);
+            rect.y += scene.scaleToDisplay(inset);
+            rect.width -= scene.scaleToDisplay(inset) * 2;
+            rect.height -= scene.scaleToDisplay(inset) * 2;
             g2d.draw(rect);
         }
 
@@ -65,7 +74,7 @@ public class Button extends LocalizedComponent {
 
         g2d.setColor(this.currentTextColor);
         g2d.setFont(instance.lexicon.equipmentPro.deriveFont((float) this.scene.scaleToDisplay(60.0)));
-        this.textBounds = fontRenderer.drawStringAccurately(g2d, this.scene.localize(this.key, this.localizationObjects), (int) (this.textAlign[0] == Align.CENTER ? center.x : this.textAlign[0] == Align.RIGHT ? this.bounds.position.x + this.bounds.size.x - this.scene.scaleToDisplay(10.0) : this.bounds.position.x + this.scene.scaleToDisplay(10.0)), (int) (this.textAlign[1] == Align.CENTER ? center.y : this.textAlign[1] == Align.BOTTOM ? this.bounds.position.y + this.bounds.size.y : this.bounds.position.y), this.textAlign[0], this.textAlign[1], true);
+        this.textBounds = fontRenderer.drawStringAccurately(g2d, this.scene.localize(this.key, this.localizationObjects), (int) (this.textAlign[0] == Align.CENTER ? center.x : this.textAlign[0] == Align.RIGHT ? this.bounds.position.x + this.bounds.size.x - this.scene.scaleToDisplay(10.0 + inset) : this.bounds.position.x + this.scene.scaleToDisplay(10.0 + inset)), (int) (this.textAlign[1] == Align.CENTER ? center.y : this.textAlign[1] == Align.BOTTOM ? this.bounds.position.y + this.bounds.size.y : this.bounds.position.y), this.textAlign[0], this.textAlign[1], true);
 
         g2d.setClip(null);
     }

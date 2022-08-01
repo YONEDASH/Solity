@@ -41,23 +41,18 @@ public class SceneMainMenu extends SceneMenu {
         int width = display.getWidth(), height = display.getHeight();
 
         drawBackground(g2d, dt);
-        drawPlayer(g2d, dt, width / 3);
-        drawFog(g2d, dt);
 
-        g2d.setColor(new Color(68, 70, 76));
+        g2d.setColor(new Color(0, 0, 0, 80));
         g2d.fillRect(0, 0, width / 3, height);
 
-        double lineThickness = 20.0;
-        Color lineColor = g2d.getColor().darker();
-
-        g2d.setColor(lineColor);
-        g2d.fillRect(width / 3 - super.scaleToDisplay(lineThickness), 0, super.scaleToDisplay(lineThickness), height);
+        double lineThickness = 10.0;
+        Color lineColor = Color.WHITE;
 
         g2d.setColor(Constants.MAP_BACKGROUND_COLOR);
         g2d.setFont(this.instance.lexicon.futilePro.deriveFont((float) super.scaleToDisplay(240.0)));
         this.fontRenderer.drawStringAccurately(g2d, "Solity", width / 3 / 2, height / 8, Align.CENTER, Align.CENTER, true);
 
-        double buttonWidth = width / 3.0 * 2, buttonHeight = 75.0, buttonSpace = 10.0;
+        double buttonHeight = 75.0, buttonSpace = 10.0;
 
         boolean hasPlayedAlready = !this.instance.launchData.getString("saveGameLastPlayed").equals("null");
 
@@ -65,12 +60,18 @@ public class SceneMainMenu extends SceneMenu {
 
         for (int i = 0; i < buttons.length; i++) {
             Button button = buttons[i];
-            button.setBounds(width / 3.0 / 2 - super.scaleToDisplay(width / 3.0 * 0.9), height / 2.0 + super.scaleToDisplay(buttons.length * buttonHeight + buttons.length * buttonSpace) - super.scaleToDisplay(100.0 + buttonHeight * i + buttonSpace * i + buttonHeight), super.scaleToDisplay(buttonWidth), super.scaleToDisplay(buttonHeight));
+            button.setBounds(width / 3.0 - width / 3.0 * 0.9, height / 2.0 + super.scaleToDisplay(buttons.length * buttonHeight + buttons.length * buttonSpace) - super.scaleToDisplay(100.0 + buttonHeight * i + buttonSpace * i + buttonHeight), width / 3.0 * 0.8, super.scaleToDisplay(buttonHeight));
 
-            g2d.setColor(lineColor);
-            g2d.fillRect(0, (int) (button.getBounds().position.y + button.getBounds().size.y), width / 3 - super.scaleToDisplay(lineThickness), super.scaleToDisplay(lineThickness * 0.5));
+            g2d.setColor(lineColor.darker());
+            g2d.fillRect(super.scaleToDisplay(lineThickness * 2.0), (int) (button.getBounds().position.y + button.getBounds().size.y), width / 3 - super.scaleToDisplay(lineThickness * 2.0) * 2, super.scaleToDisplay(lineThickness * 0.5));
 
         }
+
+        // Draw surrounding white rect
+        g2d.setStroke(new BasicStroke(super.scaleToDisplay(lineThickness)));
+
+        g2d.setColor(lineColor);
+        g2d.drawRect(super.scaleToDisplay(lineThickness * 2.0), super.scaleToDisplay(lineThickness * 2.0), width / 3 - (super.scaleToDisplay(lineThickness * 2.0) * 2), height - (super.scaleToDisplay(lineThickness * 2.0) * 2));
 
         this.updateComponents(g2d, dt);
     }
@@ -111,7 +112,7 @@ public class SceneMainMenu extends SceneMenu {
             super(scene, key);
             setTextAlign(Align.LEFT, Align.CENTER);
             setBackgroundVisible(false);
-            setTextColor(new Color(148, 148, 151));
+            setTextColor(new Color(163, 163, 167));
         }
     }
 

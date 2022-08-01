@@ -194,7 +194,7 @@ public class TutorialStory extends Story {
             }
 
             if (this.step == 6 || this.step == 7) {
-                drawObjectiveText(scene.localize("story.tutorial.ants remaining", antCount), g2d, scene);
+                drawObjectiveText(scene.localize("story.tutorial.antsremaining", antCount), g2d, scene);
             }
         }
 

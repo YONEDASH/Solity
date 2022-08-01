@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 
 // This class represents the game window
 public class Display extends JFrame {
@@ -28,7 +29,7 @@ public class Display extends JFrame {
         this.setLocationRelativeTo(null);
 
         // Set title
-        super.setTitle("Solity Immortal");
+        super.setTitle("Solity renderPipeline=" + instance.launchData.getRenderPipeline().name());
 
         // Set close operation, we want program to exit when display window is closed
         super.addWindowListener(new WindowAdapter() {
@@ -153,6 +154,21 @@ public class Display extends JFrame {
 
     // Stores time display was last updated
     private long timeLastUpdated;
+
+    // Hides cursor
+    public void hideCursor() {
+        // Create a new cursor with transparent image
+        Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(
+                new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB), new Point(0, 0), "blank cursor");
+
+        // Set cursor to display
+        this.setCursor(blankCursor);
+    }
+
+    // Shows cursor
+    public void showCursor() {
+        this.setCursor(Cursor.getDefaultCursor());
+    }
 
     // Updates display
     public boolean update() {

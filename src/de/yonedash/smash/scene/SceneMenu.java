@@ -1,23 +1,18 @@
 package de.yonedash.smash.scene;
 
 import de.yonedash.smash.*;
-import de.yonedash.smash.entity.EntityPlayer;
 import de.yonedash.smash.entity.LevelObject;
 import de.yonedash.smash.graphics.EntityFog;
-import de.yonedash.smash.graphics.TextureAtlas;
 import de.yonedash.smash.resource.Texture;
 
 import java.awt.*;
 import java.util.Random;
 
 public abstract class SceneMenu extends Scene {
-
-    private static OpenSimplexNoise openSimplexNoise1, openSimplexNoise2;
-    private static double simplexOffset;
-    private static boolean menuInitialized, playerInitialized;
-    private static double playerPosX, playerPosY;
+    private static OpenSimplexNoise openSimplexNoise;
+    private static boolean menuInitialized;
     private static EntityFog entityFog;
-    private static double fogOffset;
+    private static double fogOffset, backgroundOffset;
 
     public SceneMenu(Instance instance) {
         super(instance);
@@ -25,84 +20,55 @@ public abstract class SceneMenu extends Scene {
         if (!menuInitialized) {
             menuInitialized = true;
             long seed = new Random().nextLong();
-            openSimplexNoise1 = new OpenSimplexNoise(seed);
-            openSimplexNoise2 = new OpenSimplexNoise(seed / 2);
+            openSimplexNoise = new OpenSimplexNoise(seed);
             entityFog = new EntityFog(new Chunk(0, 0, new LevelObject[0]));
         }
+
+        // Show cursor
+        this.instance.display.showCursor();
     }
 
     public void drawBackground(Graphics2D g2d, double dt) {
         Display display = this.instance.display;
         int width = display.getWidth(), height = display.getHeight();
 
-        g2d.setColor(Constants.MAP_BACKGROUND_COLOR.darker());
+        // Draw background/grass color in case of background not covering the entire screen
+        g2d.setColor(Constants.MAP_BACKGROUND_COLOR);
         g2d.fillRect(0, 0, width, height);
-    }
 
-    public void drawPlayer(Graphics2D g2d, double dt, double minX) {
-        Display display = this.instance.display;
-        int width = display.getWidth(), height = display.getHeight();
+        double bgMoveSpeed = 0.00004, bgMoveFactor = 400.0;
 
-        // Draw player
-        double speed = 0.001;
-        double random1 = openSimplexNoise1.eval(simplexOffset, simplexOffset += speed);
-        double random2 = openSimplexNoise2.eval(simplexOffset, simplexOffset += speed);
+        // Calculates circle movement translation
+        double displayScale = calculateDisplayScaleFactor();
+        double tx = Math.cos(backgroundOffset * 2) * bgMoveFactor * displayScale, ty = Math.sin(backgroundOffset * 0.5) * bgMoveFactor * displayScale;
 
-        TextureAtlas atlas = this.instance.atlas;
+        // Translate
+        g2d.translate(tx, ty);
 
-        BoundingBox desiredView = new BoundingBox(new Vec2D(minX, 0), new Vec2D(width - minX, height)).scale(0.8);
+        // Draw scaled background in center of screen
+        double backgroundScale = super.scaleToDisplay(6.0);
+        Texture background = this.instance.atlas.uiBackground;
+        int backgroundWidth = (int) (background.getWidth() * backgroundScale);
+        int backgroundHeight = (int) (background.getHeight() * backgroundScale);
+        g2d.drawImage(background.getBufferedImage(),
+                width / 2 - backgroundWidth / 2, height / 2 - backgroundHeight / 2,
+                backgroundWidth, backgroundHeight, null);
 
-        double playerSize = 400.0;int pullPart1 = random1 < -0.5 ? 0x001 : random1 < 0.0 ? 0x002 : random1 < 0.5 ? 0x003 : 0x004;
+        // Revert translation
+        g2d.translate(-tx, -ty);
 
-        int pullPart2 = random2 < 0 | !desiredView.contains(
-                        new Vec2D(playerPosX + super.scaleToDisplay(playerSize / 2),
-                                playerPosY + super.scaleToDisplay(playerSize / 2)))
-                ? atlas.walkSubId : atlas.idleSubId;
+        // Draw fog on top of background
+        drawFog(g2d, dt);
 
-        Texture texture = atlas.getBundle(EntityPlayer.class).pull(pullPart1 + pullPart2);
-        if (texture == null) texture = atlas.invalid;
-
-        if (!playerInitialized) {
-            playerInitialized = true;
-            playerPosX = width - width / 3 - super.scaleToDisplay(playerSize / 2);
-            playerPosY = height / 2 - super.scaleToDisplay(playerSize / 2);
-        }
-
-        if (pullPart2 == atlas.walkSubId) {
-            double walkSpeed = super.time(super.scaleToDisplay(2) * 0.2, dt);
-            if (pullPart1 == 0x001)
-                playerPosY -= walkSpeed;
-            else if (pullPart1 == 0x002)
-                playerPosX += walkSpeed;
-            else if (pullPart1 == 0x003)
-                playerPosY += walkSpeed;
-            else if (pullPart1 == 0x004)
-                playerPosX -= walkSpeed;
-
-            while (playerPosY + playerSize < 0)
-                playerPosY += height + playerSize;
-
-            while (playerPosY > height)
-                playerPosY -= height + playerSize;
-
-            while (playerPosX + playerSize < minX)
-                playerPosX += width + playerSize - minX;
-
-            while (playerPosX > width)
-                playerPosX -= width + playerSize - minX;
-        }
-
-        g2d.drawImage(texture.getBufferedImage(),
-                (int) playerPosX, (int) playerPosY,
-                super.scaleToDisplay(playerSize), super.scaleToDisplay(playerSize),
-                null);
+        // Move background by adding speed to offset
+        backgroundOffset += super.time(bgMoveSpeed, dt);
     }
 
     public void drawFog(Graphics2D g2d, double dt) {
         Display display = this.instance.display;
         int width = display.getWidth(), height = display.getHeight();
 
-        entityFog.updateFog(fogOffset, 0.0, openSimplexNoise1);
+        entityFog.updateFog(fogOffset, 0.0, openSimplexNoise);
         g2d.drawImage(entityFog.getImage(), 0, 0, width, height, null);
 
         fogOffset -= super.time(0.1, dt);

@@ -32,7 +32,7 @@ public class EntityPlayer extends EntityCharacter {
 
         // Slowly recharge dashes
         SkillDash skillDash = scene.instance.world.saveGame.getSkills().skillDash;
-        dashesLeft = Math.min((dashesLeft += scene.time(0.00001f * skillDash.getChargeFactor(), dt)), skillDash.getMaximumDashCount());
+        dashesLeft = Math.min((dashesLeft += scene.time(0.000025f * skillDash.getChargeFactor(), dt)), skillDash.getMaximumDashCount());
     }
 
     @Override
