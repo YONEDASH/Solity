@@ -11,7 +11,7 @@ public class EntityEnemy extends EntityCharacter {
 
     private Entity target;
 
-    protected double entityMoveSpeed = 1;
+    protected double entityMoveSpeed = 1, shotDamage = 1.0, shotSpeed = 0.6;
 
     public EntityEnemy(BoundingBox boundingBox) {
         super(boundingBox);
@@ -53,8 +53,6 @@ public class EntityEnemy extends EntityCharacter {
         double maxDistance = Tile.TILE_SIZE * 8.0;
         double shootDelay = 1000.0 * 1; // TODO DIFFICULTY HERE
         double shotDistance = maxDistance;
-        double shotDamage = 1.0;
-        double shotSpeed = 0.6;
         double shotSize = 60.0;
         Vec2D projSize = new Vec2D(shotSize, shotSize);
 
@@ -66,7 +64,7 @@ public class EntityEnemy extends EntityCharacter {
                 return;
             }
 
-            this.reTargetIdleTime = -100 * world.random();
+            this.reTargetIdleTime = -100 * world.random(scene, dt);
 
             // Loop through found entities
             for (Entity temp : findNewTargets(world)) {
@@ -91,8 +89,8 @@ public class EntityEnemy extends EntityCharacter {
                 return;
 
             // Reset shoot idle time
-            if (world.random() > 0)
-                this.shootIdleTime = 0.0 - world.random() * shootDelay * 0.1;
+            if (world.random(scene, dt) > 0)
+                this.shootIdleTime = 0.0 - world.random(scene, dt) * shootDelay * 0.1;
 
         }
 
@@ -102,7 +100,7 @@ public class EntityEnemy extends EntityCharacter {
         double intelligence = 1.0; // range 0 - 1
 
         if (this.shootIdleTime >= shootDelay) {
-            this.shootIdleTime = 0.0 - world.random() * shootDelay * 0.5;
+            this.shootIdleTime = 0.0 - world.random(scene, dt) * shootDelay * 0.5;
 
             // Motion prediction
             Vec2D targetPosition = this.target.getBoundingBox().center();
@@ -128,6 +126,26 @@ public class EntityEnemy extends EntityCharacter {
 
             world.entitiesLoaded.add(proj);
         }
+
+        if (this.targetPosition != null && this.boundingBox.contains(this.targetPosition)) {
+            this.targetPosition = null;
+        }
+
+        if (this.targetPosition == null) {
+            double angle = world.random(scene, dt) * 360.0;
+            double distance = Math.abs(Tile.TILE_SIZE * 2 * world.random(scene, dt));
+
+            LevelObject levelObject = MathUtils.rayCast(world, this.boundingBox, angle, Tile.TILE_SIZE * 0.2, distance);
+
+            if (levelObject != null)
+                distance -= (distance - levelObject.getBoundingBox().center().distanceSqrt(center)) + Tile.TILE_SIZE;
+
+            this.targetPosition = center.clone().add(angle, distance);
+        }
+
+        double dx = Math.min(Math.max(this.targetPosition.x - center.x, -this.entityMoveSpeed), this.entityMoveSpeed);
+        double dy = Math.min(Math.max(this.targetPosition.y - center.y, -this.entityMoveSpeed), this.entityMoveSpeed);
+        move(scene, dt, new Vec2D(scene.time(dx, dt), scene.time(dy, dt)));
     }
 
     private ArrayList<Entity> findNewTargets(World world) {

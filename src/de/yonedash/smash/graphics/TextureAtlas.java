@@ -14,13 +14,14 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static de.yonedash.smash.Direction.*;
 
 public class TextureAtlas {
 
     private final Instance instance;
-    protected final ArrayList<Texture> texturesLoaded;
+    protected final CopyOnWriteArrayList<Texture> texturesLoaded;
     private final HashMap<Class<? extends Entity>, TextureBundle> textureBundles;
     private final HashMap<Texture, Texture> particleMap;
 
@@ -42,7 +43,7 @@ public class TextureAtlas {
     public TextureAtlas(Instance instance) {
         this.instance = instance;
 
-        this.texturesLoaded = new ArrayList<>();
+        this.texturesLoaded = new CopyOnWriteArrayList<>();
         this.textureBundles = new HashMap<>();
         this.particleMap = new HashMap<>();
 

@@ -25,9 +25,10 @@ story.tutorial.6=Oh no, it looks like there are more ants attacking! Search the 
 story.tutorial.antsremaining=Find & defend yourself against the {0} remaining ants.
 story.tutorial.8=You see this? I wonder what it is.
 story.tutorial.9=Pick it up by walking into it.
-story.tutorial.10=Well done! Find out what this is by starting your journey. You have successfully completed the tutorial.
+story.tutorial.10=Well done! You have successfully completed the tutorial. Find out what that bottle was by starting a new journey.
 
 story.main.unknownperson=Unknown Person
+story.main.spock=Mister Spohck
 
 # The Beginnings
 story.main.pathobj=Follow the path.

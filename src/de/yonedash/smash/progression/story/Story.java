@@ -3,16 +3,21 @@ package de.yonedash.smash.progression.story;
 import de.yonedash.smash.*;
 import de.yonedash.smash.entity.*;
 import de.yonedash.smash.graphics.VisualEffect;
+import de.yonedash.smash.progression.saves.SaveGame;
+import de.yonedash.smash.progression.saves.StateCapture;
 import de.yonedash.smash.resource.FontLexicon;
 import de.yonedash.smash.scene.Scene;
 import de.yonedash.smash.scene.SceneInWorld;
 
 import java.awt.*;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicLong;
 
 public abstract class Story {
+
+    protected StateCapture capture;
 
     private final String mapName;
     protected int checkpoint;
@@ -90,7 +95,7 @@ public abstract class Story {
         world.chunks.forEach(chunk -> {
             ArrayList<Entity> toRemove = new ArrayList<>();
             for (Entity entity : chunk.getEntities()) {
-                if (!(entity instanceof EntityPlayer) && !(entity instanceof VisualEffect))
+                if (!(entity instanceof EntityPlayer) && !(entity instanceof VisualEffect) && !(entity instanceof EntityCoin))
                     if (force)
                         toRemove.add(entity);
                     else
@@ -99,7 +104,7 @@ public abstract class Story {
             chunk.getEntities().removeAll(toRemove);
         });
         for (Entity entity : world.entitiesLoaded) {
-            if (!(entity instanceof EntityPlayer) && !(entity instanceof VisualEffect))
+            if (!(entity instanceof EntityPlayer) && !(entity instanceof VisualEffect) && !(entity instanceof EntityCoin))
                 if (force)
                     world.entitiesLoaded.remove(entity);
                 else
@@ -141,8 +146,20 @@ public abstract class Story {
         }
     }
 
-    protected void markStepAsCheckpoint() {
+    protected void markStepAsCheckpoint(SaveGame saveGame) {
         this.checkpoint = this.step;
+        if (!this.checkpointLoaded)
+            this.capture = saveGame.capture();
+    }
+
+    protected void saveProgress(SaveGame saveGame) {
+        if (this.capture != null)
+            this.capture.apply(saveGame);
+        try {
+            saveGame.save();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void loadCheckpoint() {
@@ -158,6 +175,11 @@ public abstract class Story {
         }
 
         updateStep(g2d, dt, scene, step);
+
+        // Count up playtime
+        SaveGame saveGame = scene.instance.world.saveGame;
+        long playTime = saveGame.getLong("playTime");
+        saveGame.set("playTime", (playTime + (int) Math.ceil(dt)));
     }
 
     protected abstract void initStep(double dt, SceneInWorld scene, int step);

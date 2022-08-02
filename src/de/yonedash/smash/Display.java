@@ -1,6 +1,7 @@
 package de.yonedash.smash;
 
 import de.yonedash.smash.graphics.GraphicsUtils;
+import de.yonedash.smash.scene.SceneInWorld;
 
 import javax.swing.*;
 import java.awt.*;
@@ -77,6 +78,10 @@ public class Display extends JFrame {
             public void focusGained(FocusEvent e) {
                 // Add input listeners if window is in focus
                 Display.this.input.listen();
+
+                // Hide cursor if ingame
+                if (instance.scene instanceof SceneInWorld)
+                    hideCursor();
             }
 
             @Override

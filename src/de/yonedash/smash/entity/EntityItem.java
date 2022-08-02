@@ -21,13 +21,13 @@ public abstract class EntityItem extends EntityBase {
 
     @Override
     public boolean collide(Scene scene, Entity entity) {
-        if (entity instanceof EntityPlayer player && pickup(player)) {
+        if (entity instanceof EntityPlayer player && pickup(scene, player)) {
             remove();
         }
 
         return false;
     }
 
-    public abstract boolean pickup(EntityPlayer entityPlayer);
+    public abstract boolean pickup(Scene scene, EntityPlayer entityPlayer);
 
 }

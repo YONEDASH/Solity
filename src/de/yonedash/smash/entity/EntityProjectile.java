@@ -105,6 +105,7 @@ public class EntityProjectile extends EntityBase {
     public boolean collide(Scene scene, Entity entity) {
         if (shooter == entity
                 || entity instanceof EntityProjectile
+                || !(entity instanceof EntityDamageable)
                 || !scene.instance.world.entitiesLoaded.contains(this)
                 || (shooter instanceof EntityEnemy && entity instanceof EntityEnemy))
             return false;
@@ -112,16 +113,19 @@ public class EntityProjectile extends EntityBase {
         scene.instance.world.entitiesLoaded.remove(this);
 
         // Damage entity
-        if (entity instanceof EntityDamageable entityDamageable) {
-            entityDamageable.setHealth(entityDamageable.getHealth() - damage);
+        EntityDamageable entityDamageable = (EntityDamageable) entity;
+        entityDamageable.setHealth(entityDamageable.getHealth() - damage);
 
-            if (entityDamageable.getHealth() <= 0) {
-                if (!(entity instanceof EntityPlayer))
-                    scene.instance.world.entitiesLoaded.remove(entity);
+        if (entityDamageable.getHealth() <= 0 && scene.instance.world.entitiesLoaded.contains(entity)) {
+            if (!(entity instanceof EntityPlayer))
+                scene.instance.world.entitiesLoaded.remove(entity);
 
-                EntityParticle particle = new EntityParticle(entity.getBoundingBox().clone().scale(2.0), scene.instance.atlas.animAfterDeath, 0.0, 0.0, 350.0, entity.getZ() - 1, false);
-                scene.instance.world.entitiesLoaded.add(particle);
+            if (entity instanceof EntityEnemy) {
+                scene.instance.world.entitiesLoaded.add(new EntityCoin(entity.getBoundingBox().center().clone()));
             }
+
+            EntityParticle particle = new EntityParticle(entity.getBoundingBox().clone().scale(2.0), scene.instance.atlas.animAfterDeath, 0.0, 0.0, 350.0, entity.getZ() - 1, false);
+            scene.instance.world.entitiesLoaded.add(particle);
         }
 
         double particleHitScale = 0.75;

@@ -6,12 +6,14 @@ import de.yonedash.smash.config.KeyBind;
 import de.yonedash.smash.entity.*;
 import de.yonedash.smash.localization.BindLocalizer;
 import de.yonedash.smash.scene.SceneInWorld;
+import de.yonedash.smash.scene.SceneLoadMainMenu;
 
 import java.awt.*;
 
 public class TutorialStory extends Story {
 
     private EntityAnt starterAnt;
+    private EntityBottle bottle;
 
     public TutorialStory() {
         super("tutorial");
@@ -75,7 +77,7 @@ public class TutorialStory extends Story {
                 world.prompt(new TextPrompt(scene.localize(langPrefix + "title"), scene.localize(langPrefix + step, BindLocalizer.getDeviceName(scene, KeyBind.Device.MOUSE), BindLocalizer.getActualBindName(inputConfig.getBind("shoot"))), this::nextStep, TextPrompt.UNSKIPPABLE));
             }
             case 6 -> {
-                markStepAsCheckpoint();
+                markStepAsCheckpoint(world.saveGame);
 
                 // Clear world of entities
                 cleanupWorld(world, checkpointLoaded);
@@ -83,6 +85,7 @@ public class TutorialStory extends Story {
                 if (checkpointLoaded) {
                     scene.player.getBoundingBox().position = superPosition.clone();
                     scene.resetCameraPosition();
+                    capture.apply(world.saveGame);
                 }
 
                 // Set player stats
@@ -108,19 +111,25 @@ public class TutorialStory extends Story {
                 // Do nothing here
             }
             case 8 -> {
-                // Spawn shard
-
+                // Spawn bottle
+                this.bottle = new EntityBottle(new Vec2D(-771.8151771893367, -129.58057274493697), EntityBottle.Color.RED);
+                world.entitiesLoaded.add(this.bottle);
 
                 // Set waypoint
-                world.waypoint = new Vec2D(-771.8151771893367, -129.58057274493697);
+                world.waypoint = this.bottle.getBoundingBox().center();
 
                 world.prompt(new TextPrompt(scene.localize(langPrefix + "title"), scene.localize(langPrefix + step, BindLocalizer.getActualBindName(inputConfig.getBind("use"))), this::nextStep, TextPrompt.UNSKIPPABLE));
             }
             case 9 -> {
+                world.prompt(new TextPrompt(scene.localize(langPrefix + "title"), scene.localize(langPrefix + step), this::nextStep, TextPrompt.UNSKIPPABLE));
+            }
+            case 10 -> {
+                world.waypoint = null;
+                world.prompt(new TextPrompt(scene.localize(langPrefix + "title"), scene.localize(langPrefix + step), this::nextStep, 10));
+            }
+            case 11 -> {
                 // End tutorial
-
-
-                world.prompt(new TextPrompt(scene.localize(langPrefix + "title"), scene.localize(langPrefix + step), this::nextStep, 5));
+                instance.scene = new SceneLoadMainMenu(instance);
             }
 
         }
@@ -196,6 +205,13 @@ public class TutorialStory extends Story {
             if (this.step == 6 || this.step == 7) {
                 drawObjectiveText(scene.localize("story.tutorial.antsremaining", antCount), g2d, scene);
             }
+        }
+
+        if (this.step == 8 && world.waypoint != null && scene.player.getBoundingBox().center().distanceSqrt(world.waypoint) < Tile.TILE_SIZE * 4.0) {
+            nextStep();
+        }
+        if (this.step == 9 && world.waypoint != null && scene.player.getBoundingBox().center().distanceSqrt(world.waypoint) < Tile.TILE_SIZE && !world.entitiesLoaded.contains(bottle)) {
+            nextStep();
         }
 
         // Freeze every entity if prompt is shown

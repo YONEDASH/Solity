@@ -45,8 +45,8 @@ public class World implements ProgressReport {
     }
 
     // Returns random value between -1 and 1
-    public double random() {
-        return this.simplexNoise.eval(randomOffset, ++randomOffset);
+    public double random(Scene scene, double dt) {
+        return this.simplexNoise.eval(randomOffset, randomOffset += scene.time(1, dt));
     }
 
     // Show prompt on screen

@@ -18,6 +18,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SceneInWorld extends Scene {
 
@@ -761,7 +762,7 @@ public class SceneInWorld extends Scene {
         // Draw Player Health
         this.healthDisplayed += (this.player.getHealth() - this.healthDisplayed) * Constants.HUD_VALUE_ANIMATION_SPEED; // Animates health add/remove
         int hearts = (int) (player.getMaxHealth() / 2);
-        double heartSize = 100.0;
+        double heartSize = 80.0;
         double heartGap = 7.5;
         double heartsX = 40.0;
         double heartsY = 40.0;
@@ -796,7 +797,7 @@ public class SceneInWorld extends Scene {
         double dashFullCutoff = 0.19;
 
         double dashArc = 15.0;
-        double dashWidth = dashes * 100.0;
+        double dashWidth = dashes * heartSize;
         double dashInset = 10.0;
         double dashBarWidth = 7.5;
         double dashAreaWidth = (dashWidth - dashInset * 2) / dashes;
@@ -824,7 +825,7 @@ public class SceneInWorld extends Scene {
         double coinTextSize = 62.0;
         double coinBoxWidth = heartSize * 2 - coinSize;
 
-        int coinAmount = 0;
+        int coinAmount = world.saveGame.getCoins();
 
         g2d.setColor(new Color(48, 44, 46));
         g2d.fillRoundRect(super.scaleToDisplay(coinX), super.scaleToDisplay(coinY), super.scaleToDisplay(coinSize + coinBoxWidth), super.scaleToDisplay(coinSize), super.scaleToDisplay(dashArc), super.scaleToDisplay(dashArc));
@@ -832,14 +833,21 @@ public class SceneInWorld extends Scene {
         g2d.setColor(dashColorBarBackground);
         g2d.fillRoundRect(super.scaleToDisplay(coinX + dashInset), super.scaleToDisplay(coinY + dashInset), super.scaleToDisplay(coinSize + coinBoxWidth - dashInset * 2), super.scaleToDisplay(coinSize - dashInset * 2), super.scaleToDisplay(dashArc), super.scaleToDisplay(dashArc));
 
-
         Image coinImage = this.instance.atlas.coin instanceof TextureAnimated animated ? animated.getImage(0) : this.instance.atlas.coin.getBufferedImage();
-        g2d.drawImage(coinImage, super.scaleToDisplay(coinX + dashInset * 1.1), super.scaleToDisplay(coinY + dashInset * 1.1), super.scaleToDisplay(coinSize - dashInset * 2.4), super.scaleToDisplay(coinSize - dashInset * 2.4), null);
+        g2d.drawImage(coinImage, super.scaleToDisplay(coinX + dashInset), super.scaleToDisplay(coinY + dashInset * 0.8), super.scaleToDisplay(coinSize - dashInset * 2), super.scaleToDisplay(coinSize - dashInset * 2), null);
 
         g2d.setFont(this.instance.lexicon.equipmentPro.deriveFont((float) super.scaleToDisplay(coinTextSize - dashInset * 2)));
         g2d.setColor(new Color(234, 234, 234));
         fontRenderer.drawStringAccurately(g2d,  String.valueOf(coinAmount), super.scaleToDisplay(coinX + (coinSize + coinBoxWidth) / 2), super.scaleToDisplay(coinY + coinSize / 2), Align.CENTER, Align.CENTER, true);
 
+
+        g2d.setFont(this.instance.lexicon.arial.deriveFont((float) super.scaleToDisplay(50.0)));
+        AtomicInteger nLinesSG = new AtomicInteger();
+        world.saveGame.DEBUG_REMOVE_MEEEEEEEE().stringPropertyNames().forEach(key -> {
+            int n = nLinesSG.getAndIncrement();
+
+            fontRenderer.drawString(g2d, key + "=" + world.saveGame.get(key), width / 2, height / 7 + n * scaleToDisplay(50.0), Align.CENTER, Align.TOP, false);
+        });
     }
 
     private void loadCheckpoint() {

@@ -11,7 +11,8 @@ public class EntityAnt extends EntityEnemy {
         super(new BoundingBox(position, new Vec2D(60, 12)));
         this.maxHealth = 3.0;
         this.health = maxHealth;
-        this.entityMoveSpeed = 0.12;
+        this.entityMoveSpeed = 0.09;
+        this.shotDamage = 0.5;
         this.lightSource = new LightSource(Color.RED, Math.random() * 8);
     }
 }
