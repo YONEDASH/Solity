@@ -19,7 +19,7 @@ public class GameLoop extends Thread {
     @Override
     public void run() {
         // No need to start a loop since this method is scheduled if low power mode is enabled
-        if (Constants.LOW_POWER_MODE) {
+        if (instance.gameConfig.lowPowerMode) {
             update();
             return;
         }

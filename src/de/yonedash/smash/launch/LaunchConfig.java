@@ -1,10 +1,10 @@
 package de.yonedash.smash.launch;
 
-import de.yonedash.smash.config.XMLConfig;
+import de.yonedash.smash.config.INIConfig;
 
 import java.io.File;
 
-public class LaunchConfig extends XMLConfig {
+public class LaunchConfig extends INIConfig {
 
     private RenderPipeline renderPipeline;
 
@@ -14,7 +14,7 @@ public class LaunchConfig extends XMLConfig {
 
     @Override
     protected void init() {
-        add("renderPipeline", RenderPipeline.SOFTWARE.name());
+        add("renderPipeline", RenderPipeline.OPENGL.name());
         add("saveGameLastPlayed", null);
     }
 

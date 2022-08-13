@@ -12,7 +12,7 @@ public class EntityBottle extends EntityItem {
     private final Color color;
 
     public EntityBottle(Vec2D position, Color color) {
-        super(new BoundingBox(position, new Vec2D(50.0, 50.0)));
+        super(new BoundingBox(position, new Vec2D(50.0, 20.0)));
         this.boundingBox.position.subtract(this.getBoundingBox().size.clone().multiply(0.5));
         this.color = color;
     }
@@ -29,7 +29,7 @@ public class EntityBottle extends EntityItem {
         g2d.drawImage(
                 texture.getBufferedImage(),
                 scene.scaleToDisplay(texBounds.position.x), scene.scaleToDisplay(texBounds.position.y),
-                scene.scaleToDisplay(texBounds.size.x), scene.scaleToDisplay(texBounds.size.y),
+                scene.scaleToDisplay(texBounds.size.x), scene.scaleToDisplay(texBounds.size.x),
                 null
         );
     }

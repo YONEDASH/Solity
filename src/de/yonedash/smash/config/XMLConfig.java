@@ -7,7 +7,7 @@ public abstract class XMLConfig {
 
     protected final Properties properties;
 
-    private final File file;
+    protected final File file;
 
     public XMLConfig(File file) {
         this.properties = new Properties();

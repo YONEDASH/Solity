@@ -14,17 +14,15 @@ public class SceneLoadMainMenu extends SceneLoading {
 
         this.thread = new Thread(() -> {
             instance.atlas.flush();
-            System.out.println("flush");
-
-            instance.atlas.load();
-            System.out.println("Aload");
 
             instance.lexicon.load();
-            System.out.println("Lload");
+
+            instance.atlas.load();
+
+            instance.library.load();
 
             this.threadRunning = false;
             this.done = true;
-            System.out.println("done");
 
             try {
                 this.thread.join();
@@ -32,7 +30,6 @@ public class SceneLoadMainMenu extends SceneLoading {
                 throw new RuntimeException(e);
             }
 
-            System.out.println("join");
         });
         this.thread.setName("Scene Main Menu Load Thread");
     }
@@ -44,17 +41,13 @@ public class SceneLoadMainMenu extends SceneLoading {
 
     @Override
     public void update(Graphics2D g2d, double dt) {
-        this.progress = (getFieldsInitializedRatio(this.instance.atlas) + getFieldsInitializedRatio(this.instance.lexicon)) / 2.0;
+        this.progress = (getFieldsInitializedRatio(this.instance.atlas) + getFieldsInitializedRatio(this.instance.lexicon) + getFieldsInitializedRatio(this.instance.library)) / 3.0;
         super.update(g2d, dt);
-
-        System.out.println(progress + " " + done + " " + threadRunning + " " + thread);
 
         if (!done && !this.threadRunning) {
             startLoadThread();
-            System.out.println("started");
         } else if (done && !this.threadRunning) {
             this.instance.scene = new SceneMainMenu(this.instance);
-            System.out.println("nexted");
         }
     }
 }

@@ -52,6 +52,10 @@ public class SaveGame extends XMLConfig {
         return new StateCapture(this);
     }
 
+    public String getName() {
+        return file.getName().replaceFirst("[.][^.]+$", "");
+    }
+
     // todo remove
     public Properties DEBUG_REMOVE_MEEEEEEEE() {
         return properties;

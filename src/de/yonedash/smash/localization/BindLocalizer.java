@@ -1,6 +1,7 @@
 package de.yonedash.smash.localization;
 
 import de.yonedash.smash.Align;
+import de.yonedash.smash.BoundingBox;
 import de.yonedash.smash.FontRenderer;
 import de.yonedash.smash.scene.Scene;
 import de.yonedash.smash.Vec2D;
@@ -230,28 +231,27 @@ public class BindLocalizer implements Align {
         return  "Key 0x" + Integer.toString(keyCode, 16);
     }
 
-    public static Vec2D drawHint(Graphics2D g2d, Scene scene, KeyBind keyBind, int x, int y, int height, int alignHorizontal) {
-        g2d.setFont(scene.instance.lexicon.arial.deriveFont((float) scene.scaleToDisplay(height * 1.6)));
+    public static BoundingBox drawHint(Graphics2D g2d, Scene scene, KeyBind keyBind, int x, int y, int height, int alignHorizontal, Color background, String override) {
+        g2d.setFont(scene.instance.lexicon.arial.deriveFont((float) height * 0.6f));
 
         String text = getBindNameOrUnicode(keyBind);
         FontRenderer fontRenderer = scene.fontRenderer;
         Vec2D fontBounds = fontRenderer.bounds(g2d, text);
 
-        int width = (int) (fontBounds.x * 1.1 + scene.scaleToDisplay(30.0));
+        int width = (int) (fontBounds.x + scene.scaleToDisplay(30.0));
 
         switch (alignHorizontal) {
             case CENTER -> x -= width / 2;
             case RIGHT -> x -= width;
         }
 
-        g2d.setColor(Color.WHITE);
+        g2d.setColor(background);
         g2d.fillRect(x, y, width, height);
 
         g2d.setColor(Color.DARK_GRAY);
-        g2d.setFont(scene.instance.lexicon.arial.deriveFont((float) scene.scaleToDisplay(height * 1.4)));
-        fontRenderer.drawStringAccurately(g2d, text, x + width / 2, y + height / 2, Align.CENTER, Align.CENTER, false);
+        fontRenderer.drawStringAccurately(g2d, override != null ? override : text, x + width / 2, y + height / 2, Align.CENTER, Align.CENTER, false);
 
-        return new Vec2D(width, height);
+        return new BoundingBox(new Vec2D(x, y), new Vec2D(width, height));
     }
 
 }

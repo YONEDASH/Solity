@@ -12,6 +12,8 @@ import java.awt.image.BufferedImage;
 // This class represents the game window
 public class Display extends JFrame {
 
+    private static final int displayRefreshRate = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getRefreshRate();
+
     private final Instance instance;
 
     // We want protected access to this class in order to access it in the canvas class
@@ -24,13 +26,13 @@ public class Display extends JFrame {
         this.instance = instance;
 
         // Set display dimensions
-        super.setSize(1280, 720);
+        super.setSize(900, 600);
 
-        // Reset relative position
+        // Reset relative position (makes window centered)
         this.setLocationRelativeTo(null);
 
         // Set title
-        super.setTitle("Solity renderPipeline=" + instance.launchData.getRenderPipeline().name());
+        super.setTitle("Solity");
 
         // Set close operation, we want program to exit when display window is closed
         super.addWindowListener(new WindowAdapter() {
@@ -125,6 +127,11 @@ public class Display extends JFrame {
                     return true;
                 }
 
+                if (!target.isFullScreenSupported()) {
+                    // If fullscreen is not supported, don't try it to prevent crashes
+                    return false;
+                }
+
                 // If window is not on fullscreen on target screen, turn off fullscreen
                 this.fullscreenDevice.setFullScreenWindow(null);
             }
@@ -148,6 +155,11 @@ public class Display extends JFrame {
             this.fullscreenDevice = null;
 
         }
+
+        // Hide cursor if ingame
+        if (instance.scene instanceof SceneInWorld)
+            hideCursor();
+
         return true;
     }
 
@@ -183,13 +195,14 @@ public class Display extends JFrame {
         long dt = timeNow - timeLastUpdated;
 
         // Cap framerate to fps limit (exception: cap=0 -> unlimited frames)
-        if (Constants.FPS_LIMIT > 0
-                && dt <= 1_000_000 * (1000.0 / Constants.FPS_LIMIT))
+        double fpsLimit = this.instance.gameConfig.fpsLimit;
+        if (fpsLimit > 0
+                && dt <= 1_000_000 * (1000.0 / fpsLimit))
             return false;
 
-        // Cap framerate if game on fullscreen to prevent tearing
-        if (isFullscreen()
-                && dt <= 1_000_000 * (1000.0 / this.fullscreenDevice.getDisplayMode().getRefreshRate()))
+        // Cap framerate if game on fullscreen or vsync enabled to prevent tearing
+        if ((isFullscreen() && dt <= 1_000_000 * (1000.0 / this.fullscreenDevice.getDisplayMode().getRefreshRate()))
+            || (instance.gameConfig.vSync && dt <= 1_000_000 * (1000.0 / displayRefreshRate)))
             return false;
 
         // Update update-time
@@ -199,7 +212,7 @@ public class Display extends JFrame {
         if (!isVisible())
             return false;
 
-        // Get buffer strategy
+        // Get buffer strategy; Buffer Strategy prevents display from flickering
         BufferStrategy buffer = this.canvas.getBufferStrategy();
 
         // Skip render if buffer does not exist

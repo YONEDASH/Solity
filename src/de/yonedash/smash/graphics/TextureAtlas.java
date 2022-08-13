@@ -1,5 +1,6 @@
 package de.yonedash.smash.graphics;
 
+import de.yonedash.smash.Constants;
 import de.yonedash.smash.Direction;
 import de.yonedash.smash.Instance;
 import de.yonedash.smash.entity.Entity;
@@ -10,6 +11,9 @@ import de.yonedash.smash.resource.Texture;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.font.FontRenderContext;
+import java.awt.font.GlyphVector;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
@@ -28,6 +32,9 @@ public class TextureAtlas {
     public final int walkSubId = 0x0000, idleSubId = 0x1111;
 
     public final Texture invalid;
+
+    // Window iCON
+    public Texture windowIcon;
 
     // UI
     public Texture uiBackground, uiCrossHair, uiArrow, uiHeartEmpty, uiHeartFull, uiDashEmpty, uiDashFull;
@@ -51,6 +58,10 @@ public class TextureAtlas {
     }
 
     public void load() {
+        // Generate & set window icon
+        this.windowIcon = generateWindowIcon();
+        this.instance.adapter.setIcon(instance, windowIcon);
+
         this.fork = loadTexture("/Fork.png");
         this.forest = loadTexture("/forest.png");
 
@@ -115,6 +126,46 @@ public class TextureAtlas {
         this.potionYellow = loadTexture("/assets/gameplay/potion/potion_yellow.png");
     }
 
+    private Texture generateWindowIcon() {
+        int size = 256;
+        int arc = size / 2;
+        int border = size / 32;
+        double scale = 0.8;
+        BufferedImage bufferedImage = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = bufferedImage.createGraphics();
+
+        Color backgroundColor = new Color(72, 72, 72);
+        g2d.setPaint(new GradientPaint(size / 2f, 0, backgroundColor, size / 2f, size, backgroundColor.brighter()));
+        g2d.fillRoundRect((int) (size * (1.0 - scale) * 0.5), (int) (size * (1.0 - scale) * 0.5), (int) (size * scale), (int) (size * scale), (int) (arc * scale), (int) (arc * scale));
+
+        Color borderColor = new Color(72, 72, 72);
+        g2d.setStroke(new BasicStroke((int) (border * scale)));
+        g2d.setPaint(new GradientPaint(size / 2f, 0, borderColor.brighter(), size / 2f, size, borderColor));
+        g2d.drawRoundRect((int) (size * (1.0 - scale) * 0.5), (int) (size * (1.0 - scale) * 0.5), (int) (size * scale), (int) (size * scale), (int) (arc * scale), (int) (arc * scale));
+
+        String text = "S";
+        g2d.setFont(instance.lexicon.futilePro.deriveFont((float) (size * 1 * scale)));
+
+        g2d.setColor(Color.BLACK);
+        FontRenderContext context = g2d.getFontRenderContext();
+        GlyphVector vector = g2d.getFont().createGlyphVector(context, text);
+        Rectangle2D r2d = vector.getVisualBounds();
+        int textHeight = (int) r2d.getHeight();
+        int textWidth = (int) r2d.getWidth();
+        g2d.drawString(text, size / 2 - textWidth / 2, size / 2 + textHeight / 2);
+
+        g2d.setFont(instance.lexicon.futilePro.deriveFont((float) (size * 0.81 * scale)));
+
+        g2d.setColor(Constants.MAP_BACKGROUND_COLOR);
+        vector = g2d.getFont().createGlyphVector(context, text);
+        r2d = vector.getVisualBounds();
+        textHeight = (int) r2d.getHeight();
+        textWidth = (int) r2d.getWidth();
+        g2d.drawString(text, size / 2 - textWidth / 2, size / 2 + textHeight / 2);
+
+        return new TextureStatic(this, bufferedImage);
+    }
+
     public void update(double dt) {
         this.texturesLoaded.forEach(texture -> {
             if (texture instanceof TextureAnimated textureAnimated)
@@ -139,7 +190,7 @@ public class TextureAtlas {
         if (bundle != null && (texture = bundle.pull(id)) != null)
             return texture;
 
-        if (owner.getSuperclass() != null)
+        if (owner.getSuperclass() != null && owner.getSuperclass().isAssignableFrom(Entity.class))
             return getTexture((Class<? extends Entity>) owner.getSuperclass(), id);
 
         return this.invalid;

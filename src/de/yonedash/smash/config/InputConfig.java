@@ -1,16 +1,18 @@
 package de.yonedash.smash.config;
 
+import de.yonedash.smash.Instance;
+
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class InputConfig extends XMLConfig {
+public class InputConfig extends INIConfig {
 
     private final HashMap<String, KeyBind> binds = new HashMap<>();
 
-    public InputConfig() {
-        super(new File("GAMEFOLDER", "input.xml"));
+    public InputConfig(Instance instance) {
+        super(new File(instance.gameRoot, "input.ini"));
     }
 
     @Override
@@ -31,7 +33,6 @@ public class InputConfig extends XMLConfig {
         addBind("moveRight", new KeyBind(KeyBind.Device.KEYBOARD, KeyEvent.VK_D));
         addBind("shoot", new KeyBind(KeyBind.Device.MOUSE, 1));
         addBind("dash", new KeyBind(KeyBind.Device.KEYBOARD, KeyEvent.VK_SHIFT));
-        addBind("use", new KeyBind(KeyBind.Device.KEYBOARD, KeyEvent.VK_E));
     }
 
     @Override

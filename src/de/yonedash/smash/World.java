@@ -4,11 +4,13 @@ import de.yonedash.smash.progression.saves.SaveGame;
 import de.yonedash.smash.entity.DisplayEntity;
 import de.yonedash.smash.entity.Entity;
 import de.yonedash.smash.entity.LevelObject;
+import de.yonedash.smash.progression.saves.SaveGameTemporary;
 import de.yonedash.smash.progression.story.Story;
 import de.yonedash.smash.scene.Scene;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -61,6 +63,8 @@ public class World implements ProgressReport {
     private int progressTotal, progress;
 
     public void load(Instance instance, LevelData level) {
+        System.out.println("OBJECTS: " + level.levelObjects().size());
+
         // Init simplex noise
         this.simplexNoise = new OpenSimplexNoise(level.seed());
 
@@ -69,6 +73,16 @@ public class World implements ProgressReport {
 
         // Set last access
         this.saveGame.set("lastAccess", System.currentTimeMillis());
+
+        // Set last played
+        if (!(saveGame instanceof SaveGameTemporary)) {
+            instance.launchData.set("saveGameLastPlayed", this.saveGame.getName());
+            try {
+                instance.launchData.save();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         // Reset waypoint
         this.waypoint = null;

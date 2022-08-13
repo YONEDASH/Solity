@@ -8,6 +8,37 @@ main.options=Options
 main.quit=Quit
 main.starttutorial=Start Tutorial
 
+options.restartNeeded=Restart needed for some changes to apply.
+
+options.left=<
+options.right=>
+options.on=On
+options.off=Off
+options.back=Back
+options.cancel=Cancel
+options.apply=Apply
+
+options.unlimitedFps=Unlimited
+
+options.language=Language
+options.volumeMaster=Master Volume
+options.volumeMusic=Music Volume
+options.volumeSound=Sound Volume
+options.volumeTyping=Typing Volume
+options.fullscreen=Fullscreen
+options.fpsLimit=FPS Limit
+options.vsync=VSync
+options.lowPowerMode=Low Power Mode
+options.renderPipeline=Render Pipeline
+
+options.moveUp=Move Up
+options.moveLeft=Move Left
+options.moveDown=Move Down
+options.moveRight=Move Right
+options.shoot=Shoot
+options.dash=Dash
+options.skipDialog=Skip Dialog
+
 difficulty.grandchallenge=Grand Challenge
 difficulty.hard=Hard
 difficulty.normal=Normal

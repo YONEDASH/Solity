@@ -93,6 +93,8 @@ public class EntityProjectile extends EntityBase {
         // levelObject.getBoundingBox().size = levelObject.getBoundingBox().position = new Vec2D(0, 0);
         scene.instance.world.entitiesLoaded.remove(this);
 
+        scene.instance.audioProcessor.play(scene.instance.library.hitSound);
+
 
         double particleHitScale = 1.0;
         EntityParticle particle = new EntityParticle(this.boundingBox.clone().scale(particleHitScale), scene.instance.atlas.animHit, 0.0, 0.0, 150.0, this.getZ(), false);
@@ -109,6 +111,8 @@ public class EntityProjectile extends EntityBase {
                 || !scene.instance.world.entitiesLoaded.contains(this)
                 || (shooter instanceof EntityEnemy && entity instanceof EntityEnemy))
             return false;
+
+        scene.instance.audioProcessor.play(scene.instance.library.hitSound);
 
         scene.instance.world.entitiesLoaded.remove(this);
 

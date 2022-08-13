@@ -46,6 +46,9 @@ public class SceneLoadWorld extends SceneLoading {
             }
         });
         this.thread.setName("Scene World Load Thread");
+
+        // Stop music
+        this.instance.audioProcessor.stopMusic();
     }
 
     private void startLoadThread() {

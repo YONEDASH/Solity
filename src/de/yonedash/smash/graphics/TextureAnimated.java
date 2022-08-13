@@ -1,7 +1,6 @@
 package de.yonedash.smash.graphics;
 
 import de.yonedash.smash.Direction;
-import de.yonedash.smash.ImageUtils;
 import de.yonedash.smash.resource.Texture;
 
 import java.awt.*;
@@ -44,7 +43,7 @@ public class TextureAnimated implements Texture {
         double playbackDelay = 1000.0 / playbackSpeed;
         this.playbackLength = playbackDelay * this.bufferedImages.length;
 
-        this.blank = Arrays.stream(this.bufferedImages).anyMatch(bi -> !ImageUtils.isBufferedImageBlank(bi));
+        this.blank = Arrays.stream(this.bufferedImages).anyMatch(bi -> !isBufferedImageBlank(bi));
     }
 
     protected TextureAnimated(TextureAtlas atlas, double playbackSpeed, Texture... textures) {
@@ -60,7 +59,7 @@ public class TextureAnimated implements Texture {
         double playbackDelay = 1000.0 / playbackSpeed;
         this.playbackLength = playbackDelay * this.bufferedImages.length;
 
-        this.blank = Arrays.stream(this.bufferedImages).anyMatch(bi -> !ImageUtils.isBufferedImageBlank(bi));
+        this.blank = Arrays.stream(this.bufferedImages).anyMatch(bi -> !isBufferedImageBlank(bi));
     }
 
     public void update(double dt) {

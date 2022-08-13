@@ -3,15 +3,16 @@ package de.yonedash.smash.scene.components;
 import de.yonedash.smash.*;
 import de.yonedash.smash.config.KeyBind;
 import de.yonedash.smash.scene.Scene;
+import de.yonedash.smash.scene.SceneOptions;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 
 public class Button extends LocalizedComponent {
 
     protected Color textColor;
-    protected boolean backgroundVisible;
+    protected boolean backgroundVisible, enabled;
     protected int[] textAlign;
+    protected double fontScale;
 
     protected int selected; // 0 = not selected, 1 = selected via diverse inputs, 2 = selected via mouse
 
@@ -19,22 +20,30 @@ public class Button extends LocalizedComponent {
         super(scene, key);
         this.textColor = Color.WHITE;
         this.textAlign = new int[] { Align.CENTER, Align.CENTER };
+        this.enabled = true;
+        this.fontScale = 1.0;
     }
 
     @Override
     public void devicePressed(KeyBind.Device device, int code) {
         if ((selected >= 2 && device == KeyBind.Device.KEYBOARD && code == '\n') // if enter is pressed
-                || (selected >= 1 && device == KeyBind.Device.MOUSE && code == 1)) { // left mouse button is pressed
+                || (selected >= 1 && device == KeyBind.Device.MOUSE && code == 1) // left mouse button is pressed
+            && enabled) {
             this.scene.fireComponent(this);
+            scene.instance.audioProcessor.play(scene.instance.library.clickSound);
         }
     }
 
     @Override
     public void mouseMoved(int x, int y) {
-        this.selected = (this.backgroundVisible || this.textBounds == null ? this.bounds.contains(new Vec2D(x, y)) : this.textBounds.contains(new Vec2D(x, y))) ? 2 : 0;
+        int selectedBefore = this.selected;
+        this.selected = enabled ? (this.backgroundVisible || this.textBounds == null ? this.bounds.contains(new Vec2D(x, y)) : this.textBounds.contains(new Vec2D(x, y))) ? 2 : 0 : 0;
+        if (selectedBefore != this.selected && this.selected > 0) {
+            scene.instance.audioProcessor.play(scene.instance.library.selectSound);
+        }
     }
 
-    private Color currentTextColor;
+    protected Color currentTextColor;
 
     protected BoundingBox textBounds;
 
@@ -50,10 +59,10 @@ public class Button extends LocalizedComponent {
 
         double inset = 0.0;
         if (this.backgroundVisible) {
-            g2d.setColor(new Color(0, 0, 0, 40));
+            g2d.setColor(new Color(0, 0, 0, 70));
             g2d.fill(rect);
             g2d.setStroke(new BasicStroke(scene.scaleToDisplay(6.0)));
-            g2d.setColor(Color.WHITE);
+            g2d.setColor(enabled ? Color.WHITE : Color.GRAY);
             inset = 8.0;
             rect.x += scene.scaleToDisplay(inset);
             rect.y += scene.scaleToDisplay(inset);
@@ -62,9 +71,22 @@ public class Button extends LocalizedComponent {
             g2d.draw(rect);
         }
 
+        updateColor(dt);
+        drawText(g2d, dt, instance, fontRenderer, center, inset);
+
+        g2d.setClip(null);
+    }
+
+    protected void drawText(Graphics2D g2d, double dt, Instance instance, FontRenderer fontRenderer, Vec2D center, double inset) {
+        g2d.setColor(enabled ? this.currentTextColor : this.currentTextColor.darker());
+        g2d.setFont(instance.lexicon.equipmentPro.deriveFont((float) this.scene.scaleToDisplay(fontScale * 60.0)));
+        this.textBounds = fontRenderer.drawStringAccurately(g2d, this.scene.localize(this.key, this.localizationObjects), (int) (this.textAlign[0] == Align.CENTER ? center.x : this.textAlign[0] == Align.RIGHT ? this.bounds.position.x + this.bounds.size.x - this.scene.scaleToDisplay(10.0 + inset) : this.bounds.position.x + this.scene.scaleToDisplay(10.0 + inset)), (int) (this.textAlign[1] == Align.CENTER ? center.y : this.textAlign[1] == Align.BOTTOM ? this.bounds.position.y + this.bounds.size.y : this.bounds.position.y), this.textAlign[0], this.textAlign[1], true);
+    }
+
+    protected void updateColor(double dt) {
         if (this.currentTextColor == null)
             this.currentTextColor = this.textColor;
-        Color targetColor = this.selected == 0 ? this.textColor : this.textColor.brighter();
+        Color targetColor = this.selected == 0 || !enabled ? this.textColor : this.textColor.brighter();
         double d = this.scene.time(0.02, dt);
         this.currentTextColor = new Color(
                 (int) Math.min(Math.max(this.currentTextColor.getRed() + (targetColor.getRed() - this.currentTextColor.getRed()) * d, 0), 255),
@@ -72,11 +94,6 @@ public class Button extends LocalizedComponent {
                 (int) Math.min(Math.max(this.currentTextColor.getBlue() + (targetColor.getBlue() - this.currentTextColor.getBlue()) * d, 0), 255)
         );
 
-        g2d.setColor(this.currentTextColor);
-        g2d.setFont(instance.lexicon.equipmentPro.deriveFont((float) this.scene.scaleToDisplay(60.0)));
-        this.textBounds = fontRenderer.drawStringAccurately(g2d, this.scene.localize(this.key, this.localizationObjects), (int) (this.textAlign[0] == Align.CENTER ? center.x : this.textAlign[0] == Align.RIGHT ? this.bounds.position.x + this.bounds.size.x - this.scene.scaleToDisplay(10.0 + inset) : this.bounds.position.x + this.scene.scaleToDisplay(10.0 + inset)), (int) (this.textAlign[1] == Align.CENTER ? center.y : this.textAlign[1] == Align.BOTTOM ? this.bounds.position.y + this.bounds.size.y : this.bounds.position.y), this.textAlign[0], this.textAlign[1], true);
-
-        g2d.setClip(null);
     }
 
     public void setBackgroundVisible(boolean backgroundVisible) {
@@ -94,5 +111,21 @@ public class Button extends LocalizedComponent {
 
     public void setTextColor(Color textColor) {
         this.textColor = textColor;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public void setFontScale(double fontScale) {
+        this.fontScale = fontScale;
+    }
+
+    public double getFontScale() {
+        return fontScale;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
     }
 }

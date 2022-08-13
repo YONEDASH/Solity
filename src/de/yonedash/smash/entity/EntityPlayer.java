@@ -35,6 +35,8 @@ public class EntityPlayer extends EntityCharacter {
         dashesLeft = Math.min((dashesLeft += scene.time(0.000025f * skillDash.getChargeFactor(), dt)), skillDash.getMaximumDashCount());
     }
 
+    private double dashErrorSoundTimer;
+
     @Override
     protected void move(Scene scene, double dt, Vec2D moveMotion) {
         double moveSpeed = scene.time(0.2, dt);
@@ -67,30 +69,47 @@ public class EntityPlayer extends EntityCharacter {
 
         // Dashing
 
+        this.dashErrorSoundTimer -= dt;
+
         SkillDash skillDash = scene.instance.world.saveGame.getSkills().skillDash;
         final double dashTime = 300.0;
         final double dashSpeedFactor = skillDash.getMoveSpeedFactor();
         final double dashSustainFactor = skillDash.getSustainFactor();
         if (!dash.isLocked() && input.isBindPressed(dash)
-                && this.dashesLeft >= 1 // has dashes left
-                && this.dashesLeft <= skillDash.getMaximumDashCount() // prevent any cheats/bugs
-                && this.timeDashingLeft <= 0 // only allow to dash if not already dashing
                 && moveMotion.length() > 0.01 // and player is moving
         ) {
 
-            // Raycast to not dash player through object
-            World world = scene.instance.world;
-            double rotation = moveMotion.angle();
-            LevelObject casted = MathUtils.rayCast(world, this.boundingBox, rotation, 10.0, moveMotion.clone().multiply(dashSpeedFactor).length());
-            if (casted == null) {
-                this.dashParticleDelay = 0.0;
-                this.timeDashingLeft = dashTime; //ms
-                this.dashesLeft--;
+            if (this.dashesLeft >= 1 // has dashes left
+                    && this.dashesLeft <= skillDash.getMaximumDashCount() // prevent any cheats/bugs
+                    && this.timeDashingLeft <= 0 // only allow to dash if not already dashing
+            ) {
+                // Raycast to not dash player through object
+                World world = scene.instance.world;
+                double rotation = moveMotion.angle();
+                LevelObject casted = MathUtils.rayCast(world, this.boundingBox, rotation, 10.0, moveMotion.clone().multiply(dashSpeedFactor).length());
+                if (casted == null) {
+                    this.dashParticleDelay = 0.0;
+                    this.timeDashingLeft = dashTime; //ms
+                    this.dashesLeft--;
 
-                // Lock key to not be held down to spam dashes
-                dash.lock();
+                    scene.instance.audioProcessor.play(scene.instance.library.dashSound);
+
+                    // Lock key to not be held down to spam dashes
+                    dash.lock();
+                } else {
+                    // Do nothing if player is not eligible to dash except for error sound
+                    if (this.dashErrorSoundTimer < 0) {
+                        scene.instance.audioProcessor.play(scene.instance.library.errorSound);
+                        this.dashErrorSoundTimer = 250.0;
+                    }
+                }
+            } else {
+                // Not eligible, play error sound
+                if (this.dashErrorSoundTimer < 0) {
+                    scene.instance.audioProcessor.play(scene.instance.library.errorSound);
+                    this.dashErrorSoundTimer = 250.0;
+                }
             }
-            // Do nothing if player is not eligible to dash
         }
 
         if (this.timeDashingLeft > 0) {

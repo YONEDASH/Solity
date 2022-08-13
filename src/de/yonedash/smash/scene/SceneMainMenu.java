@@ -17,6 +17,8 @@ public class SceneMainMenu extends SceneMenu {
 
     private final Button continueButton, loadButton, startNewButton, optionsButton, quitButton, tutorialButton;
 
+    private final boolean hasPlayedAlready;
+
     public SceneMainMenu(Instance instance) {
         super(instance);
 
@@ -26,6 +28,13 @@ public class SceneMainMenu extends SceneMenu {
         this.components.add(this.optionsButton = new MainMenuButton(this, "main.options"));
         this.components.add(this.quitButton = new MainMenuButton(this, "main.quit"));
         this.components.add(this.tutorialButton = new MainMenuButton(this, "main.starttutorial"));
+
+        // Play main theme
+        this.instance.audioProcessor.softForce(instance.library.themeMusic);
+
+        // Set has played state
+        String lastPlayed = this.instance.launchData.getString("saveGameLastPlayed");
+        hasPlayedAlready = !lastPlayed.equals("null") && getSaveGameFile(lastPlayed).exists();
     }
 
     @Override
@@ -45,16 +54,14 @@ public class SceneMainMenu extends SceneMenu {
         g2d.setColor(new Color(0, 0, 0, 80));
         g2d.fillRect(0, 0, width / 3, height);
 
-        double lineThickness = 10.0;
+        double lineThickness = 9.0;
         Color lineColor = Color.WHITE;
 
         g2d.setColor(Constants.MAP_BACKGROUND_COLOR);
-        g2d.setFont(this.instance.lexicon.futilePro.deriveFont((float) super.scaleToDisplay(240.0)));
+        g2d.setFont(this.instance.lexicon.futilePro.deriveFont((float) super.scaleToDisplay(Math.min(250.0, width / 3.0 * 0.8))));
         this.fontRenderer.drawStringAccurately(g2d, "Solity", width / 3 / 2, height / 8, Align.CENTER, Align.CENTER, true);
 
         double buttonHeight = 75.0, buttonSpace = 10.0;
-
-        boolean hasPlayedAlready = !this.instance.launchData.getString("saveGameLastPlayed").equals("null");
 
         Button[] buttons = hasPlayedAlready ? new Button[] { this.quitButton, this.optionsButton, this.tutorialButton, this.startNewButton, this.loadButton, this.continueButton } : new Button[] { this.quitButton, this.optionsButton, this.startNewButton, this.tutorialButton };
 
@@ -90,8 +97,10 @@ public class SceneMainMenu extends SceneMenu {
 
             // Load it
             loadSaveGame(file);
+        } else if (component == optionsButton) {
+            this.instance.scene = new SceneOptions(this.instance);
         } else if (component == tutorialButton) {
-            this.instance.scene = new SceneLoadWorld(this.instance, new TutorialStory(), new SaveGameTemporary());;
+            this.instance.scene = new SceneLoadWorld(this.instance, new TutorialStory(), new SaveGameTemporary());
         } else if (component == startNewButton) {
             loadSaveGame(getSaveGameFile(UUID.randomUUID() + "_" + System.currentTimeMillis()));
         } else if (component == quitButton) {
@@ -104,7 +113,7 @@ public class SceneMainMenu extends SceneMenu {
     }
 
     private File getSaveGameFile(String name) {
-        return new File(Constants.GAME_ROOT + "/saves", name + ".save");
+        return new File(instance.gameRoot + "/saves", name + ".save");
     }
 
     static class MainMenuButton extends Button {

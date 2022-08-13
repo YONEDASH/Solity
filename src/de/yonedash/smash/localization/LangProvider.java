@@ -37,8 +37,10 @@ public class LangProvider {
     private void load() {
         try {
             InputStream is = ResourceFinder.openInputStream(path);
+            if (is == null)
+                return;
             properties.load(is);
-            if (is != null) is.close();
+            is.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,6 +1,5 @@
 package de.yonedash.smash.graphics;
 
-import de.yonedash.smash.ImageUtils;
 import de.yonedash.smash.resource.Texture;
 
 import java.awt.*;
@@ -18,7 +17,7 @@ public class TextureStatic implements Texture {
         this.bufferedImage = bufferedImage;
         this.width = bufferedImage.getWidth();
         this.height = bufferedImage.getHeight();
-        this.blank = ImageUtils.isBufferedImageBlank(this.bufferedImage);
+        this.blank = isBufferedImageBlank(this.bufferedImage);
     }
 
     @Override

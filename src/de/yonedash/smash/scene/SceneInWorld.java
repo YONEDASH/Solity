@@ -138,11 +138,13 @@ public class SceneInWorld extends Scene {
                 return;
 
             int promptTextLength = prompt.text().length();
-            if (promptLettersRevealed < promptTextLength)
+            if (promptLettersRevealed < promptTextLength) {
+                instance.audioProcessor.play(instance.library.selectSound);
                 promptLettersRevealed = promptTextLength + 10;
-            else if (prompt.waitTime() != TextPrompt.UNSKIPPABLE)
+            } else if (prompt.waitTime() != TextPrompt.UNSKIPPABLE) {
+                instance.audioProcessor.play(instance.library.clickSound);
                 promptAutoNextTimer = (prompt.waitTime() + 10) * 1000.0;
-
+            }
 
         }
     }
@@ -606,12 +608,17 @@ public class SceneInWorld extends Scene {
                     double bindOffsetX = super.scaleToDisplay(8.0);
                     double bindSize = nextBounds.size.y * 1.1;
 
-                    BindLocalizer.drawHint(g2d, this, instance.inputConfig.getBind("skipDialog"), (int) (nextBounds.position.x - bindOffsetX), (int) (nextBounds.position.y + 2.0), (int) bindSize, Align.RIGHT);
+                    BindLocalizer.drawHint(g2d, this, instance.inputConfig.getBind("skipDialog"), (int) (nextBounds.position.x - bindOffsetX), (int) (nextBounds.position.y + 2.0), (int) bindSize, Align.RIGHT, Color.WHITE, null);
                 }
             }
 
+            int lettersBefore = (int) Math.floor(this.promptLettersRevealed);
+
             // Reveal letters
-            this.promptLettersRevealed += super.time(Constants.PROMPT_TEXT_REVEAL_SPEED, dt);
+            this.promptLettersRevealed += super.time(Constants.PROMPT_TEXT_REVEAL_SPEED * Math.abs(world.random(instance.scene, dt)), dt);
+
+            if (lettersBefore < (int) Math.floor(this.promptLettersRevealed) && this.promptLettersRevealed < prompt.text().length() && prompt.text().toCharArray()[lettersBefore+1] != ' ')
+                this.instance.audioProcessor.play(this.instance.library.typeSound, Math.min(1, 0.6 + Math.abs(world.random(instance.scene, dt))) * this.instance.gameConfig.getDouble("volumeTyping") * 1.0);
 
             // g2d.drawImage(this.instance.atlas.uiBorderText.getImage(), (int) promptBB.position.x, (int) promptBB.position.y, (int) promptBB.size.x, (int) promptBB.size.y, null);
 
@@ -841,13 +848,13 @@ public class SceneInWorld extends Scene {
         fontRenderer.drawStringAccurately(g2d,  String.valueOf(coinAmount), super.scaleToDisplay(coinX + (coinSize + coinBoxWidth) / 2), super.scaleToDisplay(coinY + coinSize / 2), Align.CENTER, Align.CENTER, true);
 
 
-        g2d.setFont(this.instance.lexicon.arial.deriveFont((float) super.scaleToDisplay(50.0)));
-        AtomicInteger nLinesSG = new AtomicInteger();
-        world.saveGame.DEBUG_REMOVE_MEEEEEEEE().stringPropertyNames().forEach(key -> {
-            int n = nLinesSG.getAndIncrement();
-
-            fontRenderer.drawString(g2d, key + "=" + world.saveGame.get(key), width / 2, height / 7 + n * scaleToDisplay(50.0), Align.CENTER, Align.TOP, false);
-        });
+//        g2d.setFont(this.instance.lexicon.arial.deriveFont((float) super.scaleToDisplay(50.0)));
+//        AtomicInteger nLinesSG = new AtomicInteger();
+//        world.saveGame.DEBUG_REMOVE_MEEEEEEEE().stringPropertyNames().forEach(key -> {
+//            int n = nLinesSG.getAndIncrement();
+//
+//            fontRenderer.drawString(g2d, key + "=" + world.saveGame.get(key), width / 2, height / 7 + n * scaleToDisplay(50.0), Align.CENTER, Align.TOP, false);
+//        });
     }
 
     private void loadCheckpoint() {

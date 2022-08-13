@@ -9,7 +9,7 @@ import java.awt.*;
 public class EntityCoin extends EntityItem {
 
     public EntityCoin(Vec2D position) {
-        super(new BoundingBox(position, new Vec2D(50.0, 50.0)));
+        super(new BoundingBox(position, new Vec2D(50.0, 20.0)));
         this.boundingBox.position.subtract(this.getBoundingBox().size.clone().multiply(0.5));
     }
 
@@ -18,7 +18,7 @@ public class EntityCoin extends EntityItem {
         g2d.drawImage(
                 scene.instance.atlas.coin.getBufferedImage(),
                 scene.scaleToDisplay(this.boundingBox.position.x), scene.scaleToDisplay(this.boundingBox.position.y),
-                scene.scaleToDisplay(this.boundingBox.size.x), scene.scaleToDisplay(this.boundingBox.size.y),
+                scene.scaleToDisplay(this.boundingBox.size.x), scene.scaleToDisplay(this.boundingBox.size.x),
                 null
         );
     }
