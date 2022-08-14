@@ -118,7 +118,7 @@ public class TutorialStory extends Story {
                 // Set waypoint
                 world.waypoint = this.bottle.getBoundingBox().center();
 
-                world.prompt(new TextPrompt(scene.localize(langPrefix + "title"), scene.localize(langPrefix + step, BindLocalizer.getActualBindName(inputConfig.getBind("use"))), this::nextStep, TextPrompt.UNSKIPPABLE));
+                world.prompt(new TextPrompt(scene.localize(langPrefix + "title"), scene.localize(langPrefix + step), this::nextStep, TextPrompt.UNSKIPPABLE));
             }
             case 9 -> {
                 world.prompt(new TextPrompt(scene.localize(langPrefix + "title"), scene.localize(langPrefix + step), this::nextStep, TextPrompt.UNSKIPPABLE));

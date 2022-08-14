@@ -1,5 +1,6 @@
 package de.yonedash.smash;
 
+import de.yonedash.smash.graphics.EntityFog;
 import de.yonedash.smash.progression.saves.SaveGame;
 import de.yonedash.smash.entity.DisplayEntity;
 import de.yonedash.smash.entity.Entity;
@@ -151,6 +152,10 @@ public class World implements ProgressReport {
 
                 // Create a new chunk with tiles
                 Chunk chunk = new Chunk(x, y, tilesInChunk.toArray(new LevelObject[0]));
+
+                // Create fog image
+                chunk.getEntities().stream().filter(entity -> entity instanceof EntityFog).forEach(entity -> ((EntityFog) entity).createFog(instance.graphicsConfig));
+
                 // Add to chunk list
                 this.chunks.add(chunk);
             }

@@ -98,7 +98,7 @@ public class SceneMainMenu extends SceneMenu {
             // Load it
             loadSaveGame(file);
         } else if (component == optionsButton) {
-            this.instance.scene = new SceneOptions(this.instance);
+            this.instance.scene = new SceneOptions(this.instance, this);
         } else if (component == tutorialButton) {
             this.instance.scene = new SceneLoadWorld(this.instance, new TutorialStory(), new SaveGameTemporary());
         } else if (component == startNewButton) {

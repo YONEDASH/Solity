@@ -5,6 +5,7 @@ import de.yonedash.smash.audio.AudioProcessor;
 import de.yonedash.smash.compat.OS;
 import de.yonedash.smash.compat.adapter.Adapter;
 import de.yonedash.smash.config.GameConfig;
+import de.yonedash.smash.config.GraphicsConfig;
 import de.yonedash.smash.config.InputConfig;
 import de.yonedash.smash.graphics.GraphicsThread;
 import de.yonedash.smash.item.ItemRegistry;
@@ -42,6 +43,7 @@ public class Instance implements Runnable {
     public final String gameRoot;
 
     public GameConfig gameConfig;
+    public GraphicsConfig graphicsConfig;
     public InputConfig inputConfig;
     public LaunchConfig launchData;
 
@@ -88,6 +90,7 @@ public class Instance implements Runnable {
 
         // Initialize configs
         this.gameConfig = new GameConfig(this);
+        this.graphicsConfig = new GraphicsConfig(this);
         this.inputConfig = new InputConfig(this);
     }
 
@@ -108,6 +111,7 @@ public class Instance implements Runnable {
 
         // Load configurations
         this.gameConfig.load();
+        this.graphicsConfig.load();
         this.inputConfig.load();
 
         // Load audio volumes

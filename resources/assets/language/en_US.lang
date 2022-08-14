@@ -29,7 +29,13 @@ options.fullscreen=Fullscreen
 options.fpsLimit=FPS Limit
 options.vsync=VSync
 options.lowPowerMode=Low Power Mode
+options.preset=Graphics
 options.renderPipeline=Render Pipeline
+
+options.graphics.low=Low
+options.graphics.medium=Medium
+options.graphics.high=High
+options.graphics.ultra=Ultra
 
 options.moveUp=Move Up
 options.moveLeft=Move Left

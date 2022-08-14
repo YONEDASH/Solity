@@ -40,7 +40,7 @@ public class Tile extends LevelObject {
             return;
 
         if (this.particleType != null && (this.time += dt) > this.timeNextParticleEmit) {
-            rollNextEmitTime();
+            rollNextEmitTime(scene.instance.graphicsConfig.particleEmitDelayFactor);
             this.time = 0;
 
             double random1 = random(scene), random2 = random(scene), random3 = (random1 + random2) / 2, random4 = random(scene);
@@ -64,7 +64,7 @@ public class Tile extends LevelObject {
 
     public void setParticleType(TextureAtlas atlas, ParticleType particleType) {
         this.particleType = particleType;
-        rollNextEmitTime();
+        rollNextEmitTime(1.0);
 
         int tw = this.texture.getWidth(), th = this.texture.getHeight();
         int size = Math.min(8, Math.min(tw, th));
@@ -72,8 +72,8 @@ public class Tile extends LevelObject {
         atlas.storeParticle(this.texture, particle);
     }
 
-    private void rollNextEmitTime() {
-        this.timeNextParticleEmit = Math.random() * this.particleType.maxDelay * Constants.PARTICLE_SPAWN_DELAY_FACTOR;
+    private void rollNextEmitTime(double factor) {
+        this.timeNextParticleEmit = Math.random() * this.particleType.maxDelay * factor;
     }
 
 }

@@ -1,6 +1,7 @@
 package de.yonedash.smash.graphics;
 
 import de.yonedash.smash.*;
+import de.yonedash.smash.config.GraphicsConfig;
 import de.yonedash.smash.entity.Entity;
 import de.yonedash.smash.entity.EntityBase;
 import de.yonedash.smash.entity.LevelObject;
@@ -11,19 +12,25 @@ import java.awt.image.BufferedImage;
 
 public class EntityFog extends EntityBase implements VisualEffect {
 
-    private final BufferedImage image;
+    private BufferedImage image;
 
     public EntityFog(Chunk chunk) {
         // To prevent a bug (for which the fix would take unnecessary time) from not loading the fog,
         // we need to offset the fog by 1 into the chunk for it to be loaded like intended
         super(chunk.getBoundingBox().clone().add(new BoundingBox(new Vec2D(1, 1), Vec2D.zero())));
+    }
 
+    public void createFog(GraphicsConfig graphicsConfig) {
         // Create image
-        this.image = new BufferedImage((int) (Chunk.CHUNK_SIZE * Constants.FOG_QUALITY_FACTOR), (int) (Chunk.CHUNK_SIZE * Constants.FOG_QUALITY_FACTOR), BufferedImage.TYPE_INT_ARGB);
+        double quality = graphicsConfig.fogQuality;
+        this.image = new BufferedImage((int) (Chunk.CHUNK_SIZE * quality), (int) (Chunk.CHUNK_SIZE * quality), BufferedImage.TYPE_INT_ARGB);
     }
 
     @Override
     public void draw(Scene scene, Graphics2D g2d, double dt) {
+        if (image == null)
+            return;
+
         g2d.drawImage(
                 image,
                 scene.scaleToDisplay(this.boundingBox.position.x - 1),
@@ -35,6 +42,9 @@ public class EntityFog extends EntityBase implements VisualEffect {
     }
 
     public void updateFog(double fogOffset, double weatherProgress, OpenSimplexNoise simplexNoise) {
+        if (image == null)
+            return;
+
         double fogSize = 1500.0f;
         double fogX = this.boundingBox.position.x - 1 + fogOffset;
         double fogY = this.boundingBox.position.y - 1 + fogOffset * 0.4;
@@ -45,6 +55,8 @@ public class EntityFog extends EntityBase implements VisualEffect {
         float fogDensity = 2.0f * (float) ((weatherProgress + 1.0f) / 2.0f);
         for (int x = 0; x < image.getWidth(); x++) {
             for (int y = 0; y < image.getHeight(); y++) {
+                if (image == null) break;
+
                 double value = simplexNoise.eval(
                         (fogX + (x * fogHorizontalScale)) / fogSize, (fogY + (y * fogVerticalScale)) / fogSize
                 );
@@ -57,7 +69,8 @@ public class EntityFog extends EntityBase implements VisualEffect {
                 int b = (int) (Math.min(1.0f, brightness) * 255 * 0.9);
                 int argb = (a << 24) | (b << 16 ) | (b << 8) | b;
 
-                image.setRGB(x, y, argb);
+                if (x <= image.getWidth() && y <= image.getHeight())
+                    image.setRGB(x, y, argb);
             }
         }
     }

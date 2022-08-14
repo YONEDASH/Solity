@@ -1,6 +1,7 @@
 package de.yonedash.smash.scene;
 
 import de.yonedash.smash.*;
+import de.yonedash.smash.config.GraphicsConfig;
 import de.yonedash.smash.config.InputConfig;
 import de.yonedash.smash.config.KeyBind;
 import de.yonedash.smash.entity.*;
@@ -18,7 +19,6 @@ import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class SceneInWorld extends Scene {
 
@@ -147,6 +147,10 @@ public class SceneInWorld extends Scene {
             }
 
         }
+
+        if (device == KeyBind.Device.KEYBOARD && code == KeyEvent.VK_ESCAPE) {
+            this.instance.scene = new SceneOptions(instance, this);
+        }
     }
 
     @Override
@@ -230,9 +234,8 @@ public class SceneInWorld extends Scene {
 
         long chunkTime = System.currentTimeMillis();
 
-        // Only refresh chunks with every Constants.CHUNK_REFRESH_FRAME_DELAY -> x-th frame
-        double chunkRefreshDelay = Math.min(Constants.CHUNK_REFRESH_MAX_DELAY,
-                1000.0 / (this.instance.gameLoop.getFramesPerSecond() * Constants.CHUNK_REFRESH_FRAME_DELAY));
+        // Only refresh chunks with every few milliseconds in order to reduce cpu usage by reloading chunks to often, without even being able to see it
+        double chunkRefreshDelay = (1000.0 / instance.gameLoop.getFramesPerSecond()) * instance.graphicsConfig.chunkRefreshTimeFactor;
         if ((this.timeNoChunksRefreshed += dt) >= chunkRefreshDelay) {
             // Reload chunks
             reloadChunks(cameraView);
@@ -889,4 +892,8 @@ public class SceneInWorld extends Scene {
         return currentPrompt == instance.world.getPrompt() && promptLettersRevealed > promptTextLength;
     }
 
+    public void reloadFog(GraphicsConfig gc) {
+        instance.world.chunks.forEach(chunk -> chunk.getEntities().stream().filter(entity -> entity instanceof EntityFog).forEach(entity -> ((EntityFog) entity).createFog(gc)));
+        instance.world.entitiesLoaded.stream().filter(entity -> entity instanceof EntityFog).forEach(entity -> ((EntityFog) entity).createFog(gc));
+    }
 }

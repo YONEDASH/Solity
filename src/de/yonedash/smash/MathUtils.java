@@ -6,6 +6,22 @@ import java.util.List;
 
 public class MathUtils {
 
+    // biggest common divisor
+    public static int bcd(int a, int b) {
+        while(true)
+        {
+            a = a % b;
+            if(a == 0) return b;
+            b = b % a;
+            if(b == 0) return a;
+        }
+    }
+
+    // smallest common divisor
+    public static int scd(int a, int b) {
+        if(a == 0 || b == 0) return 1;
+        return Math.abs(a*b)/bcd(a,b);
+    }
     public static Vec2D findInterceptionPoint(Vec2D origin1, Vec2D motion1, Vec2D origin2, Vec2D motion2, double length) {
         Vec2D s1 = origin1.clone();
         Vec2D s2 = origin1.clone().add(motion1.clone().multiply(length));

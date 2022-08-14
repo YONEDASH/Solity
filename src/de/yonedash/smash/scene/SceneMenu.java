@@ -11,7 +11,7 @@ import java.util.Random;
 public abstract class SceneMenu extends Scene {
     private static OpenSimplexNoise openSimplexNoise;
     private static boolean menuInitialized;
-    private static EntityFog entityFog;
+    protected static EntityFog entityFog;
     private static double fogOffset, backgroundOffset;
 
     public SceneMenu(Instance instance) {
@@ -22,6 +22,7 @@ public abstract class SceneMenu extends Scene {
             long seed = new Random().nextLong();
             openSimplexNoise = new OpenSimplexNoise(seed);
             entityFog = new EntityFog(new Chunk(0, 0, new LevelObject[0]));
+            entityFog.createFog(instance.graphicsConfig);
         }
 
         // Show cursor

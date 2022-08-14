@@ -1,10 +1,8 @@
 package de.yonedash.smash.scene;
 
 import de.yonedash.smash.*;
-import de.yonedash.smash.config.GameConfig;
-import de.yonedash.smash.config.INIConfig;
-import de.yonedash.smash.config.InputConfig;
-import de.yonedash.smash.config.KeyBind;
+import de.yonedash.smash.config.*;
+import de.yonedash.smash.graphics.EntityFog;
 import de.yonedash.smash.launch.LaunchConfig;
 import de.yonedash.smash.launch.RenderPipeline;
 import de.yonedash.smash.localization.BindLocalizer;
@@ -27,8 +25,12 @@ public class SceneOptions extends SceneMenu {
     private ArrayList<OptionComponent> optionComponents;
     private ArrayList<KeyBindButton> inputButtons;
 
-    public SceneOptions(Instance instance) {
+    private final Scene before;
+
+    public SceneOptions(Instance instance, Scene before) {
         super(instance);
+
+        this.before = before;
 
         this.components.add(this.leftButton = new NavButton(this, "options.left"));
         this.components.add(this.rightButton = new NavButton(this, "options.right"));
@@ -46,6 +48,7 @@ public class SceneOptions extends SceneMenu {
         this.optionComponents.add(new OptionComponent(this, instance.gameConfig, "fpsLimit"));
         this.optionComponents.add(new OptionComponent(this, instance.gameConfig, "vsync"));
         this.optionComponents.add(new OptionComponent(this, instance.gameConfig, "lowPowerMode"));
+        this.optionComponents.add(new OptionComponent(this, instance.graphicsConfig, "preset"));
         this.optionComponents.add(new OptionComponent(this, instance.launchData, "renderPipeline"));
 
         ArrayList<OptionComponent> sortedInput = new ArrayList<>();
@@ -67,7 +70,10 @@ public class SceneOptions extends SceneMenu {
         Display display = this.instance.display;
         int width = display.getWidth(), height = display.getHeight();
 
-        drawBackground(g2d, dt);
+        if (before instanceof SceneMainMenu)
+            drawBackground(g2d, dt);
+        else if (before instanceof SceneInWorld siw)
+            siw.update(g2d, 0);
 
         g2d.setColor(new Color(0, 0, 0, 80));
         g2d.fillRect(0, 0, width / 3, height);
@@ -166,7 +172,7 @@ public class SceneOptions extends SceneMenu {
         super.fireComponent(component);
 
         if (component == cancelButton || component == backButton) {
-            instance.scene = new SceneMainMenu(instance);
+            instance.scene = before;
         }
 
         if (component == applyButton) {
@@ -183,6 +189,9 @@ public class SceneOptions extends SceneMenu {
                     if (optionComponent.config instanceof GameConfig && optionComponent.key.equals("lowPowerMode")) {
                         fullRestartNeeded = true;
                     }
+//                    if (optionComponent.config instanceof GraphicsConfig && optionComponent.key.equals("preset")) {
+//                        fullRestartNeeded = true;
+//                    }
                 }
             }
             configs.forEach(config -> {
@@ -197,8 +206,19 @@ public class SceneOptions extends SceneMenu {
             instance.gameConfig.language.flush();
 
             // Reload configs
-            instance.gameConfig.load();
-            instance.inputConfig.load();
+            configs.forEach(INIConfig::load);
+
+            // If graphics changed, reset menu fog
+            for (INIConfig config : configs) {
+                if (config instanceof GraphicsConfig gc) {
+                    SceneMenu.entityFog.createFog(gc);
+
+                    if (before instanceof SceneInWorld siw) {
+                        siw.reloadFog(gc);
+                    }
+                    break;
+                }
+            }
 
             // Set volumes
             instance.audioProcessor.setMasterVolume(instance.gameConfig.getDouble("volumeMaster"));
@@ -335,6 +355,12 @@ public class SceneOptions extends SceneMenu {
                                     this.valueInt = i;
                                 }
                             }
+                        } else if (key.equals("preset")) {
+                            for (int i = 0; i < GraphicsConfig.Preset.values().length; i++) {
+                                if (GraphicsConfig.Preset.values()[i].name().equals(value)) {
+                                    this.valueInt = i;
+                                }
+                            }
                         }
                     }
                 }
@@ -420,6 +446,8 @@ public class SceneOptions extends SceneMenu {
                         value = Language.values()[valueInt].getNativeName();
                     else if (key.equals("renderPipeline"))
                         value = RenderPipeline.AVAILABLE[valueInt].name();
+                    else if (key.equals("preset"))
+                        value = scene.localize("options.graphics." + GraphicsConfig.Preset.values()[valueInt].name().toLowerCase(Locale.ROOT));
 
                 } else if (type == Type.REAL) {
                     value = (int) Math.round(valueDouble * 100) + "%";
@@ -473,6 +501,10 @@ public class SceneOptions extends SceneMenu {
             if (isModified) {
                 if (type == Type.ENUM && key.equals("language")) {
                     config.set(key, Language.values()[valueInt].name());
+                } else if (type == Type.ENUM && key.equals("preset") && config instanceof GraphicsConfig gc) {
+                    GraphicsConfig.Preset preset = GraphicsConfig.Preset.values()[valueInt];
+                    config.set(key, preset.name());
+                    preset.apply(gc);
                 } else if (type == Type.ENUM && key.equals("renderPipeline")) {
                     config.set(key, RenderPipeline.AVAILABLE[valueInt].name());
                 } else if (type == Type.NATURAL) {
@@ -570,6 +602,8 @@ public class SceneOptions extends SceneMenu {
         private double[] getBounds(String key) {
             if (type == Type.ENUM && key.equals("language")) {
                 return new double[] { 0, Language.values().length - 1 };
+            } else if (type == Type.ENUM && key.equals("preset")) {
+                return new double[] { 0, GraphicsConfig.Preset.values().length - 1 };
             } else if (type == Type.ENUM && key.equals("renderPipeline")) {
                 return new double[] { 0, RenderPipeline.AVAILABLE.length - 1 };
             } else if (type == Type.NATURAL && key.equals("fpsLimit")) {
