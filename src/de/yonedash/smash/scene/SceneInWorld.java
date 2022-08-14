@@ -19,6 +19,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SceneInWorld extends Scene {
 
@@ -235,6 +236,7 @@ public class SceneInWorld extends Scene {
         long chunkTime = System.currentTimeMillis();
 
         // Only refresh chunks with every few milliseconds in order to reduce cpu usage by reloading chunks to often, without even being able to see it
+        // Cap it to +25% to prevent any render gaps
         double chunkRefreshDelay = (1000.0 / instance.gameLoop.getFramesPerSecond()) * instance.graphicsConfig.chunkRefreshTimeFactor;
         if ((this.timeNoChunksRefreshed += dt) >= chunkRefreshDelay) {
             // Reload chunks
@@ -851,13 +853,14 @@ public class SceneInWorld extends Scene {
         fontRenderer.drawStringAccurately(g2d,  String.valueOf(coinAmount), super.scaleToDisplay(coinX + (coinSize + coinBoxWidth) / 2), super.scaleToDisplay(coinY + coinSize / 2), Align.CENTER, Align.CENTER, true);
 
 
-//        g2d.setFont(this.instance.lexicon.arial.deriveFont((float) super.scaleToDisplay(50.0)));
-//        AtomicInteger nLinesSG = new AtomicInteger();
-//        world.saveGame.DEBUG_REMOVE_MEEEEEEEE().stringPropertyNames().forEach(key -> {
-//            int n = nLinesSG.getAndIncrement();
-//
-//            fontRenderer.drawString(g2d, key + "=" + world.saveGame.get(key), width / 2, height / 7 + n * scaleToDisplay(50.0), Align.CENTER, Align.TOP, false);
-//        });
+        g2d.setColor(new Color(255, 255, 255, 120));
+        g2d.setFont(this.instance.lexicon.arial.deriveFont((float) super.scaleToDisplay(50.0)));
+        AtomicInteger nLinesSG = new AtomicInteger();
+        world.saveGame.DEBUG_REMOVE_MEEEEEEEE().stringPropertyNames().forEach(key -> {
+            int n = nLinesSG.getAndIncrement();
+
+            fontRenderer.drawString(g2d, key + "=" + world.saveGame.get(key), width / 2, height / 7 + n * scaleToDisplay(50.0), Align.CENTER, Align.TOP, false);
+        });
     }
 
     private void loadCheckpoint() {

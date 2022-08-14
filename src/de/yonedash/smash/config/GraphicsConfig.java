@@ -43,10 +43,10 @@ public class GraphicsConfig extends INIConfig {
 
     public enum Preset {
 
-        LOW(20.0, 0.02, 5.0),
-        MEDIUM(10.0, 0.1, 2.5),
-        HIGH(5.0, 0.15, 0.9),
-        ULTRA(1.0, 0.25, 0.8);
+        LOW(1.5, 0.02, 5.0),
+        MEDIUM(1.0, 0.04, 2.5),
+        HIGH(1.0, 0.08, 0.9),
+        ULTRA(1.0, 0.2, 0.8);
 
         private final Object[] values;
 
