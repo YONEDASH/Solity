@@ -23,6 +23,7 @@ public class SaveGame extends XMLConfig {
         add("difficulty", Difficulty.NORMAL.name());
         add("coins", 0);
         add("playTime", 0);
+        add("lastAccess", 0);
     }
 
     public Skills getSkills() {

@@ -1,3 +1,5 @@
+dummy={0}
+
 device.keyboard=Keyboard
 device.mouse=Mouse
 
@@ -8,6 +10,12 @@ main.options=Options
 main.quit=Quit
 main.starttutorial=Start Tutorial
 main.cancel=Cancel
+main.delete=Delete
+
+ingame.continue=Continue
+ingame.loadcheckpoint=Load Checkpoint
+ingame.options=Options
+ingame.quit=Quit to Main Menu
 
 options.restartNeeded=Restart needed for some changes to apply.
 

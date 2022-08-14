@@ -150,7 +150,7 @@ public class SceneInWorld extends Scene {
         }
 
         if (device == KeyBind.Device.KEYBOARD && code == KeyEvent.VK_ESCAPE) {
-            this.instance.scene = new SceneOptions(instance, this);
+            this.instance.scene = new SceneInWorldPaused(instance, this);
         }
     }
 

@@ -14,7 +14,7 @@ public class Button extends LocalizedComponent {
     protected int[] textAlign;
     protected double fontScale;
 
-    protected int selected; // 0 = not selected, 1 = selected via diverse inputs, 2 = selected via mouse
+    public int selected; // 0 = not selected, 1 = selected via diverse inputs, 2 = selected via mouse
 
     public Button(Scene scene, String key) {
         super(scene, key);
@@ -79,8 +79,18 @@ public class Button extends LocalizedComponent {
 
     protected void drawText(Graphics2D g2d, double dt, Instance instance, FontRenderer fontRenderer, Vec2D center, double inset) {
         g2d.setColor(enabled ? this.currentTextColor : this.currentTextColor.darker());
-        g2d.setFont(instance.lexicon.equipmentPro.deriveFont((float) this.scene.scaleToDisplay(fontScale * 60.0)));
-        this.textBounds = fontRenderer.drawStringAccurately(g2d, this.scene.localize(this.key, this.localizationObjects), (int) (this.textAlign[0] == Align.CENTER ? center.x : this.textAlign[0] == Align.RIGHT ? this.bounds.position.x + this.bounds.size.x - this.scene.scaleToDisplay(10.0 + inset) : this.bounds.position.x + this.scene.scaleToDisplay(10.0 + inset)), (int) (this.textAlign[1] == Align.CENTER ? center.y : this.textAlign[1] == Align.BOTTOM ? this.bounds.position.y + this.bounds.size.y : this.bounds.position.y), this.textAlign[0], this.textAlign[1], true);
+
+        float fontSize = 60.0f;
+        String text = this.scene.localize(this.key, this.localizationObjects);
+
+        g2d.setFont(instance.lexicon.equipmentPro.deriveFont((float) this.scene.scaleToDisplay(fontScale * fontSize)));
+        Vec2D textBounds;
+        while ((textBounds = fontRenderer.bounds(g2d, text)).x > bounds.size.x - inset * 2 || textBounds.y > bounds.size.y - inset * 2) {
+            fontSize *= 0.9;
+            g2d.setFont(instance.lexicon.equipmentPro.deriveFont((float) this.scene.scaleToDisplay(fontScale * fontSize)));
+        }
+
+        this.textBounds = fontRenderer.drawStringAccurately(g2d, text, (int) (this.textAlign[0] == Align.CENTER ? center.x : this.textAlign[0] == Align.RIGHT ? this.bounds.position.x + this.bounds.size.x - this.scene.scaleToDisplay(10.0 + inset) : this.bounds.position.x + this.scene.scaleToDisplay(10.0 + inset)), (int) (this.textAlign[1] == Align.CENTER ? center.y : this.textAlign[1] == Align.BOTTOM ? this.bounds.position.y + this.bounds.size.y : this.bounds.position.y), this.textAlign[0], this.textAlign[1], true);
     }
 
     protected void updateColor(double dt) {
@@ -127,5 +137,9 @@ public class Button extends LocalizedComponent {
 
     public boolean isEnabled() {
         return enabled;
+    }
+
+    public Color getTextColor() {
+        return textColor;
     }
 }

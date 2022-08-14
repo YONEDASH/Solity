@@ -2,7 +2,6 @@ package de.yonedash.smash.scene;
 
 import de.yonedash.smash.*;
 import de.yonedash.smash.config.*;
-import de.yonedash.smash.graphics.EntityFog;
 import de.yonedash.smash.launch.LaunchConfig;
 import de.yonedash.smash.launch.RenderPipeline;
 import de.yonedash.smash.localization.BindLocalizer;
@@ -74,6 +73,8 @@ public class SceneOptions extends SceneMenu {
             drawBackground(g2d, dt);
         else if (before instanceof SceneInWorld siw)
             siw.update(g2d, 0);
+        else if (before instanceof SceneInWorldPaused siwo)
+            siwo.before.update(g2d, 0);
 
         g2d.setColor(new Color(0, 0, 0, 80));
         g2d.fillRect(0, 0, width / 3, height);

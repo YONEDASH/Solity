@@ -74,6 +74,11 @@ public class World implements ProgressReport {
 
         // Set last access
         this.saveGame.set("lastAccess", System.currentTimeMillis());
+        try {
+            this.saveGame.save();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         // Set last played
         if (!(saveGame instanceof SaveGameTemporary)) {

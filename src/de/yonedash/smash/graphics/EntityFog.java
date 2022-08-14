@@ -42,7 +42,7 @@ public class EntityFog extends EntityBase implements VisualEffect {
     }
 
     public void updateFog(double fogOffset, double weatherProgress, OpenSimplexNoise simplexNoise) {
-        if (image == null)
+        if (image == null || simplexNoise == null)
             return;
 
         double fogSize = 1500.0f;

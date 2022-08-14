@@ -11,7 +11,6 @@ import de.yonedash.smash.scene.components.Component;
 
 import java.awt.*;
 import java.io.File;
-import java.util.UUID;
 
 public class SceneMainMenu extends SceneMenu {
 
@@ -34,7 +33,23 @@ public class SceneMainMenu extends SceneMenu {
 
         // Set has played state
         String lastPlayed = this.instance.launchData.getString("saveGameLastPlayed");
-        hasPlayedAlready = !lastPlayed.equals("null") && getSaveGameFile(lastPlayed).exists();
+
+        File saveDir = new File(instance.gameRoot, "/saves");
+        File[] files = saveDir.listFiles();
+        if (files != null) {
+            int saveGameCount = 0;
+            for (File file : saveDir.listFiles()) {
+                if (file.getName().endsWith(".save")) {
+                    saveGameCount++;
+                }
+            }
+            if (saveGameCount >= 2)
+                startNewButton.setEnabled(false);
+
+           hasPlayedAlready = saveGameCount > 0;
+        } else {
+            hasPlayedAlready = !lastPlayed.equals("null") && getSaveGameFile(lastPlayed).exists();
+        }
     }
 
     @Override
@@ -104,7 +119,9 @@ public class SceneMainMenu extends SceneMenu {
         } else if (component == startNewButton) {
            // loadSaveGame(getSaveGameFile(UUID.randomUUID() + "_" + System.currentTimeMillis()));
             this.instance.scene = new SceneChooseDifficulty(this.instance);
-        } else if (component == quitButton) {
+        } else if (component == loadButton) {
+            this.instance.scene = new SceneChooseSave(this.instance);
+        }else if (component == quitButton) {
            this.instance.stop(0);
        }
     }

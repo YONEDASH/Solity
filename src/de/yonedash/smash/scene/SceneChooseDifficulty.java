@@ -125,8 +125,6 @@ public class SceneChooseDifficulty extends SceneMenu {
                     double v = difficulty.value;
                     double weightedDifficulty = (v - minValue) / (maxValue - minValue);
 
-                    System.out.println(difficulty + " v=" + difficulty.value + " wd=" + weightedDifficulty + " (" + minValue + " < " + maxValue + ")");
-
                     Color easy = new Color(101, 162, 151);
                     Color hard = new Color(198, 40, 98);
 

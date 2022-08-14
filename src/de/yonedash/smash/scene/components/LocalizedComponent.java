@@ -12,7 +12,7 @@ public abstract class LocalizedComponent extends Component {
         this.key = key;
     }
 
-    public void setLocalizationObjects(Object[] localizationObjects) {
+    public void setLocalizationObjects(Object... localizationObjects) {
         this.localizationObjects = localizationObjects;
     }
 
