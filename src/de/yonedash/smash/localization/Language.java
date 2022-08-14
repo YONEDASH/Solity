@@ -4,7 +4,7 @@ import java.util.Locale;
 
 public enum Language {
 
-    en_US("English"), de_DE("Deutsch"), debug("Debug");
+    en_US("English"), de_DE("Deutsch");
 
     private final String nativeName;
     private LangProvider provider;

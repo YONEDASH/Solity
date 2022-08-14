@@ -21,12 +21,11 @@ public class LangProvider {
         this.language = language;
         this.properties = new Properties();
         this.load();
+        if (language != Language.en_US)
+            merge(Language.en_US.getProvider());
     }
 
     public void merge(LangProvider provider) {
-        if (language == Language.debug)
-            return;
-
         for (Object key : provider.properties.keySet()) {
             if (properties.get(key) == null) {
                 properties.setProperty(String.valueOf(key), provider.properties.getProperty(String.valueOf(key)));
