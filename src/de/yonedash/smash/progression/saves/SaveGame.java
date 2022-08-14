@@ -1,5 +1,6 @@
 package de.yonedash.smash.progression.saves;
 
+import de.yonedash.smash.Difficulty;
 import de.yonedash.smash.config.XMLConfig;
 import de.yonedash.smash.progression.skills.Skills;
 
@@ -19,7 +20,7 @@ public class SaveGame extends XMLConfig {
     public void init() {
         this.skills.init();
         add("checkpoint/step", 0);
-        add("difficulty", 0);
+        add("difficulty", Difficulty.NORMAL.name());
         add("coins", 0);
         add("playTime", 0);
     }
@@ -33,7 +34,7 @@ public class SaveGame extends XMLConfig {
     }
 
     public double getDifficulty() {
-        return getDouble("difficulty");
+        return Difficulty.valueOf(getString("difficulty")).value;
     }
 
     public void addCoins(int amount) {

@@ -7,6 +7,7 @@ main.startnewjourney=Start New Journey
 main.options=Options
 main.quit=Quit
 main.starttutorial=Start Tutorial
+main.cancel=Cancel
 
 options.restartNeeded=Restart needed for some changes to apply.
 
@@ -45,8 +46,7 @@ options.shoot=Shoot
 options.dash=Dash
 options.skipDialog=Skip Dialog
 
-difficulty.grandchallenge=Grand Challenge
-difficulty.hard=Hard
+difficulty.veteran=Veteran
 difficulty.normal=Normal
 difficulty.explorer=Explorer
 

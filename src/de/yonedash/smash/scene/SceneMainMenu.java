@@ -102,7 +102,8 @@ public class SceneMainMenu extends SceneMenu {
         } else if (component == tutorialButton) {
             this.instance.scene = new SceneLoadWorld(this.instance, new TutorialStory(), new SaveGameTemporary());
         } else if (component == startNewButton) {
-            loadSaveGame(getSaveGameFile(UUID.randomUUID() + "_" + System.currentTimeMillis()));
+           // loadSaveGame(getSaveGameFile(UUID.randomUUID() + "_" + System.currentTimeMillis()));
+            this.instance.scene = new SceneChooseDifficulty(this.instance);
         } else if (component == quitButton) {
            this.instance.stop(0);
        }
