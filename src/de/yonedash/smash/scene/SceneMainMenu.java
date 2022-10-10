@@ -4,12 +4,13 @@ import de.yonedash.smash.*;
 import de.yonedash.smash.config.KeyBind;
 import de.yonedash.smash.progression.saves.SaveGame;
 import de.yonedash.smash.progression.saves.SaveGameTemporary;
-import de.yonedash.smash.progression.story.ActualStory;
+import de.yonedash.smash.progression.story.MainStory;
 import de.yonedash.smash.progression.story.TutorialStory;
 import de.yonedash.smash.scene.components.Button;
 import de.yonedash.smash.scene.components.Component;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.io.File;
 
 public class SceneMainMenu extends SceneMenu {
@@ -56,7 +57,9 @@ public class SceneMainMenu extends SceneMenu {
     public void devicePressed(KeyBind.Device device, int code) {
         super.devicePressed(device, code);
 
-
+        if (device == KeyBind.Device.KEYBOARD && code == KeyEvent.VK_C) {
+            instance.scene = new SceneCreditRoll(instance);
+        }
     }
 
     @Override
@@ -127,7 +130,7 @@ public class SceneMainMenu extends SceneMenu {
     }
 
     private void loadSaveGame(File file) {
-        this.instance.scene = new SceneLoadWorld(this.instance, new ActualStory(), new SaveGame(file));
+        this.instance.scene = new SceneLoadWorld(this.instance, new MainStory(), new SaveGame(file));
     }
 
     private File getSaveGameFile(String name) {

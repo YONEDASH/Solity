@@ -49,6 +49,10 @@ public class EntityPlayer extends EntityCharacter {
         KeyBind moveDown = inputConfig.getBind("moveDown");
         KeyBind dash = inputConfig.getBind("dash");
 
+
+        if (input.isDeviceButtonPressed(KeyBind.Device.KEYBOARD, 'Y')) {
+            moveSpeed = scene.time(3, dt);
+        }
         // Player Axis Movement
 
         if (!moveUp.isLocked() && input.isBindPressed(moveUp)) {
@@ -174,5 +178,9 @@ public class EntityPlayer extends EntityCharacter {
 
     public float getDashesLeft() {
         return dashesLeft;
+    }
+
+    public boolean isDashing() {
+        return timeDashingLeft > 0;
     }
 }

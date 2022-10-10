@@ -10,7 +10,7 @@ public class SkillDash extends Skill {
 
     public float getMaximumDashCount() {
         int level = getLevel();
-        return 2f + (float) Math.floor(level * 0.3f);
+        return 1f + (float) Math.floor(level * 1.0f);
     }
 
     public double getSustainFactor() {

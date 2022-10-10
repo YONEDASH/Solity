@@ -11,12 +11,14 @@ import de.yonedash.smash.graphics.TextureAnimated;
 import de.yonedash.smash.graphics.VisualEffect;
 import de.yonedash.smash.localization.BindLocalizer;
 import de.yonedash.smash.progression.skills.SkillDash;
+import de.yonedash.smash.progression.story.TutorialStory;
 import de.yonedash.smash.resource.Texture;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Ellipse2D;
-import java.awt.image.BufferedImage;
+import java.awt.image.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -55,7 +57,8 @@ public class SceneInWorld extends Scene {
         player.setItemInHand(instance.itemRegistry.fork);
 
         // Init story step
-        world.story.initStep(world.saveGame.getCheckpointStep());
+        world.story.setCheckpoint(world.saveGame.getCheckpointStep());
+        world.story.loadCheckpoint();
 
         // Hide cursor
         this.instance.display.hideCursor();
@@ -423,6 +426,27 @@ public class SceneInWorld extends Scene {
 
         // Revert camera position translation
         g2d.translate(+this.cameraPos.x, +this.cameraPos.y);
+
+        // Post Processing: Bloom
+        RGBImageFilter bloomFilter = new RGBImageFilter() {
+            final int transparent = new Color(0, 0, 0, 0).getRGB();
+            @Override
+            public int filterRGB(int x, int y, int rgb) {
+                int blue = rgb & 0xFF;
+                int green = (rgb >> 8) & 0xFF;
+                int red = (rgb >> 16) & 0xFF;
+                double luminance = (0.2126 * (red / 255.0)  + 0.7152 * (green / 255.0) + 0.0722 * (blue / 255.0));
+                return luminance >= 0.6 ? rgb : transparent;
+            }
+        };
+
+//
+//        Image filtered = Toolkit.getDefaultToolkit().createImage(
+//                new FilteredImageSource(volatileImage.getSource(),
+//                        bloomFilter));
+//        g2d.setColor(Color.BLACK);
+//        g2d.fillRect(0, 0, width, height);
+//        g2d.drawImage(filtered, 0, 0, width, height, null);
 
         // Update story
         if (world.story != null) {
@@ -864,9 +888,20 @@ public class SceneInWorld extends Scene {
     }
 
     private void loadCheckpoint() {
-        resetPlayerStats();
-        checkpointLoaded = true;
-        instance.world.story.loadCheckpoint();
+        // Tutorial story was made a long time ago, this code makes sure back compatability for tutorial is still there
+        // while main story fully reloads the world (due to it being way more complex)
+        if (instance.world.story instanceof TutorialStory) {
+            resetPlayerStats();
+            checkpointLoaded = true;
+            instance.world.story.loadCheckpoint();
+        } else {
+            // Reload world
+            try {
+                instance.scene = new SceneLoadWorld(instance, instance.world.story.getClass().getConstructor().newInstance(), instance.world.saveGame);
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     private void resetPlayerStats() {

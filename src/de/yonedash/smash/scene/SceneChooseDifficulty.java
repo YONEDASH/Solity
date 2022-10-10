@@ -3,7 +3,7 @@ package de.yonedash.smash.scene;
 import de.yonedash.smash.*;
 import de.yonedash.smash.config.KeyBind;
 import de.yonedash.smash.progression.saves.SaveGame;
-import de.yonedash.smash.progression.story.ActualStory;
+import de.yonedash.smash.progression.story.MainStory;
 import de.yonedash.smash.scene.components.Button;
 
 import java.awt.*;
@@ -95,7 +95,7 @@ public class SceneChooseDifficulty extends SceneMenu {
                } catch (IOException e) {
                    throw new RuntimeException(e);
                }
-               this.instance.scene = new SceneLoadWorld(this.instance, new ActualStory(), saveGame);
+               this.instance.scene = new SceneLoadWorld(this.instance, new MainStory(), saveGame);
            }
         }
     }

@@ -28,7 +28,7 @@ public class EntityBottle extends EntityItem {
         BoundingBox texBounds = this.boundingBox.clone().scale(2.0);
         g2d.drawImage(
                 texture.getBufferedImage(),
-                scene.scaleToDisplay(texBounds.position.x), scene.scaleToDisplay(texBounds.position.y),
+                scene.scaleToDisplay(texBounds.position.x), scene.scaleToDisplay(texBounds.position.y - Tile.TILE_SIZE * 0.5),
                 scene.scaleToDisplay(texBounds.size.x), scene.scaleToDisplay(texBounds.size.x),
                 null
         );

@@ -64,18 +64,24 @@ story.tutorial.title=Tutorial
 story.tutorial.0=Welcome to the tutorial.
 story.tutorial.1=In order to skip dialogs - like these - press {0}.
 story.tutorial.2=Use {0}, {1}, {2} and {3} to move to the waypoint.
-story.tutorial.3=You can use one of your limited dashes with {0}.
+story.tutorial.3=You can use one of your limited dashes with {0}. While dashing you are immune to projectile damage.
 story.tutorial.5=Aim on the ant with your {0} and shoot it with {1}.
 story.tutorial.6=Oh no, it looks like there are more ants attacking! Search the map, defend yourself & try not to get hurt!
 story.tutorial.antsremaining=Find & defend yourself against the {0} remaining ants.
 story.tutorial.8=You see this? I wonder what it is.
 story.tutorial.9=Pick it up by walking into it.
-story.tutorial.10=Well done! You have successfully completed the tutorial. Find out what that bottle was by starting a new journey.
+story.tutorial.11=Well done! You have successfully completed the tutorial. Find out what that bottle was by starting a new journey.
 
-story.main.unknownperson=Unknown Person
-story.main.spock=Mister Spohck
+story.main.stranger=Stranger
+story.main.wizard=Wizard
 
-# The Beginnings
 story.main.pathobj=Follow the path.
+story.main.pathobjFind=Find someone by following the path.
 story.main.1=Hello stranger. Are you sure you want to follow the path? I just saw one of these killer ants over there.
 story.main.2=Well.. good luck.
+story.main.antsremaining=Find & defend yourself against the {0} remaining ants.
+story.main.5=Wow! I was watching you during your fight with these ants and I am impressed with you. Let me grant you better dashing abilities and health!
+story.main.6=No need to thank me. But actually...
+story.main.7=Can you do me a favor? There are quite some killer ants scattered around this area.
+story.main.8=Please free us of them!
+story.main.10=Thank you for freeing us.

@@ -13,6 +13,7 @@ import de.yonedash.smash.launch.LaunchConfig;
 import de.yonedash.smash.resource.FontLexicon;
 import de.yonedash.smash.graphics.TextureAtlas;
 import de.yonedash.smash.scene.Scene;
+import de.yonedash.smash.scene.SceneCreditRoll;
 import de.yonedash.smash.scene.SceneLoadMainMenu;
 import kuusisto.tinysound.TinySound;
 
@@ -78,8 +79,6 @@ public class Instance implements Runnable {
         this.itemRegistry = new ItemRegistry(this);
 
         // Initialize scene
-        //this.scene = new SceneInGame(this);
-        //this.scene = new SceneLoadWorld(this, "tutorial");
         this.scene = new SceneLoadMainMenu(this);
 
         // Initialize game loop thread
@@ -128,10 +127,11 @@ public class Instance implements Runnable {
         TinySound.init();
 
         // Start game loop thread
-        if (this.gameConfig.lowPowerMode)
+        if (this.gameConfig.lowPowerMode) {
+            gameLoop.setRunning(true);
             Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(gameLoop, 0,
                     (long) (1_000_000 * (1000.0 / 10000.0)), TimeUnit.NANOSECONDS);
-        else
+        } else
             Executors.newSingleThreadScheduledExecutor().schedule(gameLoop, 0, TimeUnit.NANOSECONDS);
     }
 

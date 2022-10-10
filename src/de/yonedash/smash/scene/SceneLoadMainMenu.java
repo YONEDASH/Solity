@@ -47,7 +47,12 @@ public class SceneLoadMainMenu extends SceneLoading {
         if (!done && !this.threadRunning) {
             startLoadThread();
         } else if (done && !this.threadRunning) {
-            this.instance.scene = new SceneMainMenu(this.instance);
+            finish();
         }
+    }
+
+    @Override
+    public void switchScene() {
+        this.instance.scene = new SceneMainMenu(this.instance);
     }
 }

@@ -3,12 +3,12 @@ package de.yonedash.smash.scene;
 import de.yonedash.smash.*;
 import de.yonedash.smash.config.KeyBind;
 import de.yonedash.smash.progression.saves.SaveGame;
+import de.yonedash.smash.progression.story.MainStory;
 import de.yonedash.smash.scene.components.Button;
 
 import java.awt.*;
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -131,6 +131,8 @@ public class SceneChooseSave extends SceneMenu {
             file.renameTo(new File(file.getParentFile(), file.getName() + ".deleted"));
            //  file.delete();
             this.instance.scene = new SceneChooseSave(this.instance);
+        } else if (component instanceof SaveButton sb && saveGameButtons.contains(sb)) {
+            this.instance.scene = new SceneLoadWorld(this.instance, new MainStory(), sb.saveGame);
         }
 
 

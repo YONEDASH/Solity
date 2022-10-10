@@ -112,6 +112,10 @@ public class EntityProjectile extends EntityBase {
                 || (shooter instanceof EntityEnemy && entity instanceof EntityEnemy))
             return false;
 
+        // Ignore player if dashing
+        if (entity instanceof EntityPlayer player && player.isDashing())
+            return false;
+
         scene.instance.audioProcessor.play(scene.instance.library.hitSound);
 
         scene.instance.world.entitiesLoaded.remove(this);

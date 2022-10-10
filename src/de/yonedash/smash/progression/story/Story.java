@@ -146,13 +146,27 @@ public abstract class Story {
         }
     }
 
-    protected void markStepAsCheckpoint(SaveGame saveGame) {
-        this.checkpoint = this.step;
-        if (!this.checkpointLoaded)
-            this.capture = saveGame.capture();
+    protected void expectEntityHere(Instance instance, Entity entity, Vec2D vec2D) {
+        double tolerance = Tile.TILE_SIZE;
+        BoundingBox bb = entity.getBoundingBox();
+        Vec2D position = entity.getBoundingBox().center();
+        boolean isPlayer = entity instanceof EntityPlayer;
+
+        if (position.distanceSqrt(vec2D) > tolerance || (isPlayer && checkpointLoaded)) {
+            bb.position = vec2D.clone().subtract(bb.size.clone().multiply(0.5));
+            if (isPlayer && instance.scene instanceof SceneInWorld siw) siw.resetCameraPosition();
+        }
     }
 
-    protected void saveProgress(SaveGame saveGame) {
+    protected void markStepAsCheckpoint(SaveGame saveGame) {
+        this.checkpoint = this.step;
+        if (!this.checkpointLoaded) {
+            saveGame.set("checkpoint/step", this.checkpoint);
+            this.capture = saveGame.capture();
+        }
+    }
+
+    public void saveProgress(SaveGame saveGame) {
         if (this.capture != null)
             this.capture.apply(saveGame);
         try {
@@ -162,9 +176,14 @@ public abstract class Story {
         }
     }
 
+    public void setCheckpoint(int checkpoint) {
+        this.checkpoint = checkpoint;
+    }
+
     public void loadCheckpoint() {
         this.checkpointLoaded = true;
         initStep(this.checkpoint);
+        System.out.println("Checkpoint " + this.checkpoint + " loaded");
     }
 
     public void update(Graphics2D g2d, double dt, SceneInWorld scene) {

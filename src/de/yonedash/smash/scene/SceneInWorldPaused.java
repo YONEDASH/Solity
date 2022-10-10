@@ -2,7 +2,7 @@ package de.yonedash.smash.scene;
 
 import de.yonedash.smash.*;
 import de.yonedash.smash.progression.saves.SaveGame;
-import de.yonedash.smash.progression.story.ActualStory;
+import de.yonedash.smash.progression.story.MainStory;
 import de.yonedash.smash.progression.story.TutorialStory;
 import de.yonedash.smash.scene.components.Button;
 import de.yonedash.smash.scene.components.Component;
@@ -83,6 +83,9 @@ public class SceneInWorldPaused extends SceneMenu {
         } else if (component == loadCheckpoint) {
             loadSaveGame(getSaveGameFile(instance.world.saveGame.getName()));
         } else if (component == quitButton) {
+            if (before instanceof SceneInWorld)
+                instance.world.story.saveProgress(instance.world.saveGame);
+
             instance.scene = new SceneLoadMainMenu(instance);
         } else if (component == optionsButton) {
             optionsButton.selected = 0;
@@ -92,7 +95,7 @@ public class SceneInWorldPaused extends SceneMenu {
 
 
     private void loadSaveGame(File file) {
-        this.instance.scene = new SceneLoadWorld(this.instance, new ActualStory(), new SaveGame(file));
+        this.instance.scene = new SceneLoadWorld(this.instance, new MainStory(), new SaveGame(file));
     }
 
     private File getSaveGameFile(String name) {

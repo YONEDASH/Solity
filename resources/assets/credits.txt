@@ -1,6 +1,6 @@
 This game was made as part of the german
 
-**Programming
+*Programming
 
 *Engine
 Til
@@ -19,10 +19,19 @@ Til
 *Scripting
 Til
 
-**Assets
+*Assets
 
-pixivan LINK:https://pixivan.itch.io/simple-forest-tileset
-deepdivegamestudio LINK:https://deepdivegamestudio.itch.io/vermin-asset-pack
-o-lobster LINK:https://o-lobster.itch.io/simple-dungeon-crawler-16x16-pixel-pack
-QBE LINK:https://qbe-e.itch.io/tp-shooter-assets
-somepx LINK:https://somepx.itch.io/humble-fonts-free
+pixivan
+https://pixivan.itch.io/simple-forest-tileset
+
+deepdivegamestudio
+https://deepdivegamestudio.itch.io/vermin-asset-pack
+
+o-lobster
+https://o-lobster.itch.io/simple-dungeon-crawler-16x16-pixel-pack
+
+QBE
+https://qbe-e.itch.io/tp-shooter-assets
+
+somepx
+https://somepx.itch.io/humble-fonts-free

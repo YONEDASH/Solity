@@ -1,6 +1,5 @@
 package de.yonedash.smash;
 
-import de.yonedash.smash.graphics.GraphicsUtils;
 import de.yonedash.smash.scene.SceneInWorld;
 
 import javax.swing.*;
@@ -16,7 +15,7 @@ public class Display extends JFrame {
 
     private final Instance instance;
 
-    // We want protected access to this class in order to access it in the canvas class
+    // We want protected access to this class in order to access it in the input class
     protected final Canvas canvas;
 
     private final Input input;
@@ -230,14 +229,7 @@ public class Display extends JFrame {
         this.instance.atlas.update(dt / 1_000_000.0);
 
         // Update scene
-        try {
-            this.instance.scene.update(g2d, dt / 1_000_000.0);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.exit(1);
-            return false;
-        }
-
+        this.instance.scene.update(g2d, dt / 1_000_000.0);
 
         // Show buffer to display
         buffer.show();

@@ -3,6 +3,7 @@ package de.yonedash.smash.scene;
 import de.yonedash.smash.Instance;
 import de.yonedash.smash.LevelData;
 import de.yonedash.smash.World;
+import de.yonedash.smash.config.KeyBind;
 import de.yonedash.smash.progression.saves.SaveGame;
 import de.yonedash.smash.progression.story.Story;
 import de.yonedash.smash.resource.TiledMap;
@@ -22,6 +23,8 @@ public class SceneLoadWorld extends SceneLoading {
         this.tiledMap = new TiledMap("/assets/map/" + story.getMapName() + ".tmx");
 
         this.thread = new Thread(() -> {
+            instance.inputConfig.getBinds().values().forEach(KeyBind::unlock);
+
             instance.world = new World(saveGame);
             instance.world.story = story;
 
@@ -64,7 +67,12 @@ public class SceneLoadWorld extends SceneLoading {
         if (this.levelData == null && !this.threadRunning) {
             startLoadThread();
         } else if (!this.threadRunning) {
-            this.instance.scene = new SceneInWorld(this.instance);
+            finish();
         }
+    }
+
+    @Override
+    public void switchScene() {
+        this.instance.scene = new SceneInWorld(this.instance);
     }
 }

@@ -20,4 +20,8 @@ public abstract class Skill {
         return this.saveGame.getInt("Skill/" + this.name + "/Level");
     }
 
+    public void setLevel(int level) {
+        this.saveGame.set("Skill/" + this.name + "/Level", level);
+    }
+
 }
