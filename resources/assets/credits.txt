@@ -17,7 +17,7 @@ Til (Apple Loops samples)
 
 *Libraries
 TinySound by finnkuusisto
-Simplex-Noise by KdotJPG
+OpenSimplex Noise by KdotJPG (Kurt Spencer)
 
 *Game Assets
 pixivan
