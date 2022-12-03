@@ -51,7 +51,7 @@ public class EntityEnemy extends EntityCharacter {
         World world = scene.instance.world;
 
         double maxDistance = Tile.TILE_SIZE * 8.0;
-        double shootDelay = 1000.0 * 1; // TODO DIFFICULTY HERE
+        double shootDelay = 1000.0 * (1 / world.saveGame.getDifficulty());
         double shotDistance = maxDistance;
         double shotSize = 60.0;
         Vec2D projSize = new Vec2D(shotSize, shotSize);

@@ -58,9 +58,4 @@ public class SaveGame extends XMLConfig {
         return file.getName().replaceFirst("[.][^.]+$", "");
     }
 
-    // todo remove
-    public Properties DEBUG_REMOVE_MEEEEEEEE() {
-        return properties;
-    }
-
 }

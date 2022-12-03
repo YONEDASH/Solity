@@ -49,12 +49,6 @@ public class EntityPlayer extends EntityCharacter {
         KeyBind moveDown = inputConfig.getBind("moveDown");
         KeyBind dash = inputConfig.getBind("dash");
 
-
-        // todo remove
-        if (input.isDeviceButtonPressed(KeyBind.Device.KEYBOARD, 'Y')) {
-            moveSpeed = scene.time(3, dt);
-        }
-
         // Player Axis Movement
 
         if (!moveUp.isLocked() && input.isBindPressed(moveUp)) {

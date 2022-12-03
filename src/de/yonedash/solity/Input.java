@@ -34,7 +34,7 @@ public class Input {
                     keysDown.add(e.getKeyCode());
                 }
 
-                // todo Fullscreen key binds
+                // Fullscreen key binds
                 if (e.isAltDown() && e.getKeyCode() == KeyEvent.VK_ENTER) {
                     Input.this.display.setFullscreen(0, !Input.this.display.isFullscreen());
                 }
