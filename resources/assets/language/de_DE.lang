@@ -50,7 +50,7 @@ options.moveUp=Nach oben
 options.moveLeft=Nach links
 options.moveDown=Nach unten
 options.moveRight=Nach rechts
-options.shoot=Schießen
+options.shoot=Schiessen
 options.dash=Dash
 options.skipDialog=Dialog ueberspringen
 
