@@ -1,37 +1,44 @@
 This game was made as part of the german
+seminar paper "Seminarfacharbeit".
+
 
 *Programming
-
-*Engine
 Til
 
-*Physics
+*Level Design
 Til
 
-*Visual Effects
+*Story
+Boris
 Til
 
-**Story
+*Music
+Til (Apple Loops samples)
 
-*Writing
-Til
+*Libraries
+TinySound by finnkuusisto
+Simplex-Noise by KdotJPG
 
-*Scripting
-Til
-
-*Assets
-
+*Game Assets
 pixivan
 https://pixivan.itch.io/simple-forest-tileset
-
 deepdivegamestudio
 https://deepdivegamestudio.itch.io/vermin-asset-pack
-
 o-lobster
 https://o-lobster.itch.io/simple-dungeon-crawler-16x16-pixel-pack
-
 QBE
 https://qbe-e.itch.io/tp-shooter-assets
-
 somepx
 https://somepx.itch.io/humble-fonts-free
+
+*Group Paper Participants
+Luca
+Luca
+Boris
+Til
+
+
+Thank you very much for playing
+this short game. Have a nice day.
+
+(c) 2021/2022 Til

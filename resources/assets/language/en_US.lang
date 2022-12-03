@@ -41,10 +41,10 @@ options.lowPowerMode=Low Power Mode
 options.preset=Graphics
 options.renderPipeline=Render Pipeline
 
-options.graphics.low=Low
-options.graphics.medium=Medium
+options.graphics.low=Minimal
+options.graphics.medium=Balanced
 options.graphics.high=High
-options.graphics.ultra=Ultra
+options.graphics.ultra=Maxed
 
 options.moveUp=Move Up
 options.moveLeft=Move Left
@@ -73,15 +73,18 @@ story.tutorial.9=Pick it up by walking into it.
 story.tutorial.11=Well done! You have successfully completed the tutorial. Find out what that bottle was by starting a new journey.
 
 story.main.stranger=Stranger
-story.main.wizard=Wizard
+story.main.wizard=Unknown Voice
 
 story.main.pathobj=Follow the path.
-story.main.pathobjFind=Find someone by following the path.
-story.main.1=Hello stranger. Are you sure you want to follow the path? I just saw one of these killer ants over there.
+story.main.pathobjFind=Follow the path.
+story.main.potion=Locate the healing potion to free the world.
+story.main.1=*Yelling* Hello stranger. Are you sure you want to follow the path? I just saw one of these killer ants over there.
 story.main.2=Well.. good luck.
 story.main.antsremaining=Find & defend yourself against the {0} remaining ants.
 story.main.5=Wow! I was watching you during your fight with these ants and I am impressed with you. Let me grant you better dashing abilities and health!
 story.main.6=No need to thank me. But actually...
 story.main.7=Can you do me a favor? There are quite some killer ants scattered around this area.
 story.main.8=Please free us of them!
-story.main.10=Thank you for freeing us.
+story.main.10=I.. I am responsible for all of this.
+story.main.11=I was experimenting with dark magic and this happened..
+story.main.12=Please find my healing potion to free us all!
