@@ -3,37 +3,37 @@ dummy={0}
 device.keyboard=Tastatur
 device.mouse=Maus
 
-main.continue=Weiter
-main.loadjourney=Abenteuer laden
-main.startnewjourney=Neues Abenteuer
+main.continue=Fortfahren
+main.loadjourney=Laden
+main.startnewjourney=Abenteuer starten
 main.options=Optionen
 main.quit=Verlassen
 main.starttutorial=Tutorial starten
 main.cancel=Abbrechen
-main.delete=Löschen
+main.delete=Loeschen
 
 ingame.continue=Weiter
 ingame.loadcheckpoint=Checkpoint laden
 ingame.options=Optionen
-ingame.quit=Hauptmenü
+ingame.quit=Zurueck zum Hauptmenue
 
-options.restartNeeded=Neustart für einige Änderungen benötigt.
+options.restartNeeded=Neustart fuer einige Aenderung noetig.
 
 options.left=<
 options.right=>
 options.on=An
 options.off=Aus
-options.back=Zurück
+options.back=Zurueck
 options.cancel=Abbrechen
 options.apply=Speichern
 
 options.unlimitedFps=Unbegrenzt
 
 options.language=Sprache
-options.volumeMaster=Master Volume
-options.volumeMusic=Music Volume
-options.volumeSound=Sound Volume
-options.volumeTyping=Typing Volume
+options.volumeMaster=Hauptlauptstaerke
+options.volumeMusic=Musik
+options.volumeSound=Geraeusche
+options.volumeTyping=Tipp Lautstaerke
 options.fullscreen=Vollbild
 options.fpsLimit=FPS Limit
 options.vsync=VSync
@@ -41,41 +41,50 @@ options.lowPowerMode=Energiesparen
 options.preset=Grafik
 options.renderPipeline=Render Pipeline
 
-options.graphics.low=Niedrig
-options.graphics.medium=Mittel
+options.graphics.low=Minimal
+options.graphics.medium=Balanciert
 options.graphics.high=Hoch
-options.graphics.ultra=Ultra
+options.graphics.ultra=Maximum
 
-options.moveUp=Move Up
-options.moveLeft=Move Left
-options.moveDown=Move Down
-options.moveRight=Move Right
-options.shoot=Shoot
+options.moveUp=Nach oben
+options.moveLeft=Nach links
+options.moveDown=Nach unten
+options.moveRight=Nach rechts
+options.shoot=Schießen
 options.dash=Dash
-options.skipDialog=Dialog überspringen
+options.skipDialog=Dialog ueberspringen
 
 difficulty.veteran=Veteran
 difficulty.normal=Normal
-difficulty.explorer=Explorer
+difficulty.explorer=Erkunder
 
-story.objective=Objective
+story.objective=Aufgabe
 
 story.tutorial.title=Tutorial
-story.tutorial.0=Welcome to the tutorial.
-story.tutorial.1=In order to skip dialogs - like these - press {0}.
-story.tutorial.2=Use {0}, {1}, {2} and {3} to move to the waypoint.
-story.tutorial.3=You can use one of your limited dashes with {0}.
-story.tutorial.5=Aim on the ant with your {0} and shoot it with {1}.
-story.tutorial.6=Oh no, it looks like there are more ants attacking! Search the map, defend yourself & try not to get hurt!
-story.tutorial.antsremaining=Find & defend yourself against the {0} remaining ants.
-story.tutorial.8=You see this? I wonder what it is.
-story.tutorial.9=Pick it up by walking into it.
-story.tutorial.10=Well done! You have successfully completed the tutorial. Find out what that bottle was by starting a new journey.
+story.tutorial.0=Willkommen im Tutorial.
+story.tutorial.1=Um Dialoge - wie diesen - zu ueberspringen, druecke {0}.
+story.tutorial.2=Benutze {0}, {1}, {2} und {3} um zum Waypoint zu gelangen.
+story.tutorial.3=Du kannst deine begrenzten Dashes mit {0} nutzen. Waehrend eines Dashes, bist du immun gegen Projektile.
+story.tutorial.5=Ziele auf die Ameise mit deiner {0} und schiesse mit {1}.
+story.tutorial.6=Oh nein, es sieht so aus, als wenn mehr Ameisen angreifen! Suche die Welt ab, verteidige dich & versuche keinen Schaden zu nehmen!
+story.tutorial.antsremaining=Suche & verteidige dich gegen die {0} verbleibenden Ameisen.
+story.tutorial.8=Siehst du das? Ich wunder mich, was das ist.
+story.tutorial.9=Nehme es auf, indem du hereinlaeufst.
+story.tutorial.10=Gut gemacht! Du hast das Tutorial erfolgreich abgeschlossen.
 
-story.main.unknownperson=Unknown Person
-story.main.spock=Mister Spohck
+story.main.stranger=Fremder
+story.main.wizard=Unbekannte Stimme
 
-# The Beginnings
-story.main.pathobj=Follow the path.
-story.main.1=Hello stranger. Are you sure you want to follow the path? I just saw one of these killer ants over there.
-story.main.2=Well.. good luck.
+story.main.pathobj=Folge dem Pfad.
+story.main.pathobjFind=Folge dem Pfad.
+story.main.potion=Finde den Heiltrank und befreie die Welt.
+story.main.1=*Ruft* Hallo Fremder. Bist du dir sicher, dass du diesem Pfad folgen willst? Ich habe dort gerade eine dieser Killer-Ameisen gesehen.
+story.main.2=Ok... viel Glueck.
+story.main.antsremaining=Suche & verteidige dich gegen die {0} verbleibenden Ameisen.
+story.main.5=Wow! Ich habe dich waehrend deines Kampfes mit diesen Ameisen beobachtet. Ich bin sehr beeindruckt von dir. Lass mich dir bessere Dash-Faehigkeiten und mehr Leben geben!
+story.main.6=Kein Grund mir zu danken. Wobei...
+story.main.7=Kannst du mir einen Gefallen tun? Es sind ganz schoen viele Killer-Ameisen in dieser Umgebung verteilt.
+story.main.8=Bitte befrei' uns von ihnen!
+story.main.10=Ich.. ich bin daran Schuld.
+story.main.11=Ich habe mit dunkler Magie experimentiert und dann ist das passiert..
+story.main.12=Bitte finde meinen Heiltrank um uns alle zu befreien!
