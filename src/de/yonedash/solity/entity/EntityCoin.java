@@ -15,9 +15,13 @@ public class EntityCoin extends EntityItem {
 
     @Override
     public void draw(Scene scene, Graphics2D g2d, double dt) {
+        g2d.setColor(new Color(0, 0, 0, 40));
+        g2d.fillOval( scene.scaleToDisplay(this.boundingBox.position.x), scene.scaleToDisplay(this.boundingBox.position.y),
+                scene.scaleToDisplay(this.boundingBox.size.x), scene.scaleToDisplay(this.boundingBox.size.y));
+
         g2d.drawImage(
                 scene.instance.atlas.coin.getBufferedImage(),
-                scene.scaleToDisplay(this.boundingBox.position.x), scene.scaleToDisplay(this.boundingBox.position.y - Tile.TILE_SIZE * 0.5),
+                scene.scaleToDisplay(this.boundingBox.position.x), scene.scaleToDisplay(this.boundingBox.position.y - this.boundingBox.size.x * 0.9),
                 scene.scaleToDisplay(this.boundingBox.size.x), scene.scaleToDisplay(this.boundingBox.size.x),
                 null
         );
