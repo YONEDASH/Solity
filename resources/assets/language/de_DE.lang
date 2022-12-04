@@ -4,7 +4,7 @@ device.keyboard=Tastatur
 device.mouse=Maus
 
 main.continue=Fortfahren
-main.loadjourney=Laden
+main.loadjourney=Abenteuer laden
 main.startnewjourney=Abenteuer starten
 main.options=Optionen
 main.quit=Verlassen

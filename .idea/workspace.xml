@@ -6,8 +6,9 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="72bd4045-439f-4dd9-ab6b-3c8ac232e6b5" name="Changes" comment="Release 1.0.2: de_DE localization fix">
-      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/scene/SceneMainMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/solity/scene/SceneMainMenu.java" afterDir="false" />
+    <list default="true" id="72bd4045-439f-4dd9-ab6b-3c8ac232e6b5" name="Changes" comment="Release 1.0.2: version update in SceneMainMenu">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/assets/language/de_DE.lang" beforeDir="false" afterPath="$PROJECT_DIR$/resources/assets/language/de_DE.lang" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -368,7 +369,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670104263730</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="Release 1.0.2: version update in SceneMainMenu">
+      <created>1670104320987</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1670104320987</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -386,7 +394,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Fog" />
     <MESSAGE value="Updates &amp; updates" />
     <MESSAGE value="Updates &amp; updates (start of asset refactoring, tutorial chapter (new level, new scripts), keybind hint text out of bounds fix, language/localization, new story functions, new raycast functions, scaling for character textures, damage/health, chapter checkpoint base, respawning/dying)" />
     <MESSAGE value="Updates &amp; updates (health &amp; dash hud, refactoring, beginning of items/pickups)" />
@@ -411,7 +418,8 @@
     <MESSAGE value="Release 1.0 watermark on SceneMainMenu" />
     <MESSAGE value="Release 1.0.1: Better difficulty implementation, code cleanup" />
     <MESSAGE value="Release 1.0.2: de_DE localization fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="Release 1.0.2: de_DE localization fix" />
+    <MESSAGE value="Release 1.0.2: version update in SceneMainMenu" />
+    <option name="LAST_COMMIT_MESSAGE" value="Release 1.0.2: version update in SceneMainMenu" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
