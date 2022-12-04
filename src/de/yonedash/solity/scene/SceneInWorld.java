@@ -21,6 +21,7 @@ import java.awt.image.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SceneInWorld extends Scene {
 
@@ -413,27 +414,6 @@ public class SceneInWorld extends Scene {
         // Revert camera position translation
         g2d.translate(+this.cameraPos.x, +this.cameraPos.y);
 
-        // Post Processing: Bloom
-        RGBImageFilter bloomFilter = new RGBImageFilter() {
-            final int transparent = new Color(0, 0, 0, 0).getRGB();
-            @Override
-            public int filterRGB(int x, int y, int rgb) {
-                int blue = rgb & 0xFF;
-                int green = (rgb >> 8) & 0xFF;
-                int red = (rgb >> 16) & 0xFF;
-                double luminance = (0.2126 * (red / 255.0)  + 0.7152 * (green / 255.0) + 0.0722 * (blue / 255.0));
-                return luminance >= 0.6 ? rgb : transparent;
-            }
-        };
-
-//
-//        Image filtered = Toolkit.getDefaultToolkit().createImage(
-//                new FilteredImageSource(volatileImage.getSource(),
-//                        bloomFilter));
-//        g2d.setColor(Color.BLACK);
-//        g2d.fillRect(0, 0, width, height);
-//        g2d.drawImage(filtered, 0, 0, width, height, null);
-
         // Update story
         if (world.story != null) {
             world.story.update(g2d, dt, this);
@@ -455,12 +435,28 @@ public class SceneInWorld extends Scene {
             this.fontRenderer.drawString(g2d, (Math.round(this.instance.gameLoop.getFramesPerSecond() * 10.0) / 10.0) + " FPS, " + (Math.round(memoryUsage * 10.0) / 10.0) + "M / " +  (Math.round(memoryTotal * 10.0) / 10.0) + "M", width - scaleToDisplay(10.0), scaleToDisplay(10.0), FontRenderer.RIGHT, FontRenderer.TOP,false);
 
 
+            AtomicInteger worldTiles = new AtomicInteger();
+            AtomicInteger worldEntities = new AtomicInteger(this.instance.world.entitiesLoaded.size()); // entitiesLoaded are not in chunk entities list
+            AtomicInteger worldTilesLoaded = new AtomicInteger();
+
+            this.instance.world.chunks.forEach(chunk -> worldTiles.addAndGet(chunk.getLevelObjects().length));
+
+            this.instance.world.chunks.forEach(chunk -> worldEntities.addAndGet(chunk.getEntities().size()));
+
+            this.instance.world.chunksLoaded.forEach(chunk -> worldTilesLoaded.addAndGet(chunk.getLevelObjects().length));
+
+            // calculates efficiency of chunks and culling optimisations
+            double ccEfficiency = 1.0 - (double) (this.instance.world.entitiesLoaded.size() + worldTilesLoaded.get()) / (worldTiles.get() + worldEntities.get());
+
+
             String[] extraInfo = {
                     "chunks=" + this.instance.world.chunksLoaded.size() + "/" + this.instance.world.chunks.size() + ", tiles=" + tilesLoaded + ", entities=" + this.instance.world.entitiesLoaded.size() + " " + countDrawnOnScreen + " drawn",
                     "dt=" + dt + "ms",
                     "chu_t=" + chunkRefreshDelay + "ms / " + chunkTime + "ms",
                     "col_t=" + collisionTime + "ms",
-                    "weather=" + world.weatherProgress
+                    "weather=" + world.weatherProgress,
+                    " ",
+                    "c/c efficiency of " + worldTiles + " tiles, " + worldEntities + " entities: " + ccEfficiency
             };
             Vec2D genericBounds = this.fontRenderer.bounds(g2d, "X");
             Vec2D infoPos = new Vec2D(50, 400 + genericBounds.y);
