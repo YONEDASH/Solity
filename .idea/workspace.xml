@@ -6,8 +6,9 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="72bd4045-439f-4dd9-ab6b-3c8ac232e6b5" name="Changes" comment="Release 1.0.3">
+    <list default="true" id="72bd4045-439f-4dd9-ab6b-3c8ac232e6b5" name="Changes" comment="chunks + culling efficiency data in debug menu">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/solity/Constants.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/scene/SceneInWorld.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/solity/scene/SceneInWorld.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -390,7 +391,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670168076797</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="chunks + culling efficiency data in debug menu">
+      <created>1670168936998</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1670168936998</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -408,7 +416,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Updates &amp; updates (health &amp; dash hud, refactoring, beginning of items/pickups)" />
     <MESSAGE value="Updates &amp; updates (dash &amp; coin hud, screen shake, dummy save games, refactoring)" />
     <MESSAGE value="Updates &amp; updates (main menu, save game stuff, refactoring)" />
     <MESSAGE value="Updates &amp; updates (main menu, refactoring, changed scaleToDisplay double to int from flooring to rounding, added potions, started lang for main story)" />
@@ -433,7 +440,8 @@
     <MESSAGE value="Release 1.0.2: version update in SceneMainMenu" />
     <MESSAGE value="More accurate german translation" />
     <MESSAGE value="Release 1.0.3" />
-    <option name="LAST_COMMIT_MESSAGE" value="Release 1.0.3" />
+    <MESSAGE value="chunks + culling efficiency data in debug menu" />
+    <option name="LAST_COMMIT_MESSAGE" value="chunks + culling efficiency data in debug menu" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

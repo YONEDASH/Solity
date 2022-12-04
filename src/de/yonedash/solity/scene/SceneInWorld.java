@@ -174,12 +174,21 @@ public class SceneInWorld extends Scene {
         }
     }
 
+    private boolean shiftPressed;
+
     @Override
     public void keyPressed(int key) {
-        if (key == KeyEvent.VK_H) {
-            Constants.SHOW_CHUNK_BORDERS = !Constants.SHOW_CHUNK_BORDERS;
-            Constants.SHOW_COLLISION = !Constants.SHOW_COLLISION;
+        if (key == KeyEvent.VK_SHIFT)
+            shiftPressed = true;
+        if (shiftPressed && key == KeyEvent.VK_F3) {
+            Constants.DEBUG_MENU_SHOWN = !Constants.DEBUG_MENU_SHOWN;
         }
+    }
+
+    @Override
+    public void keyReleased(int key) {
+        if (key == KeyEvent.VK_SHIFT)
+            shiftPressed = false;
     }
 
     private double timeNoChunksRefreshed;
@@ -348,31 +357,20 @@ public class SceneInWorld extends Scene {
             }
         }
 
-        if (Constants.SHOW_CHUNK_BORDERS || Constants.SHOW_COLLISION) {
+        if (Constants.DEBUG_MENU_SHOWN) {
             // Draw chunk borders
             g2d.setStroke(new BasicStroke(super.scaleToDisplay(2.0)));
             for (Chunk chunk : this.instance.world.chunksLoaded) {
-                if (Constants.SHOW_COLLISION) {
-                    for (LevelObject levelObject : chunk.getLevelObjects()) {
-                        for (BoundingBox bb : levelObject.getCollisionBoxes()) {
-                            g2d.setColor(new Color(200, 120, 150, 100));
-                            g2d.fillRect(
-                                    super.scaleToDisplay(bb.position.x),
-                                    super.scaleToDisplay(bb.position.y),
-                                    super.scaleToDisplay(bb.size.x),
-                                    super.scaleToDisplay(bb.size.y)
-                            );
-                            g2d.setColor(new Color(0, 0, 0, 100));
-                            g2d.drawRect(
-                                    super.scaleToDisplay(bb.position.x),
-                                    super.scaleToDisplay(bb.position.y),
-                                    super.scaleToDisplay(bb.size.x),
-                                    super.scaleToDisplay(bb.size.y)
-                            );
-                        }
-
-                        BoundingBox bb = levelObject.getBoundingBox();
-                        g2d.setColor(new Color(100, 100, 100, 200));
+                for (LevelObject levelObject : chunk.getLevelObjects()) {
+                    for (BoundingBox bb : levelObject.getCollisionBoxes()) {
+                        g2d.setColor(new Color(200, 120, 150, 100));
+                        g2d.fillRect(
+                                super.scaleToDisplay(bb.position.x),
+                                super.scaleToDisplay(bb.position.y),
+                                super.scaleToDisplay(bb.size.x),
+                                super.scaleToDisplay(bb.size.y)
+                        );
+                        g2d.setColor(new Color(0, 0, 0, 100));
                         g2d.drawRect(
                                 super.scaleToDisplay(bb.position.x),
                                 super.scaleToDisplay(bb.position.y),
@@ -380,11 +378,9 @@ public class SceneInWorld extends Scene {
                                 super.scaleToDisplay(bb.size.y)
                         );
                     }
-                }
 
-                if (Constants.SHOW_CHUNK_BORDERS) {
-                    g2d.setColor(Color.ORANGE);
-                    BoundingBox bb = chunk.getBoundingBox();
+                    BoundingBox bb = levelObject.getBoundingBox();
+                    g2d.setColor(new Color(100, 100, 100, 200));
                     g2d.drawRect(
                             super.scaleToDisplay(bb.position.x),
                             super.scaleToDisplay(bb.position.y),
@@ -392,6 +388,16 @@ public class SceneInWorld extends Scene {
                             super.scaleToDisplay(bb.size.y)
                     );
                 }
+
+                g2d.setColor(Color.ORANGE);
+                BoundingBox bb = chunk.getBoundingBox();
+                g2d.drawRect(
+                        super.scaleToDisplay(bb.position.x),
+                        super.scaleToDisplay(bb.position.y),
+                        super.scaleToDisplay(bb.size.x),
+                        super.scaleToDisplay(bb.size.y)
+                );
+
             }
         }
 
@@ -426,7 +432,7 @@ public class SceneInWorld extends Scene {
        handlePlayerDeath(g2d, width, height, dt);
 
         // Debug info
-        if (Constants.SHOW_COLLISION || Constants.SHOW_CHUNK_BORDERS) {
+        if (Constants.DEBUG_MENU_SHOWN) {
             g2d.setFont(this.instance.lexicon.arial.deriveFont((float) scaleToDisplay(48.0)));
             g2d.setColor(Color.WHITE);
             Runtime runtime = Runtime.getRuntime();
