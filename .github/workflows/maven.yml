@@ -32,14 +32,15 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
     - name: Create folder for downloads
-      run: mkdir downloads
+      run: mkdir dest
     - name: Add packaged jar to downloads folder
-      run: mv -v ~/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/target/* downloads/
+      run: mv -v ~/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/target/*.jar dest/
+    - name: Renamed packaged jar to latest
+      run: rename dest/*.jar ${{ github.event.repository.name }}-latest.jar
     - name: Upload Artifact
       uses: actions/upload-artifact@v2
       with:
-        name: test
-        path: downloads
+        path: dest
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     #- name: Update dependency graph
