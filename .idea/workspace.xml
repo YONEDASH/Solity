@@ -9,8 +9,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="72bd4045-439f-4dd9-ab6b-3c8ac232e6b5" name="Changes" comment="Maven will now set version number shown in SceneMainMenu based on project version in pom.xml">
+    <list default="true" id="72bd4045-439f-4dd9-ab6b-3c8ac232e6b5" name="Changes" comment="update .gitignore to support Maven">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Solity.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Solity.iml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -490,7 +492,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670255674051</updated>
     </task>
-    <option name="localTasksCounter" value="47" />
+    <task id="LOCAL-00047" summary="update .gitignore to support Maven">
+      <created>1670255724250</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1670255724250</updated>
+    </task>
+    <option name="localTasksCounter" value="48" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -508,7 +517,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Finishing touches" />
     <MESSAGE value="coin shadow" />
     <MESSAGE value="translation fixes" />
     <MESSAGE value="german translation" />
@@ -533,7 +541,8 @@
     <MESSAGE value="Release jar upload" />
     <MESSAGE value="version number defined on maven package process" />
     <MESSAGE value="Maven will now set version number shown in SceneMainMenu based on project version in pom.xml" />
-    <option name="LAST_COMMIT_MESSAGE" value="Maven will now set version number shown in SceneMainMenu based on project version in pom.xml" />
+    <MESSAGE value="update .gitignore to support Maven" />
+    <option name="LAST_COMMIT_MESSAGE" value="update .gitignore to support Maven" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

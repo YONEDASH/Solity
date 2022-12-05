@@ -30,4 +30,5 @@ bin/
 
 # Compile Output
 compile
+# Maven Output
 target
