@@ -34,7 +34,7 @@ jobs:
     - name: Create folder for downloads
       run: mkdir downloads
     - name: Add packaged jar to downloads folder
-      run: mv -v ~/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/target/* ~/downloads/
+      run: mv -v ~/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/target/* downloads/
     - name: Upload Artifact
       uses: actions/upload-artifact@v2
       with:
