@@ -436,8 +436,9 @@ public class SceneInWorld extends Scene {
             g2d.setFont(this.instance.lexicon.arial.deriveFont((float) scaleToDisplay(48.0)));
             g2d.setColor(Color.WHITE);
             Runtime runtime = Runtime.getRuntime();
-            double memoryUsage = (runtime.totalMemory() - runtime.freeMemory()) * 1e-6;
-            double memoryTotal = (runtime.totalMemory()) * 1e-6;
+            long totalMemoryBytes = runtime.totalMemory();;
+            double memoryUsage = (totalMemoryBytes - runtime.freeMemory()) * 1e-6;
+            double memoryTotal = (totalMemoryBytes) * 1e-6;
             this.fontRenderer.drawString(g2d, (Math.round(this.instance.gameLoop.getFramesPerSecond() * 10.0) / 10.0) + " FPS, " + (Math.round(memoryUsage * 10.0) / 10.0) + "M / " +  (Math.round(memoryTotal * 10.0) / 10.0) + "M", width - scaleToDisplay(10.0), scaleToDisplay(10.0), FontRenderer.RIGHT, FontRenderer.TOP,false);
 
 
