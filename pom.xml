@@ -9,13 +9,34 @@
     <version>1.0.5</version>
 
     <properties>
+        <test>hello</test>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub YONEDASH Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/YONEDASH/Seminarfacharbeit</url>
+        </repository>
+    </distributionManagement>
+
     <dependencies>
 
     </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources/filtered</directory>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources/unfiltered</directory>
+            </resource>
+        </resources>
+    </build>
     
 </project>

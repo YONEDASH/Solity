@@ -5,6 +5,8 @@ import de.yonedash.solity.compat.OS;
 import de.yonedash.solity.compat.adapter.Adapter;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Properties;
 
 public class Launch {
 
@@ -25,8 +27,16 @@ public class Launch {
         renderPipeline.setEnabled(true);
         System.out.println("Rendering with " + renderPipeline.name() + " on " + OS.LOCAL_MACHINE + "/" + adapter.getClass().getSimpleName());
 
+        // Grab build properties
+        Properties buildProperties = new Properties();
+        try {
+            buildProperties.load(Launch.class.getResourceAsStream("/build.properties"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         // Create new instance and run
-        (new Instance(launchConfig, adapter, gameRoot)).run();
+        (new Instance(buildProperties, launchConfig, adapter, gameRoot)).run();
     }
 
 }

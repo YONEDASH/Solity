@@ -16,11 +16,14 @@ import de.yonedash.solity.scene.SceneLoadMainMenu;
 import kuusisto.tinysound.TinySound;
 
 import javax.swing.*;
+import java.util.Properties;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 // "Main" class of game
 public class Instance implements Runnable {
+
+    public final Properties buildProperties;
 
     public final Display display;
     public final TextureAtlas atlas;
@@ -45,8 +48,11 @@ public class Instance implements Runnable {
     public InputConfig inputConfig;
     public LaunchConfig launchData;
 
-    public Instance(LaunchConfig launchData, Adapter adapter, String gameRoot) {
+    public Instance(Properties buildProperties, LaunchConfig launchData, Adapter adapter, String gameRoot) {
         // Instance constructor, initialize variables before running
+
+        // Set build properties
+        this.buildProperties = buildProperties;
 
         // Set launch data
         this.launchData = launchData;
