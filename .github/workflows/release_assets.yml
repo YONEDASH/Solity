@@ -11,7 +11,7 @@ name: Release Assets
 on:
   push:
     tags:
-      - 'Release *.*.*' # Push format: "Release x.x.x", i.e. Release 1.0.5
+      - 'Release*' # Push format: "Release x.x.x", i.e. Release 1.0.5
 
 jobs:
   build:
