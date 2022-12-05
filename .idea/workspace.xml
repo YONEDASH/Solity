@@ -9,14 +9,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="72bd4045-439f-4dd9-ab6b-3c8ac232e6b5" name="Changes" comment="Revert pom.xml">
+    <list default="true" id="72bd4045-439f-4dd9-ab6b-3c8ac232e6b5" name="Changes" comment="Show FPS option">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Solity.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Solity.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/Display.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/Display.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/config/GameConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/config/GameConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/scene/SceneOptions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/scene/SceneOptions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/language/de_DE.lang" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/language/de_DE.lang" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/language/en_US.lang" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/language/en_US.lang" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -161,13 +155,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1652091683949</updated>
-    </task>
-    <task id="LOCAL-00001" summary="Initial commit">
-      <created>1654782494889</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1654782494889</updated>
     </task>
     <task id="LOCAL-00002" summary="Initial commit">
       <created>1655284458475</created>
@@ -505,7 +492,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670262435040</updated>
     </task>
-    <option name="localTasksCounter" value="50" />
+    <task id="LOCAL-00050" summary="Show FPS option">
+      <created>1670263933190</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1670263933191</updated>
+    </task>
+    <option name="localTasksCounter" value="51" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -523,7 +517,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="german translation" />
     <MESSAGE value="credits.txt fixes" />
     <MESSAGE value="Release 1.0 watermark on SceneMainMenu" />
     <MESSAGE value="Release 1.0.1: Better difficulty implementation, code cleanup" />
@@ -548,7 +541,8 @@
     <MESSAGE value="update .gitignore to support Maven" />
     <MESSAGE value="Remove release_assets.yml" />
     <MESSAGE value="Revert pom.xml" />
-    <option name="LAST_COMMIT_MESSAGE" value="Revert pom.xml" />
+    <MESSAGE value="Show FPS option" />
+    <option name="LAST_COMMIT_MESSAGE" value="Show FPS option" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
