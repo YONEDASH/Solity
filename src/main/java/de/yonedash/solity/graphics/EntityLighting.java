@@ -18,25 +18,33 @@ public class EntityLighting extends EntityBase implements VisualEffect {
         super(chunk.getBoundingBox().clone().add(new BoundingBox(new Vec2D(1, 1), Vec2D.zero())));
 
         // Create image
-        this.image = null;
-        // this.image = new BufferedImage((int) (Chunk.CHUNK_SIZE * Constants.LIGHTING_QUALITY_FACTOR), (int) (Chunk.CHUNK_SIZE * Constants.FOG_QUALITY_FACTOR), BufferedImage.TYPE_INT_ARGB);
+       // this.image = null;
+        this.image = new BufferedImage((int) (Chunk.CHUNK_SIZE * 0.01), (int) (Chunk.CHUNK_SIZE * 0.01), BufferedImage.TYPE_INT_ARGB);
      }
 
     @Override
     public void draw(Scene scene, Graphics2D g2d, double dt) {
-//        g2d.drawImage(
-//                image,
-//                scene.scaleToDisplay(this.boundingBox.position.x - 1),
-//                scene.scaleToDisplay(this.boundingBox.position.y - 1),
-//                scene.scaleToDisplay(this.boundingBox.size.x),
-//                scene.scaleToDisplay(this.boundingBox.size.y),
-//                null
-//        );
+        g2d.drawImage(
+                image,
+                scene.scaleToDisplay(this.boundingBox.position.x - 1),
+                scene.scaleToDisplay(this.boundingBox.position.y - 1),
+                scene.scaleToDisplay(this.boundingBox.size.x),
+                scene.scaleToDisplay(this.boundingBox.size.y),
+                null
+        );
     }
 
     public void updateLighting(Scene scene, ArrayList<DisplayEntity> litUpEntities) {
         if (this.image == null)
             return;
+
+        Graphics2D g2d = (Graphics2D) this.image.getGraphics();
+        if (g2d == null) g2d = this.image.createGraphics();
+
+        g2d.clearRect(0, 0, image.getWidth(), image.getHeight());
+
+        g2d.setColor(new Color(0, 0, 0, 90));
+        g2d.fillRect(0, 0, image.getWidth(), image.getHeight());
 
         double baseSize = Tile.TILE_SIZE;
 
@@ -45,7 +53,6 @@ public class EntityLighting extends EntityBase implements VisualEffect {
         double scale = ((lightingVerticalScale + lightingHorizontalScale) / 2.0);
 
         for (DisplayEntity displayEntity : litUpEntities) {
-
             Vec2D lightPos = displayEntity.getBoundingBox().center().clone().subtract(this.boundingBox.position).multiply(scale);
             LightSource source = displayEntity.getLightSource();
             if (source == null) continue;
@@ -58,6 +65,8 @@ public class EntityLighting extends EntityBase implements VisualEffect {
 
             double radius = baseSize * source.brightness() / 2.0;
 
+            g2d.setColor(new Color(red, green, blue, 1.0f));
+            g2d.fillOval((int) (lightPos.x - radius), (int) (lightPos.y - radius), (int) radius, (int) radius);
         }
 
     }

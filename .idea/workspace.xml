@@ -5,9 +5,131 @@
       <artifact name="Demo" />
     </artifacts-to-build>
   </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="72bd4045-439f-4dd9-ab6b-3c8ac232e6b5" name="Changes" comment="Ant workflow preparation">
-      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/scene/SceneMainMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/solity/scene/SceneMainMenu.java" afterDir="false" />
+    <list default="true" id="72bd4045-439f-4dd9-ab6b-3c8ac232e6b5" name="Changes" comment="build.properties renamed to project.properties">
+      <change afterPath="$PROJECT_DIR$/.github/workflows/mavenBuild.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/ant.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JavaSmash.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Solity.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/META-INF/MANIFEST.MF" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/Align.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/Align.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/BoundingBox.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/BoundingBox.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/Chunk.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/Chunk.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/Constants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/Difficulty.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/Difficulty.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/Direction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/Direction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/Display.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/Display.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/FontRenderer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/FontRenderer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/GameLoop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/GameLoop.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/Input.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/Input.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/Instance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/Instance.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/LevelData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/LevelData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/MathUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/MathUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/OpenSimplexNoise.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/OpenSimplexNoise.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/ParticleType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/ParticleType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/ProgressReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/ProgressReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/TextPrompt.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/TextPrompt.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/Vec2D.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/Vec2D.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/World.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/World.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/audio/AudioLibrary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/audio/AudioLibrary.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/audio/AudioProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/audio/AudioProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/compat/OS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/compat/OS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/compat/adapter/Adapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/compat/adapter/Adapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/compat/adapter/FallbackAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/compat/adapter/FallbackAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/compat/adapter/LinuxAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/compat/adapter/LinuxAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/compat/adapter/OSXAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/compat/adapter/OSXAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/compat/adapter/WindowsAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/compat/adapter/WindowsAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/config/GameConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/config/GameConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/config/GraphicsConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/config/GraphicsConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/config/INIConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/config/INIConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/config/InputConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/config/InputConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/config/KeyBind.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/config/KeyBind.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/config/XMLConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/config/XMLConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/entity/CollisionAware.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/entity/CollisionAware.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/entity/Damageable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/entity/Damageable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/entity/DisplayEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/entity/DisplayEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/entity/Entity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/entity/Entity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/entity/EntityAnt.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/entity/EntityAnt.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/entity/EntityBase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/entity/EntityBase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/entity/EntityBottle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/entity/EntityBottle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/entity/EntityCharacter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/entity/EntityCharacter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/entity/EntityCoin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/entity/EntityCoin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/entity/EntityDamageable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/entity/EntityDamageable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/entity/EntityEnemy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/entity/EntityEnemy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/entity/EntityItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/entity/EntityItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/entity/EntityNPC.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/entity/EntityNPC.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/entity/EntityParticle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/entity/EntityParticle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/entity/EntityPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/entity/EntityPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/entity/EntityProjectile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/entity/EntityProjectile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/entity/LevelObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/entity/LevelObject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/entity/Tile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/entity/Tile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/graphics/EntityFog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/graphics/EntityFog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/graphics/EntityLighting.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/graphics/EntityLighting.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/graphics/GraphicsThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/graphics/GraphicsThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/graphics/GraphicsUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/graphics/GraphicsUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/graphics/LightSource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/graphics/LightSource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/graphics/TextureAnimated.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/graphics/TextureAnimated.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/graphics/TextureAtlas.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/graphics/TextureAtlas.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/graphics/TextureBundle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/graphics/TextureBundle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/graphics/TextureIndividual.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/graphics/TextureIndividual.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/graphics/TextureStatic.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/graphics/TextureStatic.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/graphics/VisualEffect.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/graphics/VisualEffect.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/item/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/item/Item.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/item/ItemRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/item/ItemRegistry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/item/ItemWeapon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/item/ItemWeapon.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/launch/Launch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/launch/Launch.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/launch/LaunchConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/launch/LaunchConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/launch/RenderPipeline.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/launch/RenderPipeline.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/localization/BindLocalizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/localization/BindLocalizer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/localization/LangProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/localization/LangProvider.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/localization/Language.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/localization/Language.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/progression/saves/SaveGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/progression/saves/SaveGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/progression/saves/SaveGameTemporary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/progression/saves/SaveGameTemporary.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/progression/saves/StateCapture.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/progression/saves/StateCapture.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/progression/skills/Skill.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/progression/skills/Skill.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/progression/skills/SkillDash.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/progression/skills/SkillDash.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/progression/skills/SkillHealth.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/progression/skills/SkillHealth.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/progression/skills/Skills.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/progression/skills/Skills.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/progression/story/MainStory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/progression/story/MainStory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/progression/story/Story.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/progression/story/Story.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/progression/story/TutorialStory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/progression/story/TutorialStory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/resource/FontLexicon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/resource/FontLexicon.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/resource/ResourceFinder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/resource/ResourceFinder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/resource/Texture.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/resource/Texture.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/resource/TiledMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/resource/TiledMap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/scene/Scene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/scene/Scene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/scene/SceneChooseDifficulty.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/scene/SceneChooseDifficulty.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/scene/SceneChooseSave.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/scene/SceneChooseSave.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/scene/SceneCreditRoll.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/scene/SceneCreditRoll.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/scene/SceneInWorld.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/scene/SceneInWorld.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/scene/SceneInWorldPaused.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/scene/SceneInWorldPaused.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/scene/SceneLoadMainMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/scene/SceneLoadMainMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/scene/SceneLoadWorld.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/scene/SceneLoadWorld.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/scene/SceneLoading.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/scene/SceneLoading.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/scene/SceneMainMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/scene/SceneMainMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/scene/SceneMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/scene/SceneMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/scene/SceneOptions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/scene/SceneOptions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/scene/components/Button.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/scene/components/Button.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/scene/components/Component.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/scene/components/Component.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/scene/components/LocalizedComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/scene/components/LocalizedComponent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/kuusisto/tinysound/Music.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/kuusisto/tinysound/Music.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/kuusisto/tinysound/Sound.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/kuusisto/tinysound/Sound.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/kuusisto/tinysound/TinySound.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/kuusisto/tinysound/TinySound.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/kuusisto/tinysound/internal/ByteList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/kuusisto/tinysound/internal/ByteList.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/kuusisto/tinysound/internal/MemMusic.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/kuusisto/tinysound/internal/MemMusic.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/kuusisto/tinysound/internal/MemSound.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/kuusisto/tinysound/internal/MemSound.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/kuusisto/tinysound/internal/Mixer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/kuusisto/tinysound/internal/Mixer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/kuusisto/tinysound/internal/MusicReference.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/kuusisto/tinysound/internal/MusicReference.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/kuusisto/tinysound/internal/SoundReference.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/kuusisto/tinysound/internal/SoundReference.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/kuusisto/tinysound/internal/StreamInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/kuusisto/tinysound/internal/StreamInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/kuusisto/tinysound/internal/StreamMusic.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/kuusisto/tinysound/internal/StreamMusic.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/kuusisto/tinysound/internal/StreamSound.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/kuusisto/tinysound/internal/StreamSound.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/kuusisto/tinysound/internal/UpdateRunner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/kuusisto/tinysound/internal/UpdateRunner.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,7 +204,7 @@
   <component name="RunManager" selected="Application.de.yonedash.solity.launch.Launch">
     <configuration name="GPUTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="GPUTest" />
-      <module name="JavaSmash" />
+      <module name="Solity" />
       <option name="VM_PARAMETERS" value="-Xmx32M" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -90,7 +212,7 @@
     </configuration>
     <configuration name="Instance" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="de.yonedash.solity.Instance" />
-      <module name="JavaSmash" />
+      <module name="Solity" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="de.yonedash.solity.graphics.*" />
@@ -110,7 +232,7 @@
     </configuration>
     <configuration name="de.yonedash.solity.launch.Launch" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="de.yonedash.solity.launch.Launch" />
-      <module name="JavaSmash" />
+      <module name="Solity" />
       <option name="PROGRAM_PARAMETERS" value="-XX:-OmitStackTraceInFastThrow" />
       <extension name="coverage">
         <pattern>
@@ -125,6 +247,19 @@
     <configuration name="Demo Unlocked FPS.jar" type="JarApplication" temporary="true">
       <option name="JAR_PATH" value="$PROJECT_DIR$/compile/Demo Unlocked FPS.jar" />
       <method v="2" />
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="Solity" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="Solity" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
     <list>
       <item itemvalue="Application.GPUTest" />
@@ -431,7 +566,28 @@
       <option name="project" value="LOCAL" />
       <updated>1670230568682</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="Release 1.0.5">
+      <created>1670230597169</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1670230597169</updated>
+    </task>
+    <task id="LOCAL-00042" summary="build.properties for ant build">
+      <created>1670234218137</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1670234218137</updated>
+    </task>
+    <task id="LOCAL-00043" summary="build.properties renamed to project.properties">
+      <created>1670234278945</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1670234278945</updated>
+    </task>
+    <option name="localTasksCounter" value="44" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -449,10 +605,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Updates &amp; updates (TinySound integration, audio processor, added audio, added theme song, option menu, switched from xml to ini, os adapters, game icon, more game config settings)" />
-    <MESSAGE value="Graphics Presets" />
-    <MESSAGE value="Graphics Presets improvements" />
-    <MESSAGE value="Choose Difficulty Screen" />
     <MESSAGE value="Choose Difficulty, Choose Save, Choose Pause Screen" />
     <MESSAGE value="Beginnings of German translation" />
     <MESSAGE value="credit screen and minor additions" />
@@ -474,7 +626,11 @@
     <MESSAGE value="Release 1.0.4" />
     <MESSAGE value="removal of character shadow color" />
     <MESSAGE value="Ant workflow preparation" />
-    <option name="LAST_COMMIT_MESSAGE" value="Ant workflow preparation" />
+    <MESSAGE value="Release 1.0.5" />
+    <MESSAGE value="ant build prepation" />
+    <MESSAGE value="build.properties for ant build" />
+    <MESSAGE value="build.properties renamed to project.properties" />
+    <option name="LAST_COMMIT_MESSAGE" value="build.properties renamed to project.properties" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

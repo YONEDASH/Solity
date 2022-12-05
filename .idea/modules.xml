@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/JavaSmash.iml" filepath="$PROJECT_DIR$/JavaSmash.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Solity.iml" filepath="$PROJECT_DIR$/Solity.iml" />
     </modules>
   </component>
 </project>

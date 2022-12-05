@@ -13,6 +13,6 @@ public class EntityAnt extends EntityEnemy {
         this.health = maxHealth;
         this.entityMoveSpeed = 0.09;
         this.shotDamage = 0.5;
-        this.lightSource = new LightSource(Color.RED, Math.random() * 8);
+        this.lightSource = new LightSource(Color.RED, 8);
     }
 }
