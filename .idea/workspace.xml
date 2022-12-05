@@ -9,68 +9,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="72bd4045-439f-4dd9-ab6b-3c8ac232e6b5" name="Changes" comment="Release jar upload">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/filtered/build.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/maven.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/maven.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/release.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Solity.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Solity.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/audio/music/theme.wav" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/audio/music/theme.wav" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/audio/sound/click.wav" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/audio/sound/click.wav" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/audio/sound/dash.wav" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/audio/sound/dash.wav" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/audio/sound/error.wav" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/audio/sound/error.wav" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/audio/sound/hit.wav" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/audio/sound/hit.wav" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/audio/sound/select.wav" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/audio/sound/select.wav" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/audio/sound/type.wav" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/audio/sound/type.wav" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/credits.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/credits.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/entities/ant/SoldierAntIdleSide.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/entities/ant/SoldierAntIdleSide.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/entities/knight/Idle.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/entities/knight/Idle.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/entities/knight/Walk.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/entities/knight/Walk.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/entities/projectile/BigEnergyBall.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/entities/projectile/BigEnergyBall.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/entities/projectile/CanonBall.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/entities/projectile/CanonBall.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/entities/projectile/EnergyBall.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/entities/projectile/EnergyBall.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/entities/projectile/Fireball.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/entities/projectile/Fireball.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/entities/projectile/Fork.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/entities/projectile/Fork.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/entities/projectile/IceSpike.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/entities/projectile/IceSpike.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/entities/projectile/Kunai.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/entities/projectile/Kunai.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/entities/projectile/PlantSpike.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/entities/projectile/PlantSpike.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/entities/projectile/Shuriken.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/entities/projectile/Shuriken.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/fonts/CompassPro.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/fonts/CompassPro.ttf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/fonts/EquipmentPro.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/fonts/EquipmentPro.ttf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/fonts/FutilePro.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/fonts/FutilePro.ttf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/gameplay/coin/coin_anim_f0.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/gameplay/coin/coin_anim_f0.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/gameplay/coin/coin_anim_f1.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/gameplay/coin/coin_anim_f1.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/gameplay/coin/coin_anim_f2.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/gameplay/coin/coin_anim_f2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/gameplay/coin/coin_anim_f3.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/gameplay/coin/coin_anim_f3.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/gameplay/potion/potion_green.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/gameplay/potion/potion_green.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/gameplay/potion/potion_red.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/gameplay/potion/potion_red.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/gameplay/potion/potion_yellow.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/gameplay/potion/potion_yellow.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/language/de_DE.lang" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/language/de_DE.lang" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/language/en_US.lang" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/language/en_US.lang" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/map/level.tmx" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/map/level.tmx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/map/textures/Cliff.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/map/textures/Cliff.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/map/textures/GrassNDirt.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/map/textures/GrassNDirt.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/map/textures/RocksnStumps.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/map/textures/RocksnStumps.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/map/textures/Trees.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/map/textures/Trees.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/map/tutorial.tmx" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/map/tutorial.tmx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/particles/enemy_afterdead_explosion_anim_spritesheet.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/particles/enemy_afterdead_explosion_anim_spritesheet.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/particles/explosion_anim_spritesheet.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/particles/explosion_anim_spritesheet.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/particles/hit_effect_anim_spritesheet.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/particles/hit_effect_anim_spritesheet.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/particles/slash_effect_anim_spritesheet.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/particles/slash_effect_anim_spritesheet.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/ui/arrow.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/ui/arrow.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/ui/crosshair.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/ui/crosshair.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/ui/dashEmpty.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/ui/dashEmpty.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/ui/dashFull.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/ui/dashFull.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/ui/heartEmpty.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/ui/heartEmpty.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/ui/heartFull.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/ui/heartFull.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/ui/menuBackground.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/unfiltered/assets/ui/menuBackground.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/Instance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/Instance.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/launch/Launch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/launch/Launch.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/scene/SceneMainMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/yonedash/solity/scene/SceneMainMenu.java" afterDir="false" />
+    <list default="true" id="72bd4045-439f-4dd9-ab6b-3c8ac232e6b5" name="Changes" comment="Maven will now set version number shown in SceneMainMenu based on project version in pom.xml">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -543,7 +483,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670252634150</updated>
     </task>
-    <option name="localTasksCounter" value="46" />
+    <task id="LOCAL-00046" summary="Maven will now set version number shown in SceneMainMenu based on project version in pom.xml">
+      <created>1670255674051</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1670255674051</updated>
+    </task>
+    <option name="localTasksCounter" value="47" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -561,8 +508,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="credit screen and minor additions" />
-    <MESSAGE value="credit scene and minor additions" />
     <MESSAGE value="Finishing touches" />
     <MESSAGE value="coin shadow" />
     <MESSAGE value="translation fixes" />
@@ -586,7 +531,9 @@
     <MESSAGE value="build.properties renamed to project.properties" />
     <MESSAGE value="Maven implemented" />
     <MESSAGE value="Release jar upload" />
-    <option name="LAST_COMMIT_MESSAGE" value="Release jar upload" />
+    <MESSAGE value="version number defined on maven package process" />
+    <MESSAGE value="Maven will now set version number shown in SceneMainMenu based on project version in pom.xml" />
+    <option name="LAST_COMMIT_MESSAGE" value="Maven will now set version number shown in SceneMainMenu based on project version in pom.xml" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
