@@ -100,7 +100,7 @@ public class SceneMainMenu extends SceneMenu {
 
         g2d.setColor(Color.WHITE);
         g2d.setFont(instance.lexicon.equipmentPro.deriveFont((float) scaleToDisplay(40.0)));
-        fontRenderer.drawString(g2d, "Version 1.0.4, Chapter 1", width - 3, 3, Align.RIGHT, Align.TOP, false);
+        fontRenderer.drawString(g2d, "Version 1.0.5, Chapter 1", width - 3, 3, Align.RIGHT, Align.TOP, false);
         fontRenderer.drawString(g2d, "(c) 2021/2022 Til M.", width - 3, 3 + (int) fontRenderer.bounds(g2d, "V,C1").y + 5, Align.RIGHT, Align.TOP, false);
 
         this.updateComponents(g2d, dt);

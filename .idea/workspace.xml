@@ -6,10 +6,8 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="72bd4045-439f-4dd9-ab6b-3c8ac232e6b5" name="Changes" comment="removal of character shadow color">
-      <change afterPath="$PROJECT_DIR$/.github/workflows/ant.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="72bd4045-439f-4dd9-ab6b-3c8ac232e6b5" name="Changes" comment="Ant workflow preparation">
+      <change beforePath="$PROJECT_DIR$/src/de/yonedash/solity/scene/SceneMainMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/de/yonedash/solity/scene/SceneMainMenu.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -426,7 +424,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670227536636</updated>
     </task>
-    <option name="localTasksCounter" value="40" />
+    <task id="LOCAL-00040" summary="Ant workflow preparation">
+      <created>1670230568682</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1670230568682</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -444,7 +449,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Updates &amp; updates (coins, bottles, tutorial finished, savegame captures (for checkpoint loading), enemy movement &quot;ai&quot;)" />
     <MESSAGE value="Updates &amp; updates (TinySound integration, audio processor, added audio, added theme song, option menu, switched from xml to ini, os adapters, game icon, more game config settings)" />
     <MESSAGE value="Graphics Presets" />
     <MESSAGE value="Graphics Presets improvements" />
@@ -469,7 +473,8 @@
     <MESSAGE value="Debug menu memoryTotal cleanup" />
     <MESSAGE value="Release 1.0.4" />
     <MESSAGE value="removal of character shadow color" />
-    <option name="LAST_COMMIT_MESSAGE" value="removal of character shadow color" />
+    <MESSAGE value="Ant workflow preparation" />
+    <option name="LAST_COMMIT_MESSAGE" value="Ant workflow preparation" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
