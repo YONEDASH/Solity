@@ -1,10 +1,13 @@
 package de.yonedash.solity;
 
 import de.yonedash.solity.scene.SceneInWorld;
+import de.yonedash.solity.scene.SceneInWorldPaused;
+import de.yonedash.solity.scene.SceneMainMenu;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
@@ -230,6 +233,18 @@ public class Display extends JFrame {
 
         // Update scene
         this.instance.scene.update(g2d, dt / 1_000_000.0);
+
+        // Draw fps counter
+        if (instance.gameConfig.showFps && instance.lexicon.equipmentPro != null) {
+            g2d.getTransform().setToTranslation(0, 0);
+            g2d.setColor(new Color(1.0f, 1.0f, 1.0f, 0.5f));
+            g2d.setFont(instance.lexicon.equipmentPro.deriveFont((float) instance.scene.scaleToDisplay(60.0)));
+
+            int fpsOffsetY = instance.scene instanceof SceneMainMenu
+                    || (Constants.DEBUG_MENU_SHOWN && instance.scene instanceof SceneInWorld) ? 40 : 0;
+
+            instance.scene.fontRenderer.drawStringAccurately(g2d, String.valueOf(Math.round(instance.gameLoop.getFramesPerSecond()*10) / 10.0), getWidth() - instance.scene.scaleToDisplay(10.0), instance.scene.scaleToDisplay(14.0) + fpsOffsetY, Align.RIGHT, Align.TOP, false);
+        }
 
         // Show buffer to display
         buffer.show();

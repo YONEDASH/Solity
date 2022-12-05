@@ -9,7 +9,7 @@ public class GameConfig extends INIConfig {
 
     public Language language;
 
-    public boolean vSync, lowPowerMode;
+    public boolean vSync, lowPowerMode, showFps;
     public double fpsLimit;
 
     public GameConfig(Instance instance) {
@@ -27,6 +27,7 @@ public class GameConfig extends INIConfig {
         add("vsync", false);
         add("lowPowerMode", false);
         add("fullscreen", false);
+        add("showFps", false);
     }
 
     @Override
@@ -37,6 +38,7 @@ public class GameConfig extends INIConfig {
         this.fpsLimit = getDouble("fpsLimit");
         this.vSync = getBoolean("vsync");
         this.lowPowerMode = getBoolean("lowPowerMode");
+        this.showFps = getBoolean("showFps");
     }
 
 }

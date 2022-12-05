@@ -47,6 +47,7 @@ public class SceneOptions extends SceneMenu {
         this.optionComponents.add(new OptionComponent(this, instance.gameConfig, "fpsLimit"));
         this.optionComponents.add(new OptionComponent(this, instance.gameConfig, "vsync"));
         this.optionComponents.add(new OptionComponent(this, instance.gameConfig, "lowPowerMode"));
+        this.optionComponents.add(new OptionComponent(this, instance.gameConfig, "showFps"));
         this.optionComponents.add(new OptionComponent(this, instance.graphicsConfig, "preset"));
         this.optionComponents.add(new OptionComponent(this, instance.launchData, "renderPipeline"));
 

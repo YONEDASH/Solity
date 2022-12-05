@@ -37,6 +37,7 @@ options.volumeTyping=Typing Volume
 options.fullscreen=Fullscreen
 options.fpsLimit=FPS Limit
 options.vsync=VSync
+options.showFps=Show FPS
 options.lowPowerMode=Low Power Mode
 options.preset=Graphics
 options.renderPipeline=Render Pipeline

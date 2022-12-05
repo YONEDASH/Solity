@@ -37,6 +37,7 @@ options.volumeTyping=Tipp Lautstaerke
 options.fullscreen=Vollbild
 options.fpsLimit=FPS Limit
 options.vsync=VSync
+options.showFps=Zeige FPS
 options.lowPowerMode=Energiesparen
 options.preset=Grafik
 options.renderPipeline=Render Pipeline
