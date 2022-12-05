@@ -32,7 +32,7 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
     - name: Create folder for downloads
-       run: mkdir downloads
+      run: mkdir downloads
     - name: Add packaged jar to downloads folder
       run: |
       ls
