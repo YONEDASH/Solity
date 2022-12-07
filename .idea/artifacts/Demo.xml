@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="Demo">
-    <output-path>$PROJECT_DIR$/compile/</output-path>
-    <root id="archive" name="Demo.jar">
-      <element id="module-output" name="Solity" />
-    </root>
-  </artifact>
-</component>
