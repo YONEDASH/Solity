@@ -15,9 +15,6 @@ public class Launch {
         // Create OS adapter obj
         Adapter adapter = OS.LOCAL_MACHINE.newAdapter();
 
-        // Set this property so app name is displayed properly on MacOS
-        System.setProperty("apple.awt.application.name", "Solity");
-
         // Create var with game folder path
         String gameRoot = adapter.getApplicationDataPath() + "/" + "Solity";
         System.out.println("Game Root is " + gameRoot);
